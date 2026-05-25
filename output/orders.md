@@ -22,7 +22,8 @@
 
 | Dish | Quantity |
 |------|----------|
-| Teriyaki Salmon rice bowl | 2 |
+| Teriyaki Salmon rice bowl | 1 |
+| Teriyaki Salmon rice bowl (Vegetarian) | 1 |
 
 ## Loreto College
 
@@ -30,4 +31,4 @@
 
 | Dish | Quantity |
 |------|----------|
-| Caesar Salad | 2 |
+| Caesar Salad | 1 |

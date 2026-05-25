@@ -31,8 +31,13 @@ def build_session_table(session_id: int, menu: list[tuple[str, list[str]]]) -> l
 def markdown_to_pdf(md_path: Path, pdf_path: Path) -> None:
     from markdown_pdf import MarkdownPdf, Section
 
+    css = (
+        "table { border-collapse: collapse; margin: 8px 0; }"
+        "th, td { border: 1px solid #888; padding: 4px 8px; }"
+        "th { background-color: #f0f0f0; }"
+    )
     pdf = MarkdownPdf()
-    pdf.add_section(Section(md_path.read_text(encoding="utf-8")))
+    pdf.add_section(Section(md_path.read_text(encoding="utf-8")), user_css=css)
     pdf.save(str(pdf_path))
 
 

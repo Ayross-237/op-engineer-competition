@@ -66,7 +66,7 @@ def get_sessions(school_id: int) -> list[tuple[int, str, str, str]]:
     data: Any = response.data
     return [(s["id"], s["day_of_week"], s["start_time"], s["end_time"]) for s in data]
 
-def get_students(session_id: int) -> list[tuple[int, list[str]]]:
+def get_students(session_id: int, wants_catering=True) -> list[tuple[int, list[str]]]:
     """
     returns the list of students that are attending the given session
 
@@ -76,9 +76,13 @@ def get_students(session_id: int) -> list[tuple[int, list[str]]]:
     """
     response = (
         client.table("enrolments")
-        .select("students(id, dietary)")
+        .select("students(id, dietary, wants_catering)")
         .eq("session_id", session_id)
         .execute()
     )
     data: Any = response.data
-    return [(e["students"]["id"], e["students"]["dietary"]) for e in data if e.get("students")]
+    return [
+        (e["students"]["id"], e["students"]["dietary"]) 
+        for e in data 
+        if e.get("students") and e["students"]["wants_catering"] == wants_catering
+    ]
