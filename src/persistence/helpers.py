@@ -13,13 +13,14 @@ def get_dietary_counts_for_school(school_id: int) -> dict[str, int]:
     )
 
     data: Any = response.data
+    print(data)
     counts: dict = {} 
     for school in data:
         for session in school.get("sessions") or []:
             for enrolment in session.get("enrolments") or []:
                 student = enrolment.get("students")
                 if student:
-                    counts[student.dietary] = counts.get(student.dietary, 0) + 1
+                    counts[student["dietary"]] = counts.get(student.dietary, 0) + 1
 
     return counts
 
@@ -56,6 +57,6 @@ def get_schools() -> list[tuple[int, str]]:
     for school in data:
         id = school.get("id")
         name = school.get("name")
-        schools.append((id, school))
+        schools.append((id, name))
     
     return schools

@@ -13,5 +13,5 @@ if not (url and key):
 
 client: Client = create_client(url, key)
 
-db_url = os.getenv("DATABASE_URL")
-conn = psycopg2.connect(db_url)
+#db_url = os.getenv("DATABASE_URL")
+#conn = psycopg2.connect(db_url)
