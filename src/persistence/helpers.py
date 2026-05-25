@@ -1,49 +1,6 @@
-from collections import Counter
 from typing import Any
 
 from . import client
-
-
-def get_dietary_counts_for_school(school_id: int) -> dict[str, int]:
-    response = (
-        client.table("schools")
-        .select("sessions(enrolments(students(dietary)))")
-        .eq("id", school_id)
-        .execute()
-    )
-
-    data: Any = response.data
-    print(data)
-    counts: dict = {} 
-    for school in data:
-        for session in school.get("sessions") or []:
-            for enrolment in session.get("enrolments") or []:
-                student = enrolment.get("students")
-                if student:
-                    counts[student["dietary"]] = counts.get(student.dietary, 0) + 1
-
-    return counts
-
-def get_menu_for_school(school_id: int) -> list[tuple[str, list[str]]]:
-    """
-    returns a list of name, dietary pairs for the available menu for each school
-    """
-    response = (
-        client.table("schools")
-        .select("caterers(items(name, dietary_tags))")
-        .eq("id", school_id)
-        .execute()
-    )
-
-    data: Any = response.data
-    menu: list[tuple[str, list[str]]] = []
-    for school in data:
-        caterer = school.get("caterers")
-        if not caterer:
-            continue
-        for item in caterer.get("items") or []:
-            menu.append((item["name"], item["dietary_tags"]))
-    return menu
 
 def get_schools() -> list[tuple[int, str]]:
     response = (
@@ -58,5 +15,70 @@ def get_schools() -> list[tuple[int, str]]:
         id = school.get("id")
         name = school.get("name")
         schools.append((id, name))
-    
+
     return schools
+
+def get_caterer(school_id: int) -> int:
+    """"
+    Returns the current caterer_id for the school
+    """
+    response = (
+        client.table("schools")
+        .select("caterer_id")
+        .eq("id", school_id)
+        .single()
+        .execute()
+    )
+    data: Any = response.data
+    return data["caterer_id"]
+
+def get_menu(caterer_id: int) -> list[tuple[str, list[str]]]:
+    """
+    Returns the list of available items with dietary tags from the given caterer
+
+    Returns: [
+        (name: str, dietary: list[str])
+    ]
+    """
+    response = (
+        client.table("items")
+        .select("name", "dietary_tags")
+        .eq("caterer_id", caterer_id)
+        .execute()
+    )
+    data: Any = response.data
+    return [(item["name"], item["dietary_tags"]) for item in data]
+
+def get_sessions(school_id: int) -> list[tuple[int, str, str, str]]:
+    """
+    returns the list of sessions associated with a school.
+
+    Returns: [
+        (id: int, day: str, start: timestamp, end: timestamp)
+    ]
+    """
+    response = (
+        client.table("sessions")
+        .select("id", "day_of_week", "start_time", "end_time")
+        .eq("school_id", school_id)
+        .execute()
+    )
+    data: Any = response.data
+    return [(s["id"], s["day_of_week"], s["start_time"], s["end_time"]) for s in data]
+
+def get_students(session_id: int) -> list[tuple[int, list[str]]]:
+    """
+    returns the list of students that are attending the given session
+
+    Returns: [
+        (id: int, dietary: list[str])
+    ]
+    """
+    response = (
+        client.table("enrolments")
+        .select("students(id, dietary)")
+        .eq("session_id", session_id)
+        .execute()
+    )
+    data: Any = response.data
+    return [(e["students"]["id"], e["students"]["dietary"]) for e in data if e.get("students")]
