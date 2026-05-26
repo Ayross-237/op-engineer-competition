@@ -8,11 +8,14 @@ CREATE TYPE day_of_week AS ENUM ('Monday', 'Tuesday', 'Wednesday', 'Thursday', '
 CREATE TYPE dietary_tag AS ENUM ('GF', 'DF', 'NF', 'V', 'H');
 
 CREATE TABLE caterers (
-    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name        TEXT NOT NULL,
-    region      TEXT,
-    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+    id             BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name           TEXT NOT NULL,
+    region         TEXT,
+    contact_email  TEXT NOT NULL,
+    chef_email     TEXT,
+    cc_chef        BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at     TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at     TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE TABLE schools (

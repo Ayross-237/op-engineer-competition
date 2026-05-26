@@ -3,11 +3,12 @@
 -- GENERATED ALWAYS AS IDENTITY produces predictable IDs starting at 1.
 
 -- Caterers → IDs 1..4
-INSERT INTO caterers (name, region) VALUES
-    ('Lakehouse Victoria Point', 'Redlands'),
-    ('Terrific Noodles',         'South Brisbane'),
-    ('Kenko Sushi House',        'West Brisbane'),
-    ('Guzman y Gomez',           'Central Brisbane');
+-- chef_email left NULL where the contact is also the chef (single point of contact).
+INSERT INTO caterers (name, region, contact_email, chef_email, cc_chef) VALUES
+    ('Lakehouse Victoria Point', 'Redlands',         'orders@lakehousevp.com.au',  'chef@lakehousevp.com.au', TRUE),
+    ('Terrific Noodles',         'South Brisbane',   'hello@terrificnoodles.com',  NULL,                      FALSE),
+    ('Kenko Sushi House',        'West Brisbane',    'orders@kenkosushi.com.au',   'kitchen@kenkosushi.com.au', TRUE),
+    ('Guzman y Gomez',           'Central Brisbane', 'catering@gyg.com.au',        NULL,                      FALSE);
 
 -- Pricing structures (1:1 with caterers)
 INSERT INTO pricing_structures (caterer_id, price_per_item, flat_delivery_fee, per_trip_fee, per_school_fee) VALUES
