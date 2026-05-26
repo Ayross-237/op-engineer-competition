@@ -338,19 +338,13 @@
                 <mxCell id="a-newses-subname" value="sub_manager_name" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
                     <mxGeometry x="900" y="760" width="140" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="a-newses-subemail" value="sub_manager_email" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
-                    <mxGeometry x="1230" y="800" width="150" height="40" as="geometry"/>
-                </mxCell>
                 <mxCell id="a-newses-submob" value="sub_manager_mobile" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
-                    <mxGeometry x="1180" y="870" width="150" height="40" as="geometry"/>
+                    <mxGeometry x="1230" y="800" width="150" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="c-newses-date" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="a-newses-date" target="ent-newsession">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="c-newses-subname" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="a-newses-subname" target="ent-newsession">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="c-newses-subemail" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="a-newses-subemail" target="ent-newsession">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="c-newses-submob" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="a-newses-submob" target="ent-newsession">

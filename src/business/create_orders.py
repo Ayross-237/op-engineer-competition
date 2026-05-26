@@ -29,6 +29,19 @@ def build_session_table(program_id: int, session_date: str, menu: list[tuple[str
     return lines
 
 
+def format_manager_line(
+    manager_name: str,
+    manager_mobile: str,
+    sub_name: str | None,
+    sub_mobile: str | None,
+) -> str:
+    """Render the manager-on-duty line. Sub takes precedence when a sub is named."""
+    if sub_name:
+        suffix = f" — {sub_mobile}" if sub_mobile else ""
+        return f"**Manager (sub for {manager_name}):** {sub_name}{suffix}"
+    return f"**Manager:** {manager_name} — {manager_mobile}"
+
+
 def markdown_to_pdf(md_path: Path, pdf_path: Path) -> None:
     from markdown_pdf import MarkdownPdf, Section
 
@@ -60,11 +73,13 @@ def main() -> None:
         programs = helpers.get_programs(school_id)
 
         session_printed = False
-        for program_id, day, start, end in programs:
-            session_dates = helpers.get_sessions(program_id, week)
-            for session_date in sorted(session_dates):
+        for program_id, day, start, end, mgr_name, mgr_mobile in programs:
+            session_rows = helpers.get_sessions(program_id, week)
+            for session_date, sub_name, sub_mobile in sorted(session_rows):
                 session_printed = True
                 sections.append(f"### {session_date} ({day} {start}–{end})")
+                sections.append("")
+                sections.append(format_manager_line(mgr_name, mgr_mobile, sub_name, sub_mobile))
                 sections.append("")
                 sections.extend(build_session_table(program_id, session_date, menu))
                 sections.append("")

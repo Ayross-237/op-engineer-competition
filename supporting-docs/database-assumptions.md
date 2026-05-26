@@ -7,4 +7,4 @@
 - `chef_email` is nullable on the assumption that when the chef is the main point of contact, only `contact_email` is populated rather than duplicating the address into both columns
 - A program has at most one session per date; the composite primary key `(program_id, date)` on `sessions` prevents two sessions of the same program on the same day
 - The schema does not enforce that an `absences` row references a program the student is actually enrolled in — application code is responsible for filtering absences against enrolments when reporting
-- `sub_manager_*` columns are independently nullable; the schema does not require them to be all-or-nothing populated together (e.g. a row could in principle have `sub_manager_name` set without an email), so consumers must treat any `sub_manager_*` value as a signal that a substitute is running the session
+- `sub_manager_*` columns are independently nullable; the schema does not require them to be all-or-nothing populated together (e.g. a row could in principle have `sub_manager_name` set without a mobile), so consumers must treat any `sub_manager_*` value as a signal that a substitute is running the session

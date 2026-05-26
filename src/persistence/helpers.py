@@ -49,22 +49,26 @@ def get_menu(caterer_id: int) -> list[tuple[str, list[str]]]:
     data: Any = response.data
     return [(item["name"], item["dietary_tags"]) for item in data]
 
-def get_programs(school_id: int) -> list[tuple[int, str, str, str]]:
+def get_programs(school_id: int) -> list[tuple[int, str, str, str, str, str]]:
     """
     returns the list of programs (weekly recurring tutoring slots) for a school.
 
     Returns: [
-        (id: int, day: str, start: timestamp, end: timestamp)
+        (id: int, day: str, start: timestamp, end: timestamp,
+         manager_name: str, manager_mobile: str)
     ]
     """
     response = (
         client.table("programs")
-        .select("id", "day_of_week", "start_time", "end_time")
+        .select("id", "day_of_week", "start_time", "end_time", "manager_name", "manager_mobile")
         .eq("school_id", school_id)
         .execute()
     )
     data: Any = response.data
-    return [(p["id"], p["day_of_week"], p["start_time"], p["end_time"]) for p in data]
+    return [
+        (p["id"], p["day_of_week"], p["start_time"], p["end_time"], p["manager_name"], p["manager_mobile"])
+        for p in data
+    ]
 
 def get_students(program_id: int, wants_catering=True) -> list[tuple[int, list[str]]]:
     """
@@ -87,20 +91,27 @@ def get_students(program_id: int, wants_catering=True) -> list[tuple[int, list[s
         if e.get("students") and e["students"]["wants_catering"] == wants_catering
     ]
 
-def get_sessions(program_id: int, dates: list[str]) -> list[str]:
+def get_sessions(program_id: int, dates: list[str]) -> list[tuple[str, str | None, str | None]]:
     """
-    Returns the dates on which the given program has a scheduled session,
-    restricted to the supplied list of candidate dates.
+    Returns the scheduled sessions for a program whose date falls in the supplied list,
+    including substitute-manager fields (which are None when the regular manager is running it).
+
+    Returns: [
+        (date: str, sub_manager_name: str | None, sub_manager_mobile: str | None)
+    ]
     """
     response = (
         client.table("sessions")
-        .select("date")
+        .select("date", "sub_manager_name", "sub_manager_mobile")
         .eq("program_id", program_id)
         .in_("date", dates)
         .execute()
     )
     data: Any = response.data
-    return [s["date"] for s in data]
+    return [
+        (s["date"], s["sub_manager_name"], s["sub_manager_mobile"])
+        for s in data
+    ]
 
 def get_students_for_session(program_id: int, session_date: str, wants_catering=True) -> list[tuple[int, list[str]]]:
     """

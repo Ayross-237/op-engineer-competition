@@ -72,7 +72,6 @@ CREATE TABLE sessions (
     program_id          BIGINT NOT NULL REFERENCES programs(id) ON DELETE CASCADE,
     date                DATE NOT NULL,
     sub_manager_name    TEXT,
-    sub_manager_email   TEXT,
     sub_manager_mobile  TEXT,
     created_at          TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at          TIMESTAMPTZ NOT NULL DEFAULT now(),

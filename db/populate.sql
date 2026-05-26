@@ -60,12 +60,12 @@ INSERT INTO programs (school_id, day_of_week, start_time, end_time, dinner_time,
 
 -- Sessions → specific dated occurrences of a program.
 -- sub_manager_* populated only when the regular manager is not running that session.
-INSERT INTO sessions (program_id, date, sub_manager_name, sub_manager_email, sub_manager_mobile) VALUES
-    (1, '2026-05-26', NULL,    NULL,                       NULL),
-    (1, '2026-06-02', NULL,    NULL,                       NULL),
-    (2, '2026-05-26', 'Mia C', 'miac@padeacatering.com.au', '0455 111 222'),
-    (3, '2026-06-01', NULL,    NULL,                       NULL),
-    (4, '2026-06-01', NULL,    NULL,                       NULL);
+INSERT INTO sessions (program_id, date, sub_manager_name, sub_manager_mobile) VALUES
+    (1, '2026-05-26', NULL,    NULL),
+    (1, '2026-06-02', NULL,    NULL),
+    (2, '2026-05-26', 'Mia C', '0455 111 222'),
+    (3, '2026-06-01', NULL,    NULL),
+    (4, '2026-06-01', NULL,    NULL);
 
 -- Students → IDs 1..8 (mix of dietary requirements within the GF/DF/NF/V/H enum)
 -- Holly Hill is opted out of catering (wants_catering = FALSE) to exercise that path.
