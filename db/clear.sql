@@ -2,10 +2,12 @@
 -- RESTART IDENTITY resets auto-generated PKs so re-populating starts at 1.
 
 TRUNCATE TABLE
+    absences,
+    sessions,
     enrolments,
     items,
     pricing_structures,
-    sessions,
+    programs,
     students,
     schools,
     caterers

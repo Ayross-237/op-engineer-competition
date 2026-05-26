@@ -51,12 +51,21 @@ INSERT INTO schools (name, region, caterer_id) VALUES
     ('Indooroopilly State High School', 'West Brisbane',    3),
     ('Loreto College',                  'Central Brisbane', 4);
 
--- Sessions → IDs 1..4 (one session per school)
-INSERT INTO sessions (school_id, day_of_week, start_time, end_time, dinner_time, building, year_levels, manager_name, manager_mobile) VALUES
+-- Programs → IDs 1..4 (one program per school: the weekly recurring tutoring slot)
+INSERT INTO programs (school_id, day_of_week, start_time, end_time, dinner_time, building, year_levels, manager_name, manager_mobile) VALUES
     (1, 'Tuesday', '16:00', '19:00', '17:30', 'Library',       '{12,11}',      'Triet',  '0469 420 067'),
     (2, 'Tuesday', '16:30', '19:30', '18:00', 'G Centre',      '{12,11,10,9}', 'Jessie', '0412 345 678'),
     (3, 'Monday',  '15:30', '18:30', '17:00', 'X Block',       '{12,11,10,9}', 'Lucian', '0412 233 445'),
     (4, 'Monday',  '15:30', '18:30', '17:00', 'Ella Building', '{12,11,10}',   'Claire', '0488 888 888');
+
+-- Sessions → specific dated occurrences of a program.
+-- sub_manager_* populated only when the regular manager is not running that session.
+INSERT INTO sessions (program_id, date, sub_manager_name, sub_manager_email, sub_manager_mobile) VALUES
+    (1, '2026-05-26', NULL,    NULL,                       NULL),
+    (1, '2026-06-02', NULL,    NULL,                       NULL),
+    (2, '2026-05-26', 'Mia C', 'miac@padeacatering.com.au', '0455 111 222'),
+    (3, '2026-06-01', NULL,    NULL,                       NULL),
+    (4, '2026-06-01', NULL,    NULL,                       NULL);
 
 -- Students → IDs 1..8 (mix of dietary requirements within the GF/DF/NF/V/H enum)
 -- Holly Hill is opted out of catering (wants_catering = FALSE) to exercise that path.
@@ -70,8 +79,8 @@ INSERT INTO students (name, year_level, dietary, wants_catering, student_email, 
     ('Holly Hill',      10, '{}',    FALSE, 'hollyhill@gmail.com',                   'Benjamin Hill',  'benjaminhill@yahoo.com',    '0445 718 173'),
     ('Matilda Turner',  11, '{DF}',  TRUE,  'matildaturner@loreto.qld.edu.au',       'Phoebe Turner',  'phoebeturner@yahoo.com',    '0467 957 174');
 
--- Enrolments (student → session)
-INSERT INTO enrolments (student_id, session_id) VALUES
+-- Enrolments (student → program: the weekly slot they signed up for)
+INSERT INTO enrolments (student_id, program_id) VALUES
     (1, 1),
     (2, 1),
     (3, 2),
@@ -80,3 +89,8 @@ INSERT INTO enrolments (student_id, session_id) VALUES
     (6, 3),
     (7, 4),
     (8, 4);
+
+-- Absences: students who won't be at a specific dated session of their program.
+INSERT INTO absences (student_id, program_id, date) VALUES
+    (2, 1, '2026-06-02'),  -- Noah Baker missing the second Moreton Bay session
+    (5, 3, '2026-06-01');  -- Sara Abdallah missing Indooroopilly on 1 June

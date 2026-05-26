@@ -41,7 +41,8 @@ CREATE TABLE students (
     updated_at      TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE TABLE sessions (
+-- A program is the recurring weekly tutoring slot at a school (e.g. JPC Tuesday 4:30pm).
+CREATE TABLE programs (
     id              BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     school_id       BIGINT NOT NULL REFERENCES schools(id) ON DELETE RESTRICT,
     day_of_week     day_of_week NOT NULL,
@@ -58,10 +59,35 @@ CREATE TABLE sessions (
 
 CREATE TABLE enrolments (
     student_id  BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
-    session_id  BIGINT NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
+    program_id  BIGINT NOT NULL REFERENCES programs(id) ON DELETE CASCADE,
     created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
-    PRIMARY KEY (student_id, session_id)
+    PRIMARY KEY (student_id, program_id)
+);
+
+-- A session is one specific occurrence of a program on a given date.
+-- Weak entity of programs: composite PK (program_id, date), no surrogate id.
+-- sub_manager_* are populated only when the regular manager is not running this session.
+CREATE TABLE sessions (
+    program_id          BIGINT NOT NULL REFERENCES programs(id) ON DELETE CASCADE,
+    date                DATE NOT NULL,
+    sub_manager_name    TEXT,
+    sub_manager_email   TEXT,
+    sub_manager_mobile  TEXT,
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at          TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (program_id, date)
+);
+
+-- M:N junction realising the absent_from relationship between students and sessions.
+CREATE TABLE absences (
+    student_id  BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    program_id  BIGINT NOT NULL,
+    date        DATE NOT NULL,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (student_id, program_id, date),
+    FOREIGN KEY (program_id, date) REFERENCES sessions(program_id, date) ON DELETE CASCADE
 );
 
 CREATE TABLE items (

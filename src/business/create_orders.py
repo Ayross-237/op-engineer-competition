@@ -1,7 +1,8 @@
-"""Generate per-session catering orders as a markdown file."""
+"""Generate per-session catering orders for the upcoming week as a markdown file."""
 from pathlib import Path
 
 from src.persistence import helpers
+from src.shared.dates import next_week
 
 
 def pick_dish(student_dietary: list[str], menu: list[tuple[str, list[str]]]) -> str:
@@ -12,10 +13,10 @@ def pick_dish(student_dietary: list[str], menu: list[tuple[str, list[str]]]) -> 
     return menu[0][0] if menu else "<no menu>"
 
 
-def build_session_table(session_id: int, menu: list[tuple[str, list[str]]]) -> list[str]:
-    students = helpers.get_students(session_id)
+def build_session_table(program_id: int, session_date: str, menu: list[tuple[str, list[str]]]) -> list[str]:
+    students = helpers.get_students_for_session(program_id, session_date)
     if not students:
-        return ["_No students enrolled._"]
+        return ["_No catering required._"]
 
     counts: dict[str, int] = {}
     for _, dietary in students:
@@ -42,7 +43,13 @@ def markdown_to_pdf(md_path: Path, pdf_path: Path) -> None:
 
 
 def main() -> None:
-    sections: list[str] = ["# Catering Orders", ""]
+    week = next_week()
+    sections: list[str] = [
+        "# Catering Orders",
+        "",
+        f"_Week of {week[0]} – {week[-1]}_",
+        "",
+    ]
 
     for school_id, school_name in helpers.get_schools():
         sections.append(f"## {school_name}")
@@ -50,17 +57,20 @@ def main() -> None:
 
         caterer_id = helpers.get_caterer(school_id)
         menu = helpers.get_menu(caterer_id)
-        sessions = helpers.get_sessions(school_id)
+        programs = helpers.get_programs(school_id)
 
-        if not sessions:
-            sections.append("_No sessions._")
-            sections.append("")
-            continue
+        session_printed = False
+        for program_id, day, start, end in programs:
+            session_dates = helpers.get_sessions(program_id, week)
+            for session_date in sorted(session_dates):
+                session_printed = True
+                sections.append(f"### {session_date} ({day} {start}–{end})")
+                sections.append("")
+                sections.extend(build_session_table(program_id, session_date, menu))
+                sections.append("")
 
-        for session_id, day, start, end in sessions:
-            sections.append(f"### {day} {start}–{end}")
-            sections.append("")
-            sections.extend(build_session_table(session_id, menu))
+        if not session_printed:
+            sections.append("_No sessions scheduled this week._")
             sections.append("")
 
     output = Path() / "output" / "orders.md"
