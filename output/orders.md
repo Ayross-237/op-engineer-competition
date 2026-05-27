@@ -32,6 +32,8 @@ _No sessions scheduled this week._
 
 **Manager:** Claire — 0488 888 888
 
-| Dish | Quantity |
-|------|----------|
-| Caesar Salad | 1 |
+**Special dietary requirements:**
+
+| Dietary Requirements | Recommended Dish |
+|----------------------|------------------|
+| DF, Lactose intolerant | Caesar Salad (Vegetarian) |

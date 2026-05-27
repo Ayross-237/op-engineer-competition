@@ -32,6 +32,7 @@ CREATE TABLE students (
     name            TEXT NOT NULL,
     year_level      INTEGER NOT NULL,
     dietary         dietary_tag[] NOT NULL DEFAULT '{}',
+    dietary_extra   TEXT,
     wants_catering  BOOLEAN NOT NULL DEFAULT TRUE,
     student_email   TEXT NOT NULL,
     parent_name     TEXT NOT NULL,

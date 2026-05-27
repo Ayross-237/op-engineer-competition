@@ -70,23 +70,23 @@ def get_programs(school_id: int) -> list[tuple[int, str, str, str, str, str]]:
         for p in data
     ]
 
-def get_students(program_id: int, wants_catering=True) -> list[tuple[int, list[str]]]:
+def get_students(program_id: int, wants_catering=True) -> list[tuple[int, list[str], str | None]]:
     """
     returns the list of students enrolled in the given program.
 
     Returns: [
-        (id: int, dietary: list[str])
+        (id: int, dietary: list[str], dietary_extra: str | None)
     ]
     """
     response = (
         client.table("enrolments")
-        .select("students(id, dietary, wants_catering)")
+        .select("students(id, dietary, dietary_extra, wants_catering)")
         .eq("program_id", program_id)
         .execute()
     )
     data: Any = response.data
     return [
-        (e["students"]["id"], e["students"]["dietary"])
+        (e["students"]["id"], e["students"]["dietary"], e["students"]["dietary_extra"])
         for e in data
         if e.get("students") and e["students"]["wants_catering"] == wants_catering
     ]
@@ -113,7 +113,7 @@ def get_sessions(program_id: int, dates: list[str]) -> list[tuple[str, str | Non
         for s in data
     ]
 
-def get_students_for_session(program_id: int, session_date: str, wants_catering=True) -> list[tuple[int, list[str]]]:
+def get_students_for_session(program_id: int, session_date: str, wants_catering=True) -> list[tuple[int, list[str], str | None]]:
     """
     Returns the catering-eligible students for a specific dated session:
     students enrolled in the program, minus those marked absent on that date.
@@ -130,4 +130,4 @@ def get_students_for_session(program_id: int, session_date: str, wants_catering=
     absences_data: Any = absences.data
     absent_ids = {a["student_id"] for a in absences_data}
 
-    return [(sid, diet) for sid, diet in enrolled if sid not in absent_ids]
+    return [(sid, diet, extra) for sid, diet, extra in enrolled if sid not in absent_ids]

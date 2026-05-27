@@ -69,15 +69,16 @@ INSERT INTO sessions (program_id, date, sub_manager_name, sub_manager_mobile) VA
 
 -- Students → IDs 1..8 (mix of dietary requirements within the GF/DF/NF/V/H enum)
 -- Holly Hill is opted out of catering (wants_catering = FALSE) to exercise that path.
-INSERT INTO students (name, year_level, dietary, wants_catering, student_email, parent_name, parent_email, parent_mobile) VALUES
-    ('Henry Hill',      11, '{}',    TRUE,  'henryhill@mbbc.qld.edu.au',             'Ryan Hill',      'ryanhill@iinet.net.au',     '0478 813 748'),
-    ('Noah Baker',      12, '{}',    TRUE,  'noahbaker@outlook.com',                 'Eliza Baker',    'elizabaker@iinet.net.au',   '0454 745 547'),
-    ('Rashid Khalil',    9, '{H,V}', TRUE,  'rashidkhalil@student.jpc.qld.edu.au',   'Fatima Khalil',  'fatimakhalil@iinet.net.au', '0487 414 081'),
-    ('Benjamin Wilson', 12, '{}',    TRUE,  'benjaminwilson@student.jpc.qld.edu.au', 'Aria Wilson',    'ariawilson@live.com',       '0458 480 893'),
-    ('Sara Abdallah',   10, '{H}',   TRUE,  'saraabdallah@gmail.com',                'Samir Abdallah', 'samirabdallah@live.com',    '0411 229 871'),
-    ('Sophie Harris',   12, '{V}',   TRUE,  'sophieharris@eq.edu.au',                'Tristan Harris', 'tristanharris@hotmail.com', '0421 889 323'),
-    ('Holly Hill',      10, '{}',    FALSE, 'hollyhill@gmail.com',                   'Benjamin Hill',  'benjaminhill@yahoo.com',    '0445 718 173'),
-    ('Matilda Turner',  11, '{DF}',  TRUE,  'matildaturner@loreto.qld.edu.au',       'Phoebe Turner',  'phoebeturner@yahoo.com',    '0467 957 174');
+-- dietary_extra captures free-text restrictions outside the enum (e.g. specific allergies).
+INSERT INTO students (name, year_level, dietary, dietary_extra, wants_catering, student_email, parent_name, parent_email, parent_mobile) VALUES
+    ('Henry Hill',      11, '{}',    NULL,                  TRUE,  'henryhill@mbbc.qld.edu.au',             'Ryan Hill',      'ryanhill@iinet.net.au',     '0478 813 748'),
+    ('Noah Baker',      12, '{}',    NULL,                  TRUE,  'noahbaker@outlook.com',                 'Eliza Baker',    'elizabaker@iinet.net.au',   '0454 745 547'),
+    ('Rashid Khalil',    9, '{H,V}', NULL,                  TRUE,  'rashidkhalil@student.jpc.qld.edu.au',   'Fatima Khalil',  'fatimakhalil@iinet.net.au', '0487 414 081'),
+    ('Benjamin Wilson', 12, '{}',    NULL,                  TRUE,  'benjaminwilson@student.jpc.qld.edu.au', 'Aria Wilson',    'ariawilson@live.com',       '0458 480 893'),
+    ('Sara Abdallah',   10, '{H}',   'No shellfish',        TRUE,  'saraabdallah@gmail.com',                'Samir Abdallah', 'samirabdallah@live.com',    '0411 229 871'),
+    ('Sophie Harris',   12, '{V}',   NULL,                  TRUE,  'sophieharris@eq.edu.au',                'Tristan Harris', 'tristanharris@hotmail.com', '0421 889 323'),
+    ('Holly Hill',      10, '{}',    NULL,                  FALSE, 'hollyhill@gmail.com',                   'Benjamin Hill',  'benjaminhill@yahoo.com',    '0445 718 173'),
+    ('Matilda Turner',  11, '{DF}',  'Lactose intolerant',  TRUE,  'matildaturner@loreto.qld.edu.au',       'Phoebe Turner',  'phoebeturner@yahoo.com',    '0467 957 174');
 
 -- Enrolments (student → program: the weekly slot they signed up for)
 INSERT INTO enrolments (student_id, program_id) VALUES

@@ -1,9 +1,18 @@
 """Generate per-session catering orders for the upcoming week as a markdown file."""
 from pathlib import Path
 
+from src.business import llm
 from src.persistence import helpers
 from src.shared.dates import next_week
 
+def filter_menu(menu: list[tuple[str, list[str]]], dietary_tags: list[str]) -> list[tuple[str, list[str]]]:
+    """Filter the menu to the dishes that meet the student's dietary requirements."""
+    filtered = []
+    requirements = set(dietary_tags)
+    for name, tags in menu:
+        if requirements.issubset(set(tags)):
+            filtered.append((name, tags))
+    return filtered
 
 def pick_dish(student_dietary: list[str], menu: list[tuple[str, list[str]]]) -> str:
     requirements = set(student_dietary)
@@ -18,14 +27,36 @@ def build_session_table(program_id: int, session_date: str, menu: list[tuple[str
     if not students:
         return ["_No catering required._"]
 
-    counts: dict[str, int] = {}
-    for _, dietary in students:
-        dish = pick_dish(dietary, menu)
-        counts[dish] = counts.get(dish, 0) + 1
+    # Students with free-text dietary requirements go through the LLM individually;
+    # the rest fall into the standard dish-count table via the greedy picker.
+    standard = [(sid, diet) for sid, diet, extra in students if not extra]
+    special = [(sid, diet, extra) for sid, diet, extra in students if extra]
 
-    lines = ["| Dish | Quantity |", "|------|----------|"]
-    for dish, qty in sorted(counts.items()):
-        lines.append(f"| {dish} | {qty} |")
+    lines: list[str] = []
+
+    if standard:
+        counts: dict[str, int] = {}
+        for _, dietary in standard:
+            dish = pick_dish(dietary, menu)
+            counts[dish] = counts.get(dish, 0) + 1
+        lines.append("| Dish | Quantity |")
+        lines.append("|------|----------|")
+        for dish, qty in sorted(counts.items()):
+            lines.append(f"| {dish} | {qty} |")
+
+    if special:
+        if standard:
+            lines.append("")
+        lines.append("**Special dietary requirements:**")
+        lines.append("")
+        lines.append("| Dietary Requirements | Recommended Dish |")
+        lines.append("|----------------------|------------------|")
+        for _, tags, extra in special:
+            requirements = ", ".join([*tags, extra]) if tags else extra
+            menu = filter_menu(menu, tags)
+            dish = llm.find_meal(tags, extra, menu)
+            lines.append(f"| {requirements} | {dish} |")
+
     return lines
 
 
