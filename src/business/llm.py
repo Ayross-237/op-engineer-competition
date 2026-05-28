@@ -40,46 +40,42 @@ def run_model(prompt: str) -> str:
         raise
 
 
-def find_meal(dietary_tags: list[str], dietary_extra: str, menu: list[tuple[str, list[str]]]) -> str:
+def find_meal(dietary_extra: str, filtered_menu: list[tuple[str, list[str]]]) -> str:
     """Given a list of >= 0 dietary tags and a mandatory dietary_extra string,
     determine which of the meals in the list is most likely to fit the student's needs.
 
     Parameters:
-    - dietary_tags: list of dietary tags (e.g. ["vegan", "nut-free"])
     - dietary_extra: free-form string with any additional dietary requirements (e.g. "allergic to shellfish")
-    - menu: list of (meal name, meal dietary tags) tuples
+    - menu: list of (meal name, meal dietary tags) tuples which already fit the student's dietary tags
     """
-    if not menu:
-        return "<no menu>"
+    if not filtered_menu:
+        return "NO MEAL AVAILABLE"
 
     menu_lines = "\n".join(
-        f"- {name} (tags: {', '.join(tags) if tags else 'none'})" for name, tags in menu
+        f"- {name} (tags: {', '.join(tags) if tags else 'none'})" for name, tags in filtered_menu
     )
-    tags_str = ", ".join(dietary_tags) if dietary_tags else "none"
 
     prompt = (
         "You are a dietary assistant choosing a meal for a student.\n\n"
-        "Dietary tag legend:\n"
+        "The following are the dietary tags and their meaning:\n"
         "  GF = gluten-free, DF = dairy-free, NF = nut-free, V = vegetarian, H = halal.\n\n"
-        f"Student standard dietary tags: {tags_str}\n"
-        f"Student free-text dietary notes: {dietary_extra}\n\n"
+        f"Student dietary notes: \"{dietary_extra}\"\n\n"
         "Available menu:\n"
         f"{menu_lines}\n\n"
-        "Pick the single meal that BEST satisfies the student's combined requirements. "
-        "Honor every standard tag the student has, then use the free-text notes to break ties or "
-        "rule out further items.\n\n"
+        "Pick the single meal that BEST satisfies the student's requirements. "
+        "Guess which meal would best fit based on the free-text notes "
+        "\n"
         "Respond with ONLY the exact meal name from the menu, copied verbatim. "
         "No explanation, no quotes, no extra text."
     )
-
-    raw = run_model(prompt)
+    raw = run_model(prompt).strip()
 
     # Validate against the menu — exact match, then substring containment, then fall back.
-    menu_names = [name for name, _ in menu]
+    menu_names = [name for name, _ in filtered_menu]
     if raw in menu_names:
         return raw
     for name in menu_names:
         if name in raw or raw in name:
             return name
-    print(f"[llm] find_meal: '{raw}' not in menu, falling back to {menu_names[0]!r}", file=sys.stderr)
-    return menu_names[0]
+    
+    return "LLM FAILURE: incorrect name"

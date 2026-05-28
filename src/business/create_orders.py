@@ -53,8 +53,7 @@ def build_session_table(program_id: int, session_date: str, menu: list[tuple[str
         lines.append("|----------------------|------------------|")
         for _, tags, extra in special:
             requirements = ", ".join([*tags, extra]) if tags else extra
-            menu = filter_menu(menu, tags)
-            dish = llm.find_meal(tags, extra, menu)
+            dish = llm.find_meal(extra, filter_menu(menu, tags))
             lines.append(f"| {requirements} | {dish} |")
 
     return lines

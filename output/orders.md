@@ -10,11 +10,27 @@ _Week of 2026-06-01 – 2026-06-07_
 
 | Dish | Quantity |
 |------|----------|
-| Shrimp Fried Rice | 1 |
+| Japanese Chicken Curry (Vegetarian) | 1 |
+| Shrimp Fried Rice | 2 |
+| Spaghetti Bolognese + Garlic Bread | 1 |
 
 ## John Paul College
 
-_No sessions scheduled this week._
+### 2026-06-02 (Tuesday 16:30:00–19:30:00)
+
+**Manager:** Jessie — 0412 345 678
+
+| Dish | Quantity |
+|------|----------|
+| Mie Goreng (Vegetarian) | 1 |
+| Spicy Miso Udon | 3 |
+
+**Special dietary requirements:**
+
+| Dietary Requirements | Recommended Dish |
+|----------------------|------------------|
+| H, Severe egg allergy | Mie Goreng (Vegetarian) |
+| Pescatarian — fish only, no other meat | Mie Goreng (Vegetarian) |
 
 ## Indooroopilly State High School
 
@@ -24,6 +40,7 @@ _No sessions scheduled this week._
 
 | Dish | Quantity |
 |------|----------|
+| Teriyaki Salmon rice bowl | 3 |
 | Teriyaki Salmon rice bowl (Vegetarian) | 1 |
 
 ## Loreto College
@@ -32,8 +49,7 @@ _No sessions scheduled this week._
 
 **Manager:** Claire — 0488 888 888
 
-**Special dietary requirements:**
-
-| Dietary Requirements | Recommended Dish |
-|----------------------|------------------|
-| DF, Lactose intolerant | Caesar Salad (Vegetarian) |
+| Dish | Quantity |
+|------|----------|
+| Caesar Salad | 1 |
+| Caesar Salad (Vegetarian) | 1 |

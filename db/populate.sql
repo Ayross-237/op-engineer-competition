@@ -20,29 +20,29 @@ INSERT INTO pricing_structures (caterer_id, price_per_item, flat_delivery_fee, p
 -- Menu items. Source menus use VO ("vegetarian option") to mean the dish can be
 -- prepared either way; each such item is split into a non-veg row and a (Vegetarian) row.
 INSERT INTO items (caterer_id, name, dietary_tags) VALUES
-    (1, 'Shrimp Fried Rice',                                '{GF,DF}'),
-    (1, 'Spaghetti Bolognese + Garlic Bread',               '{NF}'),
-    (1, 'Sweet and Sour Chicken',                           '{GF,DF,NF}'),
-    (1, 'Japanese Chicken Curry',                           '{DF,NF}'),
-    (1, 'Japanese Chicken Curry (Vegetarian)',              '{DF,NF,V}'),
-    (2, 'Spicy Miso Udon',                                  '{DF}'),
-    (2, 'Mie Goreng',                                       '{GF,DF,NF}'),
-    (2, 'Mie Goreng (Vegetarian)',                          '{GF,DF,NF,V}'),
-    (2, 'Beef Pad Thai',                                    '{}'),
-    (2, 'Lemongrass Grilled Beef and Noodles',              '{GF,DF,NF}'),
-    (2, 'Lemongrass Grilled Beef and Noodles (Vegetarian)', '{GF,DF,NF,V}'),
-    (3, 'Teriyaki Salmon rice bowl',                        '{GF,DF,NF}'),
-    (3, 'Teriyaki Salmon rice bowl (Vegetarian)',           '{GF,DF,NF,V}'),
-    (3, 'Chicken Karaage ricebowl',                         '{DF,NF}'),
-    (3, 'Chicken Karaage ricebowl (Vegetarian)',            '{DF,NF,V}'),
-    (3, 'Sweet and Sour Chicken',                           '{GF,DF}'),
-    (4, 'Caesar Salad',                                     '{GF,DF,NF}'),
-    (4, 'Caesar Salad (Vegetarian)',                        '{GF,DF,NF,V}'),
-    (4, 'Chicken Enchilada',                                '{GF,DF}'),
-    (4, 'Nachos',                                           '{GF}'),
-    (4, 'Nachos (Vegetarian)',                              '{GF,V}'),
+    (1, 'Shrimp Fried Rice',                                '{GF,DF,H}'),
+    (1, 'Spaghetti Bolognese + Garlic Bread',               '{NF,H}'),
+    (1, 'Sweet and Sour Chicken',                           '{GF,DF,NF,H}'),
+    (1, 'Japanese Chicken Curry',                           '{DF,NF,H}'),
+    (1, 'Japanese Chicken Curry (Vegetarian)',              '{DF,NF,V,H}'),
+    (2, 'Spicy Miso Udon',                                  '{DF,H}'),
+    (2, 'Mie Goreng',                                       '{GF,DF,NF,H}'),
+    (2, 'Mie Goreng (Vegetarian)',                          '{GF,DF,NF,V,H}'),
+    (2, 'Beef Pad Thai',                                    '{H}'),
+    (2, 'Lemongrass Grilled Beef and Noodles',              '{GF,DF,NF,H}'),
+    (2, 'Lemongrass Grilled Beef and Noodles (Vegetarian)', '{GF,DF,NF,V,H}'),
+    (3, 'Teriyaki Salmon rice bowl',                        '{GF,DF,NF,H}'),
+    (3, 'Teriyaki Salmon rice bowl (Vegetarian)',           '{GF,DF,NF,V,H}'),
+    (3, 'Chicken Karaage ricebowl',                         '{DF,NF,H}'),
+    (3, 'Chicken Karaage ricebowl (Vegetarian)',            '{DF,NF,V,H}'),
+    (3, 'Sweet and Sour Chicken',                           '{GF,DF,H}'),
+    (4, 'Caesar Salad',                                     '{GF,DF,NF,H}'),
+    (4, 'Caesar Salad (Vegetarian)',                        '{GF,DF,NF,V,H}'),
+    (4, 'Chicken Enchilada',                                '{GF,DF,H}'),
+    (4, 'Nachos',                                           '{GF,H}'),
+    (4, 'Nachos (Vegetarian)',                              '{GF,V,H}'),
     (4, 'Pulled pork burrito bowl',                         '{GF,NF}'),
-    (4, 'Pulled pork burrito bowl (Vegetarian)',            '{GF,NF,V}');
+    (4, 'Pulled pork burrito bowl (Vegetarian)',            '{GF,NF,V,H}');
 
 -- Schools → IDs 1..4 (each assigned a caterer)
 INSERT INTO schools (name, region, caterer_id) VALUES
@@ -64,32 +64,46 @@ INSERT INTO sessions (program_id, date, sub_manager_name, sub_manager_mobile) VA
     (1, '2026-05-26', NULL,    NULL),
     (1, '2026-06-02', NULL,    NULL),
     (2, '2026-05-26', 'Mia C', '0455 111 222'),
+    (2, '2026-06-02', NULL,    NULL),
     (3, '2026-06-01', NULL,    NULL),
     (4, '2026-06-01', NULL,    NULL);
 
--- Students → IDs 1..8 (mix of dietary requirements within the GF/DF/NF/V/H enum)
--- Holly Hill is opted out of catering (wants_catering = FALSE) to exercise that path.
--- dietary_extra captures free-text restrictions outside the enum (e.g. specific allergies).
+-- Students → IDs 1..20 (mix of dietary requirements within the GF/DF/NF/V/H enum)
+-- Holly Hill and Grace Stevenson are opted out of catering (wants_catering = FALSE) to exercise that path.
+-- dietary_extra is populated only when the requirement can't be expressed by the GF/DF/NF/V/H tags
+-- (e.g. a specific allergy outside the enum, or a non-vegetarian eating pattern).
 INSERT INTO students (name, year_level, dietary, dietary_extra, wants_catering, student_email, parent_name, parent_email, parent_mobile) VALUES
-    ('Henry Hill',      11, '{}',    NULL,                  TRUE,  'henryhill@mbbc.qld.edu.au',             'Ryan Hill',      'ryanhill@iinet.net.au',     '0478 813 748'),
-    ('Noah Baker',      12, '{}',    NULL,                  TRUE,  'noahbaker@outlook.com',                 'Eliza Baker',    'elizabaker@iinet.net.au',   '0454 745 547'),
-    ('Rashid Khalil',    9, '{H,V}', NULL,                  TRUE,  'rashidkhalil@student.jpc.qld.edu.au',   'Fatima Khalil',  'fatimakhalil@iinet.net.au', '0487 414 081'),
-    ('Benjamin Wilson', 12, '{}',    NULL,                  TRUE,  'benjaminwilson@student.jpc.qld.edu.au', 'Aria Wilson',    'ariawilson@live.com',       '0458 480 893'),
-    ('Sara Abdallah',   10, '{H}',   'No shellfish',        TRUE,  'saraabdallah@gmail.com',                'Samir Abdallah', 'samirabdallah@live.com',    '0411 229 871'),
-    ('Sophie Harris',   12, '{V}',   NULL,                  TRUE,  'sophieharris@eq.edu.au',                'Tristan Harris', 'tristanharris@hotmail.com', '0421 889 323'),
-    ('Holly Hill',      10, '{}',    NULL,                  FALSE, 'hollyhill@gmail.com',                   'Benjamin Hill',  'benjaminhill@yahoo.com',    '0445 718 173'),
-    ('Matilda Turner',  11, '{DF}',  'Lactose intolerant',  TRUE,  'matildaturner@loreto.qld.edu.au',       'Phoebe Turner',  'phoebeturner@yahoo.com',    '0467 957 174');
+    ('Henry Hill',       11, '{}',    NULL,                                       TRUE,  'henryhill@mbbc.qld.edu.au',              'Ryan Hill',       'ryanhill@iinet.net.au',       '0478 813 748'),
+    ('Noah Baker',       12, '{}',    NULL,                                       TRUE,  'noahbaker@outlook.com',                  'Eliza Baker',     'elizabaker@iinet.net.au',     '0454 745 547'),
+    ('Rashid Khalil',     9, '{H,V}', NULL,                                       TRUE,  'rashidkhalil@student.jpc.qld.edu.au',    'Fatima Khalil',   'fatimakhalil@iinet.net.au',   '0487 414 081'),
+    ('Benjamin Wilson',  12, '{}',    NULL,                                       TRUE,  'benjaminwilson@student.jpc.qld.edu.au',  'Aria Wilson',     'ariawilson@live.com',         '0458 480 893'),
+    ('Sara Abdallah',    10, '{H}',   'No shellfish',                             TRUE,  'saraabdallah@gmail.com',                 'Samir Abdallah',  'samirabdallah@live.com',      '0411 229 871'),
+    ('Sophie Harris',    12, '{V}',   NULL,                                       TRUE,  'sophieharris@eq.edu.au',                 'Tristan Harris',  'tristanharris@hotmail.com',   '0421 889 323'),
+    ('Holly Hill',       10, '{}',    NULL,                                       FALSE, 'hollyhill@gmail.com',                    'Benjamin Hill',   'benjaminhill@yahoo.com',      '0445 718 173'),
+    ('Matilda Turner',   11, '{DF}',  NULL,                                       TRUE,  'matildaturner@loreto.qld.edu.au',        'Phoebe Turner',   'phoebeturner@yahoo.com',      '0467 957 174'),
+    ('Oliver Bennett',   11, '{GF}',  NULL,                                       TRUE,  'oliverbennett@mbbc.qld.edu.au',          'Megan Bennett',   'meganbennett@outlook.com',    '0432 118 909'),
+    ('Leo Marsh',        12, '{V}',   NULL,                                       TRUE,  'leomarsh@mbbc.qld.edu.au',               'Diana Marsh',     'dianamarsh@iinet.net.au',     '0498 332 415'),
+    ('Ethan Mitchell',   11, '{NF}',  NULL,                                       TRUE,  'ethanmitchell@mbbc.qld.edu.au',          'Nina Mitchell',   'ninamitchell@gmail.com',      '0419 776 224'),
+    ('Aisha Khan',       10, '{H}',   'Severe egg allergy',                       TRUE,  'aishakhan@student.jpc.qld.edu.au',       'Yasmin Khan',     'yasminkhan@hotmail.com',      '0488 102 553'),
+    ('Lucas Nguyen',      9, '{}',    NULL,                                       TRUE,  'lucasnguyen@student.jpc.qld.edu.au',     'Minh Nguyen',     'minhnguyen@outlook.com',      '0426 519 880'),
+    ('Mia Chen',         12, '{}',    'Pescatarian — fish only, no other meat',   TRUE,  'miachen@student.jpc.qld.edu.au',         'Hua Chen',        'huachen@gmail.com',           '0461 778 092'),
+    ('Tom Whitfield',    11, '{DF}',  NULL,                                       TRUE,  'tomwhitfield@student.jpc.qld.edu.au',    'Greg Whitfield',  'gregwhitfield@iinet.net.au',  '0407 224 631'),
+    ('Jackson O''Brien',  9, '{}',    NULL,                                       TRUE,  'jacksonobrien@eq.edu.au',                'Sean O''Brien',   'seanobrien@live.com',         '0421 045 992'),
+    ('Ava Robinson',     11, '{DF}',  NULL,                                       TRUE,  'avarobinson@eq.edu.au',                  'Holly Robinson',  'hollyrobinson@yahoo.com',     '0418 663 207'),
+    ('Liam Kowalski',    10, '{GF}',  NULL,                                       TRUE,  'liamkowalski@eq.edu.au',                 'Petra Kowalski',  'petrakowalski@outlook.com',   '0432 891 116'),
+    ('Isla Thompson',    12, '{V,H}', NULL,                                       TRUE,  'islathompson@loreto.qld.edu.au',         'Claire Thompson', 'clairethompson@gmail.com',    '0429 553 110'),
+    ('Grace Stevenson',  10, '{}',    NULL,                                       FALSE, 'gracestevenson@loreto.qld.edu.au',       'Adam Stevenson',  'adamstevenson@live.com',      '0455 002 174');
 
 -- Enrolments (student → program: the weekly slot they signed up for)
 INSERT INTO enrolments (student_id, program_id) VALUES
-    (1, 1),
-    (2, 1),
-    (3, 2),
-    (4, 2),
-    (5, 3),
-    (6, 3),
-    (7, 4),
-    (8, 4);
+    -- Moreton Bay (program 1)
+    (1, 1), (2, 1), (9, 1), (10, 1), (11, 1),
+    -- John Paul College (program 2)
+    (3, 2), (4, 2), (12, 2), (13, 2), (14, 2), (15, 2),
+    -- Indooroopilly (program 3)
+    (5, 3), (6, 3), (16, 3), (17, 3), (18, 3),
+    -- Loreto (program 4)
+    (7, 4), (8, 4), (19, 4), (20, 4);
 
 -- Absences: students who won't be at a specific dated session of their program.
 INSERT INTO absences (student_id, program_id, date) VALUES
