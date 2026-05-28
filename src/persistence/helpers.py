@@ -32,6 +32,20 @@ def get_caterer(school_id: int) -> int:
     data: Any = response.data
     return data["caterer_id"]
 
+def get_caterer_name(caterer_id: int) -> str:
+    """
+    Returns the name of the caterer with the given id
+    """
+    response = (
+        client.table("caterers")
+        .select("name")
+        .eq("id", caterer_id)
+        .single()
+        .execute()
+    )
+    data: Any = response.data
+    return data["name"]
+
 def get_menu(caterer_id: int) -> list[tuple[str, list[str]]]:
     """
     Returns the list of available items with dietary tags from the given caterer

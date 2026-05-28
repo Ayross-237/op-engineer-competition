@@ -4,7 +4,7 @@ _Week of 2026-06-01 – 2026-06-07_
 
 ## Moreton Bay Boys' College
 
-### 2026-06-02 (Tuesday 16:00:00–19:00:00)
+### 2026-06-02 (Tuesday 16:00:00–19:00:00): Lakehouse Victoria Point
 
 **Manager:** Triet — 0469 420 067
 
@@ -16,7 +16,7 @@ _Week of 2026-06-01 – 2026-06-07_
 
 ## John Paul College
 
-### 2026-06-02 (Tuesday 16:30:00–19:30:00)
+### 2026-06-02 (Tuesday 16:30:00–19:30:00): Terrific Noodles
 
 **Manager:** Jessie — 0412 345 678
 
@@ -34,7 +34,7 @@ _Week of 2026-06-01 – 2026-06-07_
 
 ## Indooroopilly State High School
 
-### 2026-06-01 (Monday 15:30:00–18:30:00)
+### 2026-06-01 (Monday 15:30:00–18:30:00): Kenko Sushi House
 
 **Manager:** Lucian — 0412 233 445
 
@@ -45,7 +45,7 @@ _Week of 2026-06-01 – 2026-06-07_
 
 ## Loreto College
 
-### 2026-06-01 (Monday 15:30:00–18:30:00)
+### 2026-06-01 (Monday 15:30:00–18:30:00): Guzman y Gomez
 
 **Manager:** Claire — 0488 888 888
 

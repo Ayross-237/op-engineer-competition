@@ -4,6 +4,7 @@ from pathlib import Path
 from src.business import llm
 from src.persistence import helpers
 from src.shared.dates import next_week
+from src.business.email import send_email
 
 def filter_menu(menu: list[tuple[str, list[str]]], dietary_tags: list[str]) -> list[tuple[str, list[str]]]:
     """Filter the menu to the dishes that meet the student's dietary requirements."""
@@ -78,7 +79,6 @@ def markdown_to_pdf(md_path: Path, pdf_path: Path) -> None:
     css = (
         "table { border-collapse: collapse; margin: 8px 0; }"
         "th, td { border: 1px solid #888; padding: 4px 8px; }"
-        "th { background-color: #f0f0f0; }"
     )
     pdf = MarkdownPdf()
     pdf.add_section(Section(md_path.read_text(encoding="utf-8")), user_css=css)
@@ -99,6 +99,7 @@ def main() -> None:
         sections.append("")
 
         caterer_id = helpers.get_caterer(school_id)
+        caterer_name = helpers.get_caterer_name(caterer_id)
         menu = helpers.get_menu(caterer_id)
         programs = helpers.get_programs(school_id)
 
@@ -107,7 +108,7 @@ def main() -> None:
             session_rows = helpers.get_sessions(program_id, week)
             for session_date, sub_name, sub_mobile in sorted(session_rows):
                 session_printed = True
-                sections.append(f"### {session_date} ({day} {start}–{end})")
+                sections.append(f"### {session_date} ({day} {start}–{end}): {caterer_name}")
                 sections.append("")
                 sections.append(format_manager_line(mgr_name, mgr_mobile, sub_name, sub_mobile))
                 sections.append("")
@@ -125,7 +126,12 @@ def main() -> None:
     pdf_output = output.with_suffix(".pdf")
     markdown_to_pdf(output, pdf_output)
     print(f"Wrote {pdf_output}")
-
+    send_email(
+        "aaron.r.dmello@gmail.com",
+        f"Catering Orders for {week[0]} – {week[-1]}",
+        "Please find the catering orders attached.",
+        attachment=str(pdf_output)
+    )
 
 if __name__ == "__main__":
     main()
