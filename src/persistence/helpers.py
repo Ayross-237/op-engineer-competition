@@ -46,6 +46,22 @@ def get_caterer_name(caterer_id: int) -> str:
     data: Any = response.data
     return data["name"]
 
+def get_pricing(caterer_id: int) -> tuple[float, float, float]:
+    """
+    Returns the per-meal and per-trip cost components for the caterer.
+
+    Returns: (price_per_item, per_trip_fee)
+    """
+    response = (
+        client.table("pricing_structures")
+        .select("price_per_item, per_trip_fee", "per_school_per_trip_fee") 
+        .eq("caterer_id", caterer_id)
+        .single()
+        .execute()
+    )
+    data: Any = response.data
+    return float(data["price_per_item"]), float(data["per_trip_fee"]), float(data["per_school_per_trip_fee"])
+
 def get_menu(caterer_id: int) -> list[tuple[str, list[str]]]:
     """
     Returns the list of available items with dietary tags from the given caterer
@@ -63,24 +79,24 @@ def get_menu(caterer_id: int) -> list[tuple[str, list[str]]]:
     data: Any = response.data
     return [(item["name"], item["dietary_tags"]) for item in data]
 
-def get_programs(school_id: int) -> list[tuple[int, str, str, str, str, str]]:
+def get_programs(school_id: int) -> list[tuple[int, str, str, str, str, str, str]]:
     """
     returns the list of programs (weekly recurring tutoring slots) for a school.
 
     Returns: [
-        (id: int, day: str, start: timestamp, end: timestamp,
+        (id: int, day: str, start: timestamp, end: timestamp, dinner: timestamp,
          manager_name: str, manager_mobile: str)
     ]
     """
     response = (
         client.table("programs")
-        .select("id", "day_of_week", "start_time", "end_time", "manager_name", "manager_mobile")
+        .select("id", "day_of_week", "start_time", "end_time", "dinner_time", "manager_name", "manager_mobile")
         .eq("school_id", school_id)
         .execute()
     )
     data: Any = response.data
     return [
-        (p["id"], p["day_of_week"], p["start_time"], p["end_time"], p["manager_name"], p["manager_mobile"])
+        (p["id"], p["day_of_week"], p["start_time"], p["end_time"], p["dinner_time"], p["manager_name"], p["manager_mobile"])
         for p in data
     ]
 
@@ -145,3 +161,16 @@ def get_students_for_session(program_id: int, session_date: str, wants_catering=
     absent_ids = {a["student_id"] for a in absences_data}
 
     return [(sid, diet, extra) for sid, diet, extra in enrolled if sid not in absent_ids]
+
+def get_feedback(caterer_id: int) -> list[tuple[str, str]]:
+    """
+    Returns the feedback entries left for the caterer, as (date, feedback) pairs.
+    """
+    response = (
+        client.table("feedback")
+        .select("date", "feedback")
+        .eq("caterer_id", caterer_id)
+        .execute()
+    )
+    data: Any = response.data
+    return [(f["date"], f["feedback"]) for f in data]

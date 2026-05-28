@@ -99,12 +99,23 @@ CREATE TABLE items (
     PRIMARY KEY (caterer_id, name)
 );
 
+-- Manager-submitted feedback about a caterer.
+-- Weak entity of caterers: composite PK (caterer_id, submitted_at), no surrogate id.
+-- A single caterer may accumulate many feedback entries over time.
+CREATE TABLE feedback (
+    caterer_id    BIGINT NOT NULL REFERENCES caterers(id) ON DELETE CASCADE,
+    submitted_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    content       TEXT NOT NULL,
+    created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (caterer_id, submitted_at)
+);
+
 CREATE TABLE pricing_structures (
-    caterer_id         BIGINT PRIMARY KEY REFERENCES caterers(id) ON DELETE CASCADE,
-    price_per_item     NUMERIC(10,2) NOT NULL,
-    flat_delivery_fee  NUMERIC(10,2) NOT NULL DEFAULT 0,
-    per_trip_fee       NUMERIC(10,2) NOT NULL DEFAULT 0,
-    per_school_fee     NUMERIC(10,2) NOT NULL DEFAULT 0,
-    created_at         TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at         TIMESTAMPTZ NOT NULL DEFAULT now()
+    caterer_id      BIGINT PRIMARY KEY REFERENCES caterers(id) ON DELETE CASCADE,
+    price_per_item  NUMERIC(10,2) NOT NULL,
+    per_trip_fee    NUMERIC(10,2) NOT NULL DEFAULT 0,
+    per_school_per_trip_fee  NUMERIC(10,2) NOT NULL DEFAULT 0,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at      TIMESTAMPTZ NOT NULL DEFAULT now()
 );

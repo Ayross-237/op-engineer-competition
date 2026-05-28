@@ -4,6 +4,7 @@ On import: pulls the configured model (no-op if already cached) and
 pins it in memory so the first real call doesn't pay load latency.
 """
 import os
+import re
 import sys
 
 from dotenv import load_dotenv
@@ -79,3 +80,57 @@ def find_meal(dietary_extra: str, filtered_menu: list[tuple[str, list[str]]]) ->
             return name
     
     return "LLM FAILURE: incorrect name"
+
+def rank_meals(menu: list[str], reviews: list[tuple[str, str]]) -> list[tuple[str, int]]:
+    """Given a list of meal names and a list of reviews (date, content),
+    give each meal a score from 1-10 based on how well it seems to be reviewed.
+
+    Parameters:
+    - menu: list of meal names
+    - reviews: list of tuples containing (date, content) of reviews
+
+    Returns:
+    - list of tuples containing (meal name, score) sorted by score in descending order
+    """
+    if not menu:
+        return []
+    if not reviews:
+        # Nothing to score against — give every meal a neutral 5.
+        return [(name, 5) for name in menu]
+
+    reviews_text = "\n\n".join(f"[{date}]\n{content}" for date, content in reviews)
+
+    scored: list[tuple[str, int]] = []
+    for meal in menu:
+        prompt = (
+            f'You are evaluating the dish "{meal}" based on manager feedback from past weeks.\n\n'
+            "Reviews (one per week, newest may be last):\n"
+            f"{reviews_text}\n\n"
+            f'Based ONLY on what the reviews say about "{meal}" (ignore comments about other dishes), '
+            "give this dish a single integer quality score from 1 to 10 where:\n"
+            "  1 = consistently terrible across reviews\n"
+            "  5 = mixed, average, or the dish is not mentioned\n"
+            "  10 = consistently excellent across reviews\n\n"
+            "Respond with ONLY the integer. No words, no punctuation, no explanation."
+        )
+        raw = run_model(prompt).strip()
+        scored.append((meal, _parse_score(raw)))
+
+    scored.sort(key=lambda pair: pair[1], reverse=True)
+    return scored
+
+
+def _parse_score(raw: str) -> int:
+    """Extract an integer in [1, 10] from an LLM response. Falls back to 5 if nothing parses."""
+    try:
+        n = int(raw.strip())
+        if 1 <= n <= 10:
+            return n
+    except ValueError:
+        pass
+    # Pick the first standalone 10 or single digit 1-9 anywhere in the response.
+    match = re.search(r"\b(10|[1-9])\b", raw)
+    if match:
+        return int(match.group(1))
+    print(f"[llm] rank_meals: could not parse score from {raw!r}, defaulting to 5", file=sys.stderr)
+    return 5

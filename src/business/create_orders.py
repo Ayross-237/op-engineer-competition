@@ -20,10 +20,15 @@ def pick_dish(student_dietary: list[str], menu: list[tuple[str, list[str]]]) -> 
     for name, tags in menu:
         if requirements.issubset(tags):
             return name
-    return menu[0][0] if menu else "<no menu>"
+    return f"COULD NOT MATCH ({", ".join(requirements)} not met by any dish)"
 
 
-def build_session_table(program_id: int, session_date: str, menu: list[tuple[str, list[str]]]) -> list[str]:
+def build_session_table(
+    program_id: int,
+    session_date: str,
+    menu: list[tuple[str, list[str]]],
+    pricing: tuple[float, float, float],
+) -> list[str]:
     students = helpers.get_students_for_session(program_id, session_date)
     if not students:
         return ["_No catering required._"]
@@ -56,6 +61,13 @@ def build_session_table(program_id: int, session_date: str, menu: list[tuple[str
             requirements = ", ".join([*tags, extra]) if tags else extra
             dish = llm.find_meal(extra, filter_menu(menu, tags))
             lines.append(f"| {requirements} | {dish} |")
+
+    # One meal per student, one trip per session.
+    price_per_item, per_trip_fee, per_school_per_trip_fee = pricing
+    # Assume each trip only caters for one school
+    cost = len(students) * price_per_item + per_trip_fee + per_school_per_trip_fee
+    lines.append("")
+    lines.append(f"**Estimated cost:** ${cost:.2f} ({len(students)} × ${price_per_item:.2f} + ${per_trip_fee:.2f} trip + 1 × ${per_school_per_trip_fee:.2f} school fee)")
 
     return lines
 
@@ -101,18 +113,26 @@ def main() -> None:
         caterer_id = helpers.get_caterer(school_id)
         caterer_name = helpers.get_caterer_name(caterer_id)
         menu = helpers.get_menu(caterer_id)
+        pricing = helpers.get_pricing(caterer_id)
         programs = helpers.get_programs(school_id)
 
         session_printed = False
-        for program_id, day, start, end, mgr_name, mgr_mobile in programs:
+        for program_id, day, start, end, dinner, mgr_name, mgr_mobile in programs:
             session_rows = helpers.get_sessions(program_id, week)
             for session_date, sub_name, sub_mobile in sorted(session_rows):
                 session_printed = True
+                catering_count = len(helpers.get_students_for_session(program_id, session_date))
+                opted_out_count = len(helpers.get_students_for_session(program_id, session_date, wants_catering=False))
+                total_count = catering_count + opted_out_count
                 sections.append(f"### {session_date} ({day} {start}–{end}): {caterer_name}")
+                sections.append("")
+                sections.append(f"**Dinner served at:** {dinner}")
+                sections.append("")
+                sections.append(f"**Students:** {total_count} total, {opted_out_count} opted out")
                 sections.append("")
                 sections.append(format_manager_line(mgr_name, mgr_mobile, sub_name, sub_mobile))
                 sections.append("")
-                sections.extend(build_session_table(program_id, session_date, menu))
+                sections.extend(build_session_table(program_id, session_date, menu, pricing))
                 sections.append("")
 
         if not session_printed:

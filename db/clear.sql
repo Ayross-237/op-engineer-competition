@@ -7,6 +7,7 @@ TRUNCATE TABLE
     enrolments,
     items,
     pricing_structures,
+    feedback,
     programs,
     students,
     schools,
