@@ -164,12 +164,13 @@ def main(week: list[str]) -> None:
                 sections.append("")
                 report = build_session_report(catering, ranked_menu, pricing)
                 sections.extend(render_session(report))
-                sections.append("### Caterer feedback summary:")
-                sections.append(llm.summarise_feedback(helpers.get_feedback(caterer_id)))
-                sections.append("")
 
         if not session_printed:
             sections.append("_No sessions scheduled this week._")
+            sections.append("")
+        else:
+            sections.append("### Caterer feedback summary:")
+            sections.append(llm.summarise_feedback(helpers.get_feedback(caterer_id)))
             sections.append("")
 
     output = Path() / "output" / "orders.md"
