@@ -14,12 +14,12 @@ _Week of 2026-04-27 – 2026-05-03_
 
 | Dish | Quantity |
 |------|----------|
-| Fish Taco Bowl | 1 |
 | Fried Chicken Burger + Chips | 2 |
-| Japanese Chicken Curry | 4 |
-| Korean Beef Bulgogi Rice Bowl | 4 |
-| Spaghetti Bolognese + Garlic Bread | 2 |
-| Sweet and Sour Chicken | 1 |
+| Gnocchi in Tomato Sauce | 1 |
+| Japanese Chicken Curry | 6 |
+| Korean Beef Bulgogi Rice Bowl | 3 |
+| Shrimp Fried Rice | 1 |
+| Spaghetti Bolognese + Garlic Bread | 1 |
 
 **Special dietary requirements:**
 
@@ -47,14 +47,14 @@ The caterer demonstrates consistent strengths with dishes like Korean Beef Bulgo
 | Dish | Quantity |
 |------|----------|
 | Bacon Carbonara | 2 |
-| Beef Pad Thai | 3 |
+| Beef Pad Thai | 4 |
 | Chinese Honey Soy Noodles | 1 |
-| Creamy Garlic Beef Noodles | 3 |
-| Grilled Pork Vermicelli Salad | 1 |
-| Lemongrass Grilled Beef and Noodles | 9 |
+| Creamy Garlic Beef Noodles | 1 |
+| Lemongrass Grilled Beef and Noodles | 8 |
 | Mie Goreng | 2 |
-| Spicy Miso Udon | 1 |
-| Stir-fry Noodles topped with Chicken | 3 |
+| Spaghetti meatballs | 1 |
+| Spicy Miso Udon | 2 |
+| Stir-fry Noodles topped with Chicken | 4 |
 
 **Special dietary requirements:**
 
@@ -74,14 +74,12 @@ The caterer demonstrates consistent strengths with dishes like Korean Beef Bulgo
 | Dish | Quantity |
 |------|----------|
 | Bacon Carbonara | 1 |
-| Beef Pad Thai | 2 |
-| Chinese Honey Soy Noodles | 4 |
-| Creamy Garlic Beef Noodles | 3 |
-| Grilled Pork Vermicelli Salad | 2 |
-| Lemongrass Grilled Beef and Noodles | 10 |
-| Mie Goreng | 5 |
-| Spaghetti meatballs | 3 |
-| Stir-fry Noodles topped with Chicken | 2 |
+| Beef Pad Thai | 3 |
+| Creamy Garlic Beef Noodles | 2 |
+| Lemongrass Grilled Beef and Noodles | 9 |
+| Mie Goreng | 8 |
+| Spicy Miso Udon | 6 |
+| Stir-fry Noodles topped with Chicken | 3 |
 
 **Special dietary requirements:**
 
@@ -113,15 +111,14 @@ _No sessions scheduled this week._
 
 | Dish | Quantity |
 |------|----------|
-| Beef Fried Rice | 3 |
-| Chicken Karaage ricebowl | 1 |
-| Chicken Parmi, chips and salad | 4 |
-| Chinese Honey Soy Noodles | 3 |
-| Creamy Udon | 1 |
-| Japanese Chicken Katsu | 4 |
-| Lamb wrap | 5 |
-| Mongolian Beef and Rice | 4 |
-| Sweet and Sour Chicken | 1 |
+| Beef Fried Rice | 1 |
+| Chicken Karaage ricebowl | 7 |
+| Chicken Parmi, chips and salad | 2 |
+| Chinese Honey Soy Noodles | 1 |
+| Creamy Udon | 2 |
+| Japanese Chicken Katsu | 2 |
+| Lamb wrap | 8 |
+| Mongolian Beef and Rice | 3 |
 | Teriyaki Salmon rice bowl | 8 |
 
 **Special dietary requirements:**
@@ -143,13 +140,14 @@ _No sessions scheduled this week._
 | Dish | Quantity |
 |------|----------|
 | Beef Fried Rice | 3 |
-| Chicken Karaage ricebowl | 6 |
-| Chicken Parmi, chips and salad | 5 |
-| Creamy Udon | 2 |
-| Japanese Chicken Katsu | 4 |
-| Lamb wrap | 6 |
-| Mongolian Beef and Rice | 5 |
-| Teriyaki Salmon rice bowl | 7 |
+| Chicken Karaage ricebowl | 4 |
+| Chicken Parmi, chips and salad | 4 |
+| Chinese Honey Soy Noodles | 1 |
+| Japanese Chicken Katsu | 3 |
+| Lamb wrap | 5 |
+| Mongolian Beef and Rice | 6 |
+| Sweet and Sour Chicken | 1 |
+| Teriyaki Salmon rice bowl | 11 |
 
 **Special dietary requirements:**
 
@@ -178,15 +176,13 @@ Kenko consistently delivers strong performance, particularly with dishes like th
 | Dish | Quantity |
 |------|----------|
 | Breakfast Tacos | 1 |
-| Caesar Salad | 6 |
-| Cali Burrito | 4 |
+| Caesar Salad | 3 |
 | Chicken Enchilada | 4 |
-| Chicken Quesadilla | 1 |
-| Crispy Chicken Taco | 4 |
+| Chicken Quesadilla | 4 |
+| Crispy Chicken Taco | 5 |
 | Grilled Chicken Burrito | 2 |
-| Nacho Fries | 3 |
-| Nachos | 1 |
-| Pulled pork burrito bowl | 6 |
+| Nacho Fries | 5 |
+| Pulled pork burrito bowl | 8 |
 
 **Estimated cost:** $530.00 (32 × $15.00 + $50.00 trip + 1 × $0.00 school fee)
 ### Caterer feedback summary:
@@ -206,13 +202,12 @@ The caterer demonstrates significant strengths with consistently high ratings fo
 
 | Dish | Quantity |
 |------|----------|
-| Caesar Salad | 2 |
-| Cali Burrito | 1 |
+| Caesar Salad | 1 |
+| Chicken Enchilada | 1 |
 | Chicken Quesadilla | 1 |
-| Crispy Chicken Taco | 4 |
-| Grilled Chicken Burrito | 2 |
-| Nacho Fries | 1 |
-| Pulled pork burrito bowl | 4 |
+| Crispy Chicken Taco | 7 |
+| Nacho Fries | 3 |
+| Pulled pork burrito bowl | 2 |
 
 **Special dietary requirements:**
 
@@ -231,14 +226,13 @@ The caterer demonstrates significant strengths with consistently high ratings fo
 
 | Dish | Quantity |
 |------|----------|
-| Breakfast Tacos | 1 |
 | Caesar Salad | 3 |
-| Chicken Enchilada | 3 |
+| Cali Burrito | 1 |
+| Chicken Enchilada | 2 |
 | Chicken Quesadilla | 2 |
-| Crispy Chicken Taco | 5 |
-| Grilled Chicken Burrito | 1 |
-| Nacho Fries | 1 |
-| Pulled pork burrito bowl | 5 |
+| Crispy Chicken Taco | 4 |
+| Nacho Fries | 2 |
+| Pulled pork burrito bowl | 7 |
 
 **Estimated cost:** $365.00 (21 × $15.00 + $50.00 trip + 1 × $0.00 school fee)
 ### Caterer feedback summary:

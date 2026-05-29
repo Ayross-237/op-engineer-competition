@@ -123,7 +123,7 @@ def markdown_to_pdf(md_path: Path, pdf_path: Path) -> None:
     pdf.save(str(pdf_path))
 
 
-def main(week: list[str]) -> None:
+def main(week: list[str], email: str = "aaron.r.dmello@gmail.com") -> None:
     sections: list[str] = [
         "# Catering Orders",
         "",
@@ -181,11 +181,8 @@ def main(week: list[str]) -> None:
     markdown_to_pdf(output, pdf_output)
     print(f"Wrote {pdf_output}")
     send_email(
-        "aaron.r.dmello@gmail.com",
+        email,
         f"Catering Orders for {week[0]} – {week[-1]}",
         "Please find the catering orders attached.",
         attachment=str(pdf_output)
     )
-
-if __name__ == "__main__":
-    main(next_week(today=(date.today() - timedelta(days=33))))  # Use yesterday as "today" to avoid timezone issues on early-morning runs
