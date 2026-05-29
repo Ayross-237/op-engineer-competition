@@ -21,9 +21,6 @@ class SessionReport:
     pricing: tuple[float, float, float] = (0.0, 0.0, 0.0)
 
 
-# --- pure menu helpers --
-
-
 # --- session compute (no markdown) ---
 
 def build_session_report(
@@ -167,6 +164,8 @@ def main() -> None:
                 sections.append("")
                 report = build_session_report(catering, ranked_menu, pricing)
                 sections.extend(render_session(report))
+                sections.append("### Caterer feedback summary:")
+                sections.append(llm.summarise_feedback(helpers.get_feedback(caterer_id)))
                 sections.append("")
 
         if not session_printed:

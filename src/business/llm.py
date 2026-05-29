@@ -137,3 +137,21 @@ def _parse_score(raw: str) -> int:
         return int(match.group(1))
     print(f"[llm] rank_meals: could not parse score from {raw!r}, defaulting to 10", file=sys.stderr)
     return 10
+
+
+def summarise_feedback(reviews: list[tuple[str, str]]) -> str:
+    """Generate a concise summary of the manager feedback for this caterer."""
+    if not reviews:
+        return "No feedback available."
+
+    reviews_text = "\n\n".join(f"[{date}]\n{content}" for date, content in reviews)
+    prompt = (
+        "You are a helpful assistant summarising catering manager feedback for the upcoming week's orders.\n\n"
+        "Summarise the following feedback into a concise overview of the caterer's strengths and weaknesses, "
+        "focusing on actionable insights about the food quality, reliability, and suitability for students:\n\n"
+        f"{reviews_text}\n\n"
+        "Respond with a brief summary in 2-3 sentences. This is aimed at the program manager and administrator."
+        "This should be short and concise, focussed on strengths a weakness of the caterer and dishes"
+        "Only include the actual review and no headers or extraneous text."
+    )
+    return run_model(prompt).strip()
