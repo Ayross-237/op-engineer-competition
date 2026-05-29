@@ -1,5 +1,6 @@
 """Generate per-session catering orders for the upcoming week as a markdown file."""
 from dataclasses import dataclass, field
+from datetime import date, timedelta
 from pathlib import Path
 
 from src.business import llm
@@ -122,8 +123,7 @@ def markdown_to_pdf(md_path: Path, pdf_path: Path) -> None:
     pdf.save(str(pdf_path))
 
 
-def main() -> None:
-    week = next_week()
+def main(week: list[str]) -> None:
     sections: list[str] = [
         "# Catering Orders",
         "",
@@ -187,4 +187,4 @@ def main() -> None:
     )
 
 if __name__ == "__main__":
-    main()
+    main(next_week(today=(date.today() - timedelta(days=33))))  # Use yesterday as "today" to avoid timezone issues on early-morning runs
