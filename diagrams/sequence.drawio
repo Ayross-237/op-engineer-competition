@@ -1,0 +1,149 @@
+<mxfile host="65bd71144e">
+    <diagram id="SVpjEkqmdkYlY14IZ5zU" name="Page-1">
+        <mxGraphModel dx="859" dy="742" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="1080" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="Process diagram" style="text;html=1;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="15" width="900" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="head-sys" value="Python script" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+                    <mxGeometry x="120" y="60" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="head-db" value="Database&lt;br&gt;(supabase)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+                    <mxGeometry x="420" y="60" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="head-ai" value="Local LLM (Gemma3)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+                    <mxGeometry x="720" y="60" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="head-email" value="Email service" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+                    <mxGeometry x="1020" y="60" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="line-sys" style="endArrow=none;html=1;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="220" y="100" as="sourcePoint"/>
+                        <mxPoint x="220" y="1000" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="line-db" style="endArrow=none;html=1;strokeColor=#d6b656;strokeWidth=2;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="520" y="100" as="sourcePoint"/>
+                        <mxPoint x="520" y="1000" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="line-ai" style="endArrow=none;html=1;strokeColor=#b85450;strokeWidth=2;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="820" y="100" as="sourcePoint"/>
+                        <mxPoint x="820" y="1000" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="line-email" style="endArrow=none;html=1;strokeColor=#d79b00;strokeWidth=2;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1120" y="100" as="sourcePoint"/>
+                        <mxPoint x="1120" y="1000" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="start-note" value="Human/Automatic trigger" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=2;" vertex="1" parent="1">
+                    <mxGeometry x="10" y="130" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="start-arrow" style="endArrow=block;html=1;strokeColor=#6c8ebf;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="start-note">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="220" y="140" as="sourcePoint"/>
+                        <mxPoint x="220" y="145" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="loop-school-box" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#666666;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="180" y="185" width="980" height="670" as="geometry"/>
+                </mxCell>
+                <mxCell id="loop-school-tag" value="REPEAT FOR EACH SCHOOL" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#666666;strokeColor=#666666;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+                    <mxGeometry x="180" y="185" width="240" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m1" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;1.  Look up everything we need about this school&lt;/font&gt;" style="endArrow=block;html=1;strokeColor=#82b366;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;verticalAlign=bottom;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="220" y="230" as="sourcePoint"/>
+                        <mxPoint x="520" y="230" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m1r" value="• caterer name and prices&#xa;• full menu with dietary tags&#xa;• tutoring sessions this week&#xa;• manager (and sub) contact details&#xa;• past feedback from managers" style="endArrow=open;endFill=0;html=1;strokeColor=#d6b656;strokeWidth=2;fontSize=12;labelBackgroundColor=#ffffff;verticalAlign=middle;align=center;" edge="1" parent="1">
+                    <mxGeometry x="0.0032" relative="1" as="geometry">
+                        <mxPoint x="520" y="280" as="sourcePoint"/>
+                        <mxPoint x="220" y="280" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m2" value="2.  Score each dish on this caterer&#39;s menu from 1–10&#xa;based on what managers wrote about it in the past" style="endArrow=block;html=1;strokeColor=#82b366;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;verticalAlign=bottom;align=center;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="220" y="380" as="sourcePoint"/>
+                        <mxPoint x="820" y="380" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m2r" value="Weighted menu - better dishes are chosen more" style="endArrow=open;endFill=0;html=1;strokeColor=#b85450;strokeWidth=2;fontSize=12;labelBackgroundColor=#ffffff;verticalAlign=middle;align=center;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="820" y="410" as="sourcePoint"/>
+                        <mxPoint x="220" y="410" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="loop-sess-box" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#82b366;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="445" width="940" height="315" as="geometry"/>
+                </mxCell>
+                <mxCell id="loop-sess-tag" value="REPEAT FOR EACH SESSION THIS WEEK" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#82b366;strokeColor=#82b366;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="445" width="290" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="m3" value="3.  Who&#39;s attending this session?" style="endArrow=block;html=1;strokeColor=#82b366;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;verticalAlign=bottom;align=center;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="220" y="490" as="sourcePoint"/>
+                        <mxPoint x="520" y="490" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m3r" value="list of students attending,&#xa;list of students who opted out,&#xa;each student&#39;s dietary needs" style="endArrow=open;endFill=0;html=1;strokeColor=#d6b656;strokeWidth=2;fontSize=12;labelBackgroundColor=#ffffff;verticalAlign=middle;align=center;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="520" y="519.52" as="sourcePoint"/>
+                        <mxPoint x="220" y="519.52" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m4" value="4.  For each student with an unusual dietary need&lt;br&gt;(e.g. &#39;no shellfish&#39;, &#39;egg allergy&#39;), an llm is used to guess which dish would suit" style="endArrow=block;html=1;strokeColor=#82b366;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;verticalAlign=bottom;align=center;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="220" y="605" as="sourcePoint"/>
+                        <mxPoint x="820" y="605" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m4r" value="one recommended dish per such student" style="endArrow=open;endFill=0;html=1;strokeColor=#b85450;strokeWidth=2;fontSize=12;labelBackgroundColor=#ffffff;verticalAlign=middle;align=center;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="820" y="630" as="sourcePoint"/>
+                        <mxPoint x="220" y="630" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="note-std" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;Students with standard dietary tags (vegetarian, halal, etc.) or no dietary requirements&lt;br&gt;are matched to a dish randomly choosing a dish that suits their dietary tags (if any) with the&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;ratings of each dish serving as weights, making better dishes more likely to be chosen&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9e0;strokeColor=#d6b656;fontSize=12;fontStyle=2;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="240" y="670" width="540" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="m5" value="5.  Write a short summary of what managers&#xa;think about this caterer overall" style="endArrow=block;html=1;strokeColor=#82b366;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;verticalAlign=bottom;align=center;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="220" y="810" as="sourcePoint"/>
+                        <mxPoint x="820" y="810" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="m5r" value="plain-English summary paragraph" style="endArrow=open;endFill=0;html=1;strokeColor=#b85450;strokeWidth=2;fontSize=12;labelBackgroundColor=#ffffff;verticalAlign=middle;align=center;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="820" y="830" as="sourcePoint"/>
+                        <mxPoint x="220" y="830" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="note-build" value="Once every school is done, the system assembles the&#xa;full report and saves it as a PDF." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6f0ff;strokeColor=#6c8ebf;fontSize=12;fontStyle=2;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="880" width="360" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="m6" value="6.  Email the PDF report" style="endArrow=block;html=1;strokeColor=#82b366;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;verticalAlign=bottom;align=center;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="220" y="950" as="sourcePoint"/>
+                        <mxPoint x="1120" y="950" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="21" value="Complete" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6f0ff;strokeColor=#6c8ebf;fontSize=12;fontStyle=2;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="970" width="360" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

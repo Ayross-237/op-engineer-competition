@@ -41,7 +41,7 @@ def build_session_report(
 
     counts: dict[str, int] = {}
     for diet in standard:
-        dish = pick_dish(diet, menu)
+        dish = pick_dish(diet, filter_menu(menu, diet))
         counts[dish] = counts.get(dish, 0) + 1
 
     assignments: list[tuple[str, str]] = []

@@ -26,5 +26,5 @@ def pick_dish(student_dietary: list[str], menu: list[MenuItem]) -> str:
     filtered = filter_menu(menu, student_dietary)
     if not filtered:
         return f"COULD NOT MATCH ({', '.join(student_dietary)} not met by any dish)"
-    weights = [item.score if item.score is not None else 1 for item in filtered]
+    weights = [2**item.score if item.score is not None else 1 for item in filtered]
     return random.choices(filtered, weights=weights, k=1)[0].name
