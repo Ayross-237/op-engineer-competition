@@ -1,74 +1,102 @@
 """Generate per-session catering orders for the upcoming week as a markdown file."""
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from src.business import llm
+from src.business.email import send_email
+from src.business.menu import MenuItem, filter_menu, pick_dish
 from src.persistence import helpers
 from src.shared.dates import next_week
-from src.business.email import send_email
-
-def filter_menu(menu: list[tuple[str, list[str]]], dietary_tags: list[str]) -> list[tuple[str, list[str]]]:
-    """Filter the menu to the dishes that meet the student's dietary requirements."""
-    filtered = []
-    requirements = set(dietary_tags)
-    for name, tags in menu:
-        if requirements.issubset(set(tags)):
-            filtered.append((name, tags))
-    return filtered
-
-def pick_dish(student_dietary: list[str], menu: list[tuple[str, list[str]]]) -> str:
-    requirements = set(student_dietary)
-    for name, tags in menu:
-        if requirements.issubset(tags):
-            return name
-    return f"COULD NOT MATCH ({", ".join(requirements)} not met by any dish)"
 
 
-def build_session_table(
-    program_id: int,
-    session_date: str,
-    menu: list[tuple[str, list[str]]],
+# --- domain types ---
+
+@dataclass
+class SessionReport:
+    """The fully-computed view of one session, ready for rendering."""
+    student_count: int
+    standard_counts: dict[str, int] = field(default_factory=dict)
+    special_assignments: list[tuple[str, str]] = field(default_factory=list)  # (requirements label, dish)
+    cost: float = 0.0
+    pricing: tuple[float, float, float] = (0.0, 0.0, 0.0)
+
+
+# --- pure menu helpers --
+
+
+# --- session compute (no markdown) ---
+
+def build_session_report(
+    students: list[tuple[int, list[str], str | None]],
+    menu: list[MenuItem],
     pricing: tuple[float, float, float],
-) -> list[str]:
-    students = helpers.get_students_for_session(program_id, session_date)
+) -> SessionReport:
+    """Crunch a session's roster + menu + pricing into a SessionReport. The only I/O
+    here is the per-special-student LLM call inside `find_meal`; no markdown is produced."""
     if not students:
-        return ["_No catering required._"]
+        return SessionReport(student_count=0, pricing=pricing)
 
-    # Students with free-text dietary requirements go through the LLM individually;
-    # the rest fall into the standard dish-count table via the greedy picker.
-    standard = [(sid, diet) for sid, diet, extra in students if not extra]
-    special = [(sid, diet, extra) for sid, diet, extra in students if extra]
+    # Free-text dietary requirements route through the LLM one at a time;
+    # the rest go through the weighted picker.
+    standard = [diet for _, diet, extra in students if not extra]
+    special = [(diet, extra) for _, diet, extra in students if extra]
+
+    counts: dict[str, int] = {}
+    for diet in standard:
+        dish = pick_dish(diet, menu)
+        counts[dish] = counts.get(dish, 0) + 1
+
+    assignments: list[tuple[str, str]] = []
+    for diet, extra in special:
+        req_label = ", ".join([*diet, extra]) if diet else extra
+        dish = llm.find_meal(extra, filter_menu(menu, diet))
+        assignments.append((req_label, dish))
+
+    per_item, per_trip, per_school = pricing
+    # One meal per student, one trip per session, assume one school per trip.
+    cost = len(students) * per_item + per_trip + per_school
+
+    return SessionReport(
+        student_count=len(students),
+        standard_counts=counts,
+        special_assignments=assignments,
+        cost=cost,
+        pricing=pricing,
+    )
+
+
+# --- session render (no compute) ---
+
+def render_session(report: SessionReport) -> list[str]:
+    """Turn a SessionReport into markdown lines for the session body."""
+    if report.student_count == 0:
+        return ["_No catering required._"]
 
     lines: list[str] = []
 
-    if standard:
-        counts: dict[str, int] = {}
-        for _, dietary in standard:
-            dish = pick_dish(dietary, menu)
-            counts[dish] = counts.get(dish, 0) + 1
+    if report.standard_counts:
         lines.append("| Dish | Quantity |")
         lines.append("|------|----------|")
-        for dish, qty in sorted(counts.items()):
+        for dish, qty in sorted(report.standard_counts.items()):
             lines.append(f"| {dish} | {qty} |")
 
-    if special:
-        if standard:
+    if report.special_assignments:
+        if report.standard_counts:
             lines.append("")
         lines.append("**Special dietary requirements:**")
         lines.append("")
         lines.append("| Dietary Requirements | Recommended Dish |")
         lines.append("|----------------------|------------------|")
-        for _, tags, extra in special:
-            requirements = ", ".join([*tags, extra]) if tags else extra
-            dish = llm.find_meal(extra, filter_menu(menu, tags))
+        for requirements, dish in report.special_assignments:
             lines.append(f"| {requirements} | {dish} |")
 
-    # One meal per student, one trip per session.
-    price_per_item, per_trip_fee, per_school_per_trip_fee = pricing
-    # Assume each trip only caters for one school
-    cost = len(students) * price_per_item + per_trip_fee + per_school_per_trip_fee
+    per_item, per_trip, per_school = report.pricing
     lines.append("")
-    lines.append(f"**Estimated cost:** ${cost:.2f} ({len(students)} × ${price_per_item:.2f} + ${per_trip_fee:.2f} trip + 1 × ${per_school_per_trip_fee:.2f} school fee)")
-
+    lines.append(
+        f"**Estimated cost:** ${report.cost:.2f} "
+        f"({report.student_count} × ${per_item:.2f} + ${per_trip:.2f} trip + "
+        f"1 × ${per_school:.2f} school fee)"
+    )
     return lines
 
 
@@ -112,27 +140,33 @@ def main() -> None:
 
         caterer_id = helpers.get_caterer(school_id)
         caterer_name = helpers.get_caterer_name(caterer_id)
-        menu = helpers.get_menu(caterer_id)
         pricing = helpers.get_pricing(caterer_id)
         programs = helpers.get_programs(school_id)
+
+        # Convert raw menu rows into MenuItems and score them once per school
+        # (the LLM ranking is the same for every session at this school).
+        raw_menu = helpers.get_menu(caterer_id)
+        menu_items = [MenuItem(name=name, tags=tags) for name, tags in raw_menu]
+        ranked_menu = llm.rank_meals(menu_items, helpers.get_feedback(caterer_id))
 
         session_printed = False
         for program_id, day, start, end, dinner, mgr_name, mgr_mobile in programs:
             session_rows = helpers.get_sessions(program_id, week)
             for session_date, sub_name, sub_mobile in sorted(session_rows):
                 session_printed = True
-                catering_count = len(helpers.get_students_for_session(program_id, session_date))
-                opted_out_count = len(helpers.get_students_for_session(program_id, session_date, wants_catering=False))
-                total_count = catering_count + opted_out_count
+                catering = helpers.get_students_for_session(program_id, session_date)
+                opted_out = helpers.get_students_for_session(program_id, session_date, wants_catering=False)
+                total_count = len(catering) + len(opted_out)
                 sections.append(f"### {session_date} ({day} {start}–{end}): {caterer_name}")
                 sections.append("")
                 sections.append(f"**Dinner served at:** {dinner}")
                 sections.append("")
-                sections.append(f"**Students:** {total_count} total, {opted_out_count} opted out")
+                sections.append(f"**Students:** {total_count} total, {len(opted_out)} opted out")
                 sections.append("")
                 sections.append(format_manager_line(mgr_name, mgr_mobile, sub_name, sub_mobile))
                 sections.append("")
-                sections.extend(build_session_table(program_id, session_date, menu, pricing))
+                report = build_session_report(catering, ranked_menu, pricing)
+                sections.extend(render_session(report))
                 sections.append("")
 
         if not session_printed:

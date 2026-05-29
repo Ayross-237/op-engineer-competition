@@ -14,10 +14,9 @@ _Week of 2026-06-01 – 2026-06-07_
 
 | Dish | Quantity |
 |------|----------|
-| COULD NOT MATCH (V, DF, GF not met by any dish) | 1 |
+| Japanese Chicken Curry | 1 |
 | Japanese Chicken Curry (Vegetarian) | 1 |
-| Shrimp Fried Rice | 1 |
-| Spaghetti Bolognese + Garlic Bread | 1 |
+| Sweet and Sour Chicken | 2 |
 
 **Estimated cost:** $140.00 (4 × $35.00 + $0.00 trip + 1 × $0.00 school fee)
 
@@ -33,15 +32,16 @@ _Week of 2026-06-01 – 2026-06-07_
 
 | Dish | Quantity |
 |------|----------|
+| Lemongrass Grilled Beef and Noodles | 1 |
+| Mie Goreng | 1 |
 | Mie Goreng (Vegetarian) | 1 |
-| Spicy Miso Udon | 2 |
+| Spicy Miso Udon | 1 |
 
 **Special dietary requirements:**
 
 | Dietary Requirements | Recommended Dish |
 |----------------------|------------------|
 | H, Severe egg allergy | Mie Goreng (Vegetarian) |
-| starch intolerant | Mie Goreng (Vegetarian) |
 | Pescatarian — fish only, no other meat | Mie Goreng (Vegetarian) |
 
 **Estimated cost:** $153.00 (6 × $20.50 + $0.00 trip + 1 × $30.00 school fee)
@@ -58,8 +58,9 @@ _Week of 2026-06-01 – 2026-06-07_
 
 | Dish | Quantity |
 |------|----------|
-| Teriyaki Salmon rice bowl | 3 |
-| Teriyaki Salmon rice bowl (Vegetarian) | 1 |
+| Chicken Karaage ricebowl | 1 |
+| Teriyaki Salmon rice bowl | 1 |
+| Teriyaki Salmon rice bowl (Vegetarian) | 2 |
 
 **Estimated cost:** $32.00 (4 × $5.50 + $0.00 trip + 1 × $10.00 school fee)
 
@@ -75,7 +76,6 @@ _Week of 2026-06-01 – 2026-06-07_
 
 | Dish | Quantity |
 |------|----------|
-| Caesar Salad | 1 |
-| Caesar Salad (Vegetarian) | 1 |
+| Caesar Salad (Vegetarian) | 2 |
 
 **Estimated cost:** $80.00 (2 × $15.00 + $50.00 trip + 1 × $0.00 school fee)

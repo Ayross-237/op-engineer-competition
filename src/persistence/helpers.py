@@ -168,9 +168,9 @@ def get_feedback(caterer_id: int) -> list[tuple[str, str]]:
     """
     response = (
         client.table("feedback")
-        .select("date", "feedback")
+        .select("submitted_at", "content")
         .eq("caterer_id", caterer_id)
         .execute()
     )
     data: Any = response.data
-    return [(f["date"], f["feedback"]) for f in data]
+    return [(f["submitted_at"], f["content"]) for f in data]
