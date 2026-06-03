@@ -14,19 +14,18 @@ _Week of 2026-04-27 – 2026-05-03_
 
 | Dish | Quantity |
 |------|----------|
-| Fried Chicken Burger + Chips | 2 |
-| Gnocchi in Tomato Sauce | 1 |
-| Japanese Chicken Curry | 6 |
+| Fried Chicken Burger + Chips | 3 |
+| Japanese Chicken Curry | 3 |
+| Japanese Chicken Curry (vegetarian) | 5 |
 | Korean Beef Bulgogi Rice Bowl | 3 |
-| Shrimp Fried Rice | 1 |
 | Spaghetti Bolognese + Garlic Bread | 1 |
 
 **Special dietary requirements:**
 
 | Dietary Requirements | Recommended Dish |
 |----------------------|------------------|
-| No Fish | Japanese Chicken Curry |
-| No Shellfish | Korean Beef Bulgogi Rice Bowl |
+| No Fish | Japanese Chicken Curry (vegetarian) |
+| No Shellfish | Japanese Chicken Curry (vegetarian) |
 
 **Estimated cost:** $560.00 (16 × $35.00 + $0.00 trip + 1 × $0.00 school fee)
 ### Caterer feedback summary:
@@ -46,21 +45,23 @@ The caterer demonstrates consistent strengths with dishes like Korean Beef Bulgo
 
 | Dish | Quantity |
 |------|----------|
-| Bacon Carbonara | 2 |
-| Beef Pad Thai | 4 |
+| Bacon Carbonara | 1 |
 | Chinese Honey Soy Noodles | 1 |
 | Creamy Garlic Beef Noodles | 1 |
-| Lemongrass Grilled Beef and Noodles | 8 |
-| Mie Goreng | 2 |
-| Spaghetti meatballs | 1 |
-| Spicy Miso Udon | 2 |
-| Stir-fry Noodles topped with Chicken | 4 |
+| Creamy Garlic Beef Noodles (vegetarian) | 3 |
+| Grilled Pork Vermicelli Salad | 2 |
+| Grilled Pork Vermicelli Salad (vegetarian) | 1 |
+| Lemongrass Grilled Beef and Noodles | 3 |
+| Lemongrass Grilled Beef and Noodles (vegetarian) | 4 |
+| Mie Goreng | 3 |
+| Mie Goreng (vegetarian) | 3 |
+| Stir-fry Noodles topped with Chicken | 3 |
 
 **Special dietary requirements:**
 
 | Dietary Requirements | Recommended Dish |
 |----------------------|------------------|
-| No Beef | Mie Goreng |
+| No Beef | Mie Goreng (vegetarian) |
 
 **Estimated cost:** $563.00 (26 × $20.50 + $0.00 trip + 1 × $30.00 school fee)
 ### 2026-05-03 (Wednesday 16:30:00–19:30:00): Terrific Noodles
@@ -74,20 +75,26 @@ The caterer demonstrates consistent strengths with dishes like Korean Beef Bulgo
 | Dish | Quantity |
 |------|----------|
 | Bacon Carbonara | 1 |
-| Beef Pad Thai | 3 |
+| Beef Pad Thai | 4 |
+| Chinese Honey Soy Noodles | 2 |
 | Creamy Garlic Beef Noodles | 2 |
-| Lemongrass Grilled Beef and Noodles | 9 |
-| Mie Goreng | 8 |
-| Spicy Miso Udon | 6 |
+| Creamy Garlic Beef Noodles (vegetarian) | 1 |
+| Grilled Pork Vermicelli Salad | 2 |
+| Grilled Pork Vermicelli Salad (vegetarian) | 1 |
+| Lemongrass Grilled Beef and Noodles | 3 |
+| Lemongrass Grilled Beef and Noodles (vegetarian) | 4 |
+| Mie Goreng | 4 |
+| Mie Goreng (vegetarian) | 4 |
+| Spaghetti meatballs | 1 |
 | Stir-fry Noodles topped with Chicken | 3 |
 
 **Special dietary requirements:**
 
 | Dietary Requirements | Recommended Dish |
 |----------------------|------------------|
-| No Beef | Mie Goreng |
-| No Beef | Mie Goreng |
-| No Beef, No Pork | Mie Goreng |
+| No Beef | Mie Goreng (vegetarian) |
+| No Beef | Mie Goreng (vegetarian) |
+| No Beef, No Pork | Mie Goreng (vegetarian) |
 
 **Estimated cost:** $747.50 (35 × $20.50 + $0.00 trip + 1 × $30.00 school fee)
 ### Caterer feedback summary:
@@ -111,22 +118,24 @@ _No sessions scheduled this week._
 
 | Dish | Quantity |
 |------|----------|
-| Beef Fried Rice | 1 |
-| Chicken Karaage ricebowl | 7 |
+| Beef Fried Rice | 3 |
+| Beef Fried Rice (vegetarian) | 1 |
+| Chicken Karaage ricebowl | 2 |
+| Chicken Karaage ricebowl (vegetarian) | 4 |
 | Chicken Parmi, chips and salad | 2 |
-| Chinese Honey Soy Noodles | 1 |
-| Creamy Udon | 2 |
 | Japanese Chicken Katsu | 2 |
-| Lamb wrap | 8 |
-| Mongolian Beef and Rice | 3 |
-| Teriyaki Salmon rice bowl | 8 |
+| Japanese Chicken Katsu (vegetarian) | 2 |
+| Lamb wrap | 5 |
+| Mongolian Beef and Rice | 2 |
+| Teriyaki Salmon rice bowl | 6 |
+| Teriyaki Salmon rice bowl (vegetarian) | 5 |
 
 **Special dietary requirements:**
 
 | Dietary Requirements | Recommended Dish |
 |----------------------|------------------|
-| No Beef | Teriyaki Salmon rice bowl |
-| No Beef | Teriyaki Salmon rice bowl |
+| No Beef | Teriyaki Salmon rice bowl (vegetarian) |
+| No Beef | Teriyaki Salmon rice bowl (vegetarian) |
 
 **Estimated cost:** $208.00 (36 × $5.50 + $0.00 trip + 1 × $10.00 school fee)
 ### 2026-05-02 (Tuesday 15:30:00–18:30:00): Kenko Sushi House
@@ -139,23 +148,25 @@ _No sessions scheduled this week._
 
 | Dish | Quantity |
 |------|----------|
-| Beef Fried Rice | 3 |
-| Chicken Karaage ricebowl | 4 |
-| Chicken Parmi, chips and salad | 4 |
-| Chinese Honey Soy Noodles | 1 |
-| Japanese Chicken Katsu | 3 |
-| Lamb wrap | 5 |
-| Mongolian Beef and Rice | 6 |
-| Sweet and Sour Chicken | 1 |
-| Teriyaki Salmon rice bowl | 11 |
+| Beef Fried Rice (vegetarian) | 4 |
+| Chicken Karaage ricebowl | 2 |
+| Chicken Karaage ricebowl (vegetarian) | 8 |
+| Chicken Parmi, chips and salad | 3 |
+| Creamy Udon | 1 |
+| Japanese Chicken Katsu | 2 |
+| Japanese Chicken Katsu (vegetarian) | 1 |
+| Lamb wrap | 8 |
+| Mongolian Beef and Rice | 1 |
+| Teriyaki Salmon rice bowl | 2 |
+| Teriyaki Salmon rice bowl (vegetarian) | 6 |
 
 **Special dietary requirements:**
 
 | Dietary Requirements | Recommended Dish |
 |----------------------|------------------|
-| No Beef | Teriyaki Salmon rice bowl |
-| No Red Meat | Teriyaki Salmon rice bowl |
-| No Seafood | Sweet and Sour Chicken |
+| No Beef | Teriyaki Salmon rice bowl (vegetarian) |
+| No Red Meat | Teriyaki Salmon rice bowl (vegetarian) |
+| No Seafood | Teriyaki Salmon rice bowl (vegetarian) |
 
 **Estimated cost:** $235.50 (41 × $5.50 + $0.00 trip + 1 × $10.00 school fee)
 ### Caterer feedback summary:
@@ -175,14 +186,18 @@ Kenko consistently delivers strong performance, particularly with dishes like th
 
 | Dish | Quantity |
 |------|----------|
-| Breakfast Tacos | 1 |
-| Caesar Salad | 3 |
-| Chicken Enchilada | 4 |
-| Chicken Quesadilla | 4 |
-| Crispy Chicken Taco | 5 |
-| Grilled Chicken Burrito | 2 |
-| Nacho Fries | 5 |
-| Pulled pork burrito bowl | 8 |
+| Breakfast Tacos | 2 |
+| Caesar Salad | 1 |
+| Caesar Salad (vegetarian) | 1 |
+| Cali Burrito | 3 |
+| Chicken Quesadilla | 3 |
+| Crispy Chicken Taco | 4 |
+| Grilled Chicken Burrito | 1 |
+| Nacho Fries | 4 |
+| Nacho Fries (vegetarian) | 2 |
+| Nachos (vegetarian) | 1 |
+| Pulled pork burrito bowl | 4 |
+| Pulled pork burrito bowl (vegetarian) | 6 |
 
 **Estimated cost:** $530.00 (32 × $15.00 + $50.00 trip + 1 × $0.00 school fee)
 ### Caterer feedback summary:
@@ -202,18 +217,23 @@ The caterer demonstrates significant strengths with consistently high ratings fo
 
 | Dish | Quantity |
 |------|----------|
-| Caesar Salad | 1 |
-| Chicken Enchilada | 1 |
-| Chicken Quesadilla | 1 |
-| Crispy Chicken Taco | 7 |
-| Nacho Fries | 3 |
-| Pulled pork burrito bowl | 2 |
+| Breakfast Tacos (vegetarian) | 1 |
+| Caesar Salad (vegetarian) | 1 |
+| Cali Burrito | 1 |
+| Chicken Quesadilla | 3 |
+| Crispy Chicken Taco | 1 |
+| Grilled Chicken Burrito | 1 |
+| Nacho Fries | 2 |
+| Nacho Fries (vegetarian) | 2 |
+| Nachos (vegetarian) | 1 |
+| Pulled pork burrito bowl | 1 |
+| Pulled pork burrito bowl (vegetarian) | 1 |
 
 **Special dietary requirements:**
 
 | Dietary Requirements | Recommended Dish |
 |----------------------|------------------|
-| No Beef, No Pork | Pulled pork burrito bowl |
+| No Beef, No Pork | Nacho Fries (vegetarian) |
 
 **Estimated cost:** $290.00 (16 × $15.00 + $50.00 trip + 1 × $0.00 school fee)
 ### 2026-05-03 (Wednesday 15:30:00–18:30:00): Guzman y Gomez
@@ -226,13 +246,16 @@ The caterer demonstrates significant strengths with consistently high ratings fo
 
 | Dish | Quantity |
 |------|----------|
-| Caesar Salad | 3 |
+| Breakfast Tacos | 1 |
+| Caesar Salad | 2 |
+| Caesar Salad (vegetarian) | 2 |
 | Cali Burrito | 1 |
-| Chicken Enchilada | 2 |
+| Chicken Enchilada | 1 |
 | Chicken Quesadilla | 2 |
-| Crispy Chicken Taco | 4 |
-| Nacho Fries | 2 |
+| Crispy Chicken Taco | 2 |
+| Nachos (vegetarian) | 1 |
 | Pulled pork burrito bowl | 7 |
+| Pulled pork burrito bowl (vegetarian) | 2 |
 
 **Estimated cost:** $365.00 (21 × $15.00 + $50.00 trip + 1 × $0.00 school fee)
 ### Caterer feedback summary:

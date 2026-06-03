@@ -17,7 +17,7 @@ load_dotenv()
 host = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
 client: Client = Client(host=host)
 
-MODEL = "gemma3"
+MODEL = "gemma4:e2b"
 
 print(f"[llm] Pulling {MODEL} (first-run download may take a few minutes)...", file=sys.stderr)
 client.pull(MODEL)

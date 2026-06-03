@@ -317,15 +317,23 @@ def main():
     p("")
 
     # --- items ---
-    p("-- Menu items per caterer. VO in source → V in our enum. H added to every")
-    p("-- dish whose name does not contain 'pork' or 'bacon' (assume non-pork = halal).")
+    p("-- Menu items per caterer. H added to every dish whose name does not contain")
+    p("-- 'pork' or 'bacon' (assume non-pork = halal). A source VO (vegetarian option)")
+    p("-- dish is split into two orderable items: the default version (no V tag) and a")
+    p("-- '... (vegetarian)' version that carries the V tag, since VO means the caterer")
+    p("-- can prepare it vegetarian on request rather than it being vegetarian by default.")
     p("INSERT INTO items (caterer_id, name, dietary_tags) VALUES")
     rows = []
     for cname, dishes in MENUS.items():
         cid = caterer_id[cname]
         for dish_name, pdf_tags in dishes:
             tags = menu_tags(pdf_tags, dish_name)
-            rows.append(f"    ({cid}, {sql_str(dish_name)}, {sql_array(tags)})")
+            if "V" in tags:
+                default_tags = [t for t in tags if t != "V"]
+                rows.append(f"    ({cid}, {sql_str(dish_name)}, {sql_array(default_tags)})")
+                rows.append(f"    ({cid}, {sql_str(dish_name + ' (vegetarian)')}, {sql_array(tags)})")
+            else:
+                rows.append(f"    ({cid}, {sql_str(dish_name)}, {sql_array(tags)})")
     p(",\n".join(rows) + ";")
     p("")
 
