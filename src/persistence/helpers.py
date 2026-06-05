@@ -18,6 +18,42 @@ def get_schools() -> list[tuple[int, str]]:
 
     return schools
 
+def get_caterers() -> list[tuple[int, str]]:
+    """Returns every caterer as (id, name). Drives the per-caterer order loop."""
+    response = (
+        client.table("caterers")
+        .select("id", "name")
+        .execute()
+    )
+    data: Any = response.data
+    return [(c["id"], c["name"]) for c in data]
+
+def get_caterer_contact(caterer_id: int) -> tuple[str, str | None, bool]:
+    """Returns the dispatch contact details for a caterer.
+
+    Returns: (contact_email, chef_email, cc_chef)
+    """
+    response = (
+        client.table("caterers")
+        .select("contact_email", "chef_email", "cc_chef")
+        .eq("id", caterer_id)
+        .single()
+        .execute()
+    )
+    data: Any = response.data
+    return data["contact_email"], data["chef_email"], data["cc_chef"]
+
+def get_schools_for_caterer(caterer_id: int) -> list[tuple[int, str]]:
+    """Returns the schools served by a caterer as (id, name). Inverse of get_caterer."""
+    response = (
+        client.table("schools")
+        .select("id", "name")
+        .eq("caterer_id", caterer_id)
+        .execute()
+    )
+    data: Any = response.data
+    return [(s["id"], s["name"]) for s in data]
+
 def get_caterer(school_id: int) -> int:
     """"
     Returns the current caterer_id for the school
