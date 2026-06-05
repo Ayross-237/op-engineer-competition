@@ -23,6 +23,7 @@ class RenderedSession:
     `report` is built once (in compute_caterer_sessions) and reused for both copies."""
     school_name: str
     header: str          # e.g. "2026-05-02 (Tuesday 16:00–19:00)"
+    building: str
     dinner: str
     manager_line: str
     total_count: int     # students on the roster (incl. opted-out)

@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 import pytest
 
-from src.shared.dates import next_week
+from src.shared.dates import delivery_window, next_week
 
 
 def _today_is(d: date):
@@ -151,3 +151,35 @@ def test_handles_leap_year_february():
     assert result[0] == "2028-02-28"
     assert "2028-02-29" in result  # leap day must be in the week
     assert result[-1] == "2028-03-05"
+
+
+# --- delivery_window ---
+
+class TestDeliveryWindow:
+    def test_default_window_is_ten_to_five_before(self):
+        # 17:30 dinner → arrive 17:20 (10 before) up to 17:25 (5 before).
+        assert delivery_window("17:30") == "5:20 PM – 5:25 PM"
+
+    def test_accepts_seconds_in_time_string(self):
+        # programs.dinner_time can arrive as 'HH:MM:SS'.
+        assert delivery_window("17:30:00") == "5:20 PM – 5:25 PM"
+
+    def test_morning_time_uses_am(self):
+        assert delivery_window("09:15") == "9:05 AM – 9:10 AM"
+
+    def test_hour_has_no_leading_zero(self):
+        # 06:45 dinner → 6:35–6:40, not 06:35.
+        result = delivery_window("06:45")
+        assert result == "6:35 AM – 6:40 AM"
+        assert not result.startswith("0")
+
+    def test_window_crossing_the_hour(self):
+        # 17:05 dinner: 10 before = 16:55 (crosses back an hour).
+        assert delivery_window("17:05") == "4:55 PM – 5:00 PM"
+
+    def test_custom_lead_times(self):
+        assert delivery_window("18:00", lead_min=20, lead_max=10) == "5:40 PM – 5:50 PM"
+
+    def test_noon_is_pm(self):
+        # 12:30 → 12:20–12:25 PM (noon is PM in %p).
+        assert delivery_window("12:30") == "12:20 PM – 12:25 PM"

@@ -124,6 +124,7 @@ class TestPickDish:
     def test_zero_score_item_never_picked(self):
         menu = [MenuItem("never", [], score=0), MenuItem("always", [], score=10)]
         samples = [pick_dish([], menu) for _ in range(500)]
+        print(samples)
         assert "never" not in samples
 
     def test_picks_only_from_filtered_subset(self):

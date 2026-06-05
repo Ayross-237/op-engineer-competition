@@ -115,24 +115,24 @@ def get_menu(caterer_id: int) -> list[tuple[str, list[str]]]:
     data: Any = response.data
     return [(item["name"], item["dietary_tags"]) for item in data]
 
-def get_programs(school_id: int) -> list[tuple[int, str, str, str, str, str, str]]:
+def get_programs(school_id: int) -> list[tuple[int, str, str, str, str, str, str, str]]:
     """
     returns the list of programs (weekly recurring tutoring slots) for a school.
 
     Returns: [
         (id: int, day: str, start: timestamp, end: timestamp, dinner: timestamp,
-         manager_name: str, manager_mobile: str)
+         building: str, manager_name: str, manager_mobile: str)
     ]
     """
     response = (
         client.table("programs")
-        .select("id", "day_of_week", "start_time", "end_time", "dinner_time", "manager_name", "manager_mobile")
+        .select("id", "day_of_week", "start_time", "end_time", "dinner_time", "building", "manager_name", "manager_mobile")
         .eq("school_id", school_id)
         .execute()
     )
     data: Any = response.data
     return [
-        (p["id"], p["day_of_week"], p["start_time"], p["end_time"], p["dinner_time"], p["manager_name"], p["manager_mobile"])
+        (p["id"], p["day_of_week"], p["start_time"], p["end_time"], p["dinner_time"], p["building"], p["manager_name"], p["manager_mobile"])
         for p in data
     ]
 

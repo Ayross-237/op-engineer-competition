@@ -12,6 +12,3 @@ if not (url and key):
     raise ValueError("Environment variables are missing!")
 
 client: Client = create_client(url, key)
-
-#db_url = os.getenv("DATABASE_URL")
-#conn = psycopg2.connect(db_url)
