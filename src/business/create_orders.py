@@ -4,15 +4,18 @@ One order document is produced per caterer (covering every school it serves), wi
 requested delivery window per session, and emailed to the caterer's contact (CC'ing the
 chef when the caterer opts in).
 """
+import logging
 from pathlib import Path
 
 from src.business import llm
 from src.business.email import send_email
-from src.business.menu import MenuItem, filter_menu, pick_dish
+from src.business.menu import MenuItem, filter_menu, pick_dish, rank_meals
 from src.business.reports import RenderedSession, SessionReport
 from src.persistence import helpers
 from src.shared.dates import delivery_window
 from src.shared.files import markdown_to_pdf, slug
+
+logger = logging.getLogger("orders")
 
 
 # --- session compute (no markdown) ---
@@ -21,27 +24,34 @@ def build_session_report(
     students: list[tuple[int, list[str], str | None]],
     menu: list[MenuItem],
     pricing: tuple[float, float, float],
+    locked_orders: dict[int, str] | None = None,
 ) -> SessionReport:
     """Crunch a session's roster + menu + pricing into a SessionReport. The only I/O
-    here is the per-special-student LLM call inside `find_meal`; no markdown is produced."""
+    here is the per-special-student LLM call inside `find_meal`; no markdown is produced.
+
+    A student in `locked_orders` (student_id -> dish) pre-ordered that meal via the
+    web interface, so it is used verbatim and counted as a quantity — overriding both
+    the weighted picker and the LLM, and skipping any special-dietary recommendation."""
     if not students:
         return SessionReport(student_count=0, pricing=pricing)
 
-    # Free-text dietary requirements route through the LLM one at a time;
-    # the rest go through the weighted picker.
-    standard = [diet for _, diet, extra in students if not extra]
-    special = [(diet, extra) for _, diet, extra in students if extra]
+    locked = locked_orders or {}
 
+    # Pre-ordered meals win; otherwise free-text dietary requirements route through the
+    # LLM one at a time and the rest go through the weighted picker.
     counts: dict[str, int] = {}
-    for diet in standard:
-        dish = pick_dish(diet, filter_menu(menu, diet))
-        counts[dish] = counts.get(dish, 0) + 1
-
     assignments: list[tuple[str, str]] = []
-    for diet, extra in special:
-        req_label = ", ".join([*diet, extra]) if diet else extra
-        dish = llm.find_meal(extra, filter_menu(menu, diet))
-        assignments.append((req_label, dish))
+    for student_id, diet, extra in students:
+        if student_id in locked:
+            dish = locked[student_id]
+            counts[dish] = counts.get(dish, 0) + 1
+        elif extra:
+            req_label = ", ".join([*diet, extra]) if diet else extra
+            dish = llm.find_meal(extra, filter_menu(menu, diet))
+            assignments.append((req_label, dish))
+        else:
+            dish = pick_dish(diet, filter_menu(menu, diet))
+            counts[dish] = counts.get(dish, 0) + 1
 
     per_item, per_trip, per_school = pricing
     # One meal per student, one trip per session, assume one school per trip.
@@ -129,6 +139,13 @@ def compute_caterer_sessions(
             for session_date, sub_name, sub_mobile in sorted(helpers.get_sessions(program_id, week)):
                 catering = helpers.get_students_for_session(program_id, session_date)
                 opted_out = helpers.get_students_for_session(program_id, session_date, wants_catering=False)
+                locked = helpers.get_meal_orders(program_id, session_date)
+                pre_ordered = sum(1 for sid, _, _ in catering if sid in locked)
+                if pre_ordered:
+                    logger.info(
+                        "%s %s: %d pre-ordered, %d auto-assigned",
+                        school_name, session_date, pre_ordered, len(catering) - pre_ordered,
+                    )
                 sessions.append(RenderedSession(
                     school_name=school_name,
                     header=f"{session_date} ({day} {start}–{end})",
@@ -137,7 +154,7 @@ def compute_caterer_sessions(
                     manager_line=format_manager_line(mgr_name, mgr_mobile, sub_name, sub_mobile),
                     total_count=len(catering) + len(opted_out),
                     opted_out_count=len(opted_out),
-                    report=build_session_report(catering, ranked_menu, pricing),
+                    report=build_session_report(catering, ranked_menu, pricing, locked),
                 ))
     return sessions
 
@@ -190,11 +207,18 @@ def build_caterer_order(caterer_name: str, sessions: list[RenderedSession], week
     ]
 
 
-def rank_menu_for_caterer(caterer_id: int, feedback: list[tuple[str, str]]) -> list[MenuItem]:
-    """Load a caterer's menu and score it once against their feedback."""
+def rank_menu_for_caterer(caterer_id: int) -> list[MenuItem]:
+    """Load a caterer's menu and score it once against the per-student dish ratings,
+    weighting recent ratings exponentially higher (see menu.rank_meals)."""
     raw_menu = helpers.get_menu(caterer_id)
     menu_items = [MenuItem(name=name, tags=tags) for name, tags in raw_menu]
-    return llm.rank_meals(menu_items, feedback)
+    ratings = helpers.get_dish_ratings(caterer_id)
+    ranked = rank_meals(menu_items, ratings)
+
+    logger.info("Ranked %d dishes from %d student ratings:", len(ranked), len(ratings))
+    for item in ranked:
+        logger.info("    %5.2f  %s", item.score if item.score is not None else 0.0, item.name)
+    return ranked
 
 
 def write_document(lines: list[str], md_path: Path) -> Path:
@@ -214,7 +238,7 @@ def dispatch_caterer_order(
         build_caterer_order(caterer_name, sessions, week),
         output_dir / f"orders-{slug(caterer_name)}.md",
     )
-    print(f"[orders] {caterer_name}: wrote {pdf_path}")
+    logger.info("%s: wrote order PDF %s", caterer_name, pdf_path)
 
     contact, chef, cc_chef = helpers.get_caterer_contact(caterer_id)
     cc = [chef] if (cc_chef and chef) else None
@@ -225,7 +249,7 @@ def dispatch_caterer_order(
         attachment=str(pdf_path),
         cc=cc,
     )
-    print(f"[orders] {caterer_name}: sent to {contact}" + (f" (cc {', '.join(cc)})" if cc else ""))
+    logger.info("%s: emailed order to %s%s", caterer_name, contact, f" (cc {', '.join(cc)})" if cc else "")
 
 
 def build_overview_section(
@@ -248,18 +272,32 @@ def build_overview_section(
 def send_overview(overview: list[str], week: list[str], admin_email: str, output_dir: Path) -> None:
     """Write the combined Padea overview PDF and email it to the admin."""
     pdf_path = write_document(overview, output_dir / "orders.md")
-    print(f"[orders] wrote Padea overview {pdf_path}")
+    logger.info("Wrote Padea overview PDF %s", pdf_path)
     send_email(
         admin_email,
         f"Catering Orders (overview) — week of {week[0]} – {week[-1]}",
         "Please find the combined catering overview attached.",
         attachment=str(pdf_path),
     )
+    logger.info("Emailed overview to %s", admin_email)
 
 
 def main(week: list[str], admin_email: str = "aaron.r.dmello@gmail.com") -> None:
+    # Configure logging if the caller hasn't already (no-op when handlers exist),
+    # so running the pipeline directly still surfaces the stage-by-stage progress.
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)-5s %(name)s | %(message)s",
+        datefmt="%H:%M:%S",
+    )
+    # Quieten the HTTP client chatter (httpx/httpcore back supabase and ollama,
+    # urllib3 backs requests) so the per-request lines don't drown the stages.
+    for noisy in ("httpx", "httpcore", "urllib3", "hpack"):
+        logging.getLogger(noisy).setLevel(logging.WARNING)
+
     output_dir = Path() / "output"
     output_dir.mkdir(exist_ok=True)
+    logger.info("Generating catering orders for week %s - %s", week[0], week[-1])
 
     overview: list[str] = [
         "# Catering Orders (Padea internal)",
@@ -268,17 +306,30 @@ def main(week: list[str], admin_email: str = "aaron.r.dmello@gmail.com") -> None
         "",
     ]
 
-    for caterer_id, caterer_name in helpers.get_caterers():
-        feedback = helpers.get_feedback(caterer_id)
-        ranked_menu = rank_menu_for_caterer(caterer_id, feedback)
-        pricing = helpers.get_pricing(caterer_id)
+    caterers = helpers.get_caterers()
+    logger.info("Processing %d caterer(s)", len(caterers))
 
+    for caterer_id, caterer_name in caterers:
+        logger.info("--- %s (id=%d) ---", caterer_name, caterer_id)
+
+        feedback = helpers.get_feedback(caterer_id)
+        logger.info("%s: loaded %d feedback entr%s", caterer_name, len(feedback), "y" if len(feedback) == 1 else "ies")
+
+        ranked_menu = rank_menu_for_caterer(caterer_id)
+
+        pricing = helpers.get_pricing(caterer_id)
+        logger.info("%s: pricing $%.2f/item, $%.2f/trip, $%.2f/school", caterer_name, *pricing)
+
+        logger.info("%s: computing sessions for the week...", caterer_name)
         sessions = compute_caterer_sessions(caterer_id, ranked_menu, pricing, week)
         if not sessions:
-            print(f"[orders] {caterer_name}: no sessions this week — skipping")
+            logger.info("%s: no sessions this week — skipping", caterer_name)
             continue
+        logger.info("%s: computed %d session(s)", caterer_name, len(sessions))
 
         dispatch_caterer_order(caterer_id, caterer_name, sessions, week, output_dir)
         overview += build_overview_section(caterer_name, sessions, feedback)
 
+    logger.info("Assembling and sending the Padea overview...")
     send_overview(overview, week, admin_email, output_dir)
+    logger.info("Done - all caterer orders generated for week %s - %s", week[0], week[-1])

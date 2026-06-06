@@ -4,7 +4,6 @@ On import: pulls the configured model (no-op if already cached) and
 pins it in memory so the first real call doesn't pay load latency.
 """
 import os
-import re
 import sys
 
 from dotenv import load_dotenv
@@ -80,63 +79,6 @@ def find_meal(dietary_extra: str, filtered_menu: list[MenuItem]) -> str:
             return name
 
     return "LLM FAILURE: incorrect name"
-
-def rank_meals(menu: list[MenuItem], reviews: list[tuple[str, str]]) -> list[MenuItem]:
-    """Score every MenuItem in `menu` against the given manager feedback.
-
-    Returns a new list of MenuItems (same name + tags) with `score` populated,
-    sorted by score descending. The input items are not mutated.
-
-    Parameters:
-    - menu: list of MenuItem to score
-    - reviews: list of (date, content) feedback entries about this caterer
-
-    Returns:
-    - list of MenuItem with `score` set in [1, 10], sorted high-to-low
-    """
-    if not menu:
-        return []
-    if not reviews:
-        # Nothing to score against — give every meal a 10 so weighted sampling is uniform.
-        return [MenuItem(name=item.name, tags=item.tags, score=10) for item in menu]
-
-    reviews_text = "\n\n".join(f"[{date}]\n{content}" for date, content in reviews)
-
-    scored: list[MenuItem] = []
-    for item in menu:
-        prompt = (
-            f'You are evaluating the dish "{item.name}" based on manager feedback from past weeks.\n\n'
-            "Reviews (one per week, newest may be last):\n"
-            f"{reviews_text}\n\n"
-            f'Based ONLY on what the reviews say about "{item.name}" (ignore comments about other dishes), '
-            "give this dish a single integer quality score from 1 to 10 where:\n"
-            "  1 = consistently terrible across reviews\n"
-            "  5 = mixed, average, or the dish is not mentioned\n"
-            "  10 = consistently excellent across reviews\n\n"
-            "Respond with ONLY the integer. No words, no punctuation, no explanation.\n"
-            "If no reviews mention the dish, give it a 10."
-        )
-        raw = run_model(prompt).strip()
-        scored.append(MenuItem(name=item.name, tags=item.tags, score=_parse_score(raw)))
-
-    scored.sort(key=lambda item: item.score or 0, reverse=True)
-    return scored
-
-
-def _parse_score(raw: str) -> int:
-    """Extract an integer in [1, 10] from an LLM response. Falls back to 10 if nothing parses."""
-    try:
-        n = int(raw.strip())
-        if 1 <= n <= 10:
-            return n
-    except ValueError:
-        pass
-    # Pick the first standalone 10 or single digit 1-9 anywhere in the response.
-    match = re.search(r"\b(10|[1-9])\b", raw)
-    if match:
-        return int(match.group(1))
-    print(f"[llm] rank_meals: could not parse score from {raw!r}, defaulting to 10", file=sys.stderr)
-    return 10
 
 
 def summarise_feedback(reviews: list[tuple[str, str]]) -> str:
