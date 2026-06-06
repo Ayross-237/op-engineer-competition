@@ -210,3 +210,33 @@ def get_feedback(caterer_id: int) -> list[tuple[str, str]]:
     )
     data: Any = response.data
     return [(f["submitted_at"], f["content"]) for f in data]
+
+def get_dish_ratings(caterer_id: int) -> list[tuple[str, str, int]]:
+    """
+    Returns the per-student dish ratings for the caterer as (item_name, date, rating)
+    triples. Drives date-weighted dish scoring (menu.rank_meals).
+    """
+    response = (
+        client.table("dish_ratings")
+        .select("item_name", "date", "rating")
+        .eq("caterer_id", caterer_id)
+        .execute()
+    )
+    data: Any = response.data
+    return [(r["item_name"], r["date"], r["rating"]) for r in data]
+
+def get_meal_orders(program_id: int, date: str) -> dict[int, str]:
+    """
+    Returns the students who pre-ordered ("locked in") a meal for the given dated
+    session, as {student_id: item_name}. A locked order overrides auto-assignment
+    in build_session_report; students without a row are auto-assigned as before.
+    """
+    response = (
+        client.table("meal_orders")
+        .select("student_id", "item_name")
+        .eq("program_id", program_id)
+        .eq("date", date)
+        .execute()
+    )
+    data: Any = response.data
+    return {o["student_id"]: o["item_name"] for o in data}
