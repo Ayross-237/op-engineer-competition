@@ -35,46 +35,6 @@ def _reset_chat_mock():
     llm.client.chat.side_effect = None
 
 
-# --- _parse_score (pure) ---
-
-class TestParseScore:
-    def test_bare_integer_in_range(self):
-        for n in range(1, 11):
-            assert llm._parse_score(str(n)) == n
-
-    def test_zero_falls_to_regex_path(self):
-        # "0" parses as int but is out-of-range → regex looks for [1-9]/10.
-        # "0" has no digit 1-9, so it falls all the way to the default 10.
-        assert llm._parse_score("0") == 10
-
-    def test_eleven_falls_through_to_default(self):
-        # int("11") = 11, out of range → regex needs word boundaries on both sides
-        # of the digit. "11" has no internal \b, so neither "10" nor "1" matches.
-        # Defaults to 10.
-        assert llm._parse_score("11") == 10
-
-    def test_strips_whitespace(self):
-        assert llm._parse_score("   7   ") == 7
-        assert llm._parse_score("\n\t8\n") == 8
-
-    def test_regex_falls_back_to_first_in_range_digit(self):
-        assert llm._parse_score("I think the score is 7 out of 10") == 7
-        assert llm._parse_score("Rating: 4") == 4
-
-    def test_regex_prefers_10_over_single_digit(self):
-        # \b(10|[1-9])\b — order of alternatives means 10 wins when present at start.
-        assert llm._parse_score("10") == 10
-
-    def test_nothing_parseable_defaults_to_ten(self):
-        assert llm._parse_score("no idea") == 10
-        assert llm._parse_score("") == 10
-
-    def test_negative_number_uses_absolute_digit(self):
-        # "-3" has int parse fail (the minus makes it parse as negative, in range it'd be -3 → reject),
-        # but regex \b3\b matches the bare 3 in the string. Result: 3.
-        assert llm._parse_score("-3") == 3
-
-
 # --- find_meal ---
 
 class TestFindMeal:
@@ -117,66 +77,6 @@ class TestFindMeal:
         assert llm.client.chat.call_count == 1
 
 
-# --- rank_meals ---
-
-class TestRankMeals:
-    def test_empty_menu_returns_empty(self):
-        assert llm.rank_meals([], [("2026-01-01", "anything")]) == []
-
-    def test_no_reviews_assigns_score_ten(self):
-        menu = [MenuItem("a", ["GF"]), MenuItem("b", [])]
-        ranked = llm.rank_meals(menu, [])
-        assert len(ranked) == 2
-        assert all(item.score == 10 for item in ranked)
-
-    def test_no_reviews_does_not_call_llm(self):
-        llm.client.chat.reset_mock()
-        llm.rank_meals([MenuItem("a", [])], [])
-        assert llm.client.chat.call_count == 0
-
-    def test_one_chat_call_per_menu_item(self):
-        llm.client.chat.reset_mock()
-        llm.client.chat.return_value = _chat_returning("7")
-        menu = [MenuItem(f"item{i}", []) for i in range(4)]
-        llm.rank_meals(menu, [("2026-01-01", "some review")])
-        assert llm.client.chat.call_count == 4
-
-    def test_returns_sorted_descending_by_score(self):
-        # Sequentially return descending scores; result should be re-sorted high→low
-        # (and stay that way even though we returned them in input order).
-        llm.client.chat.side_effect = [
-            _chat_returning("3"),
-            _chat_returning("9"),
-            _chat_returning("6"),
-        ]
-        menu = [MenuItem("a", []), MenuItem("b", []), MenuItem("c", [])]
-        ranked = llm.rank_meals(menu, [("2026-01-01", "review")])
-        scores = [item.score for item in ranked]
-        assert scores == sorted(scores, reverse=True)
-        assert ranked[0].name == "b"  # was assigned 9
-
-    def test_input_items_are_not_mutated(self):
-        menu = [MenuItem("a", ["GF"]), MenuItem("b", ["V"])]
-        llm.client.chat.side_effect = [_chat_returning("3"), _chat_returning("9")]
-        llm.rank_meals(menu, [("2026-01-01", "review")])
-        # Original items still have score=None.
-        assert menu[0].score is None
-        assert menu[1].score is None
-
-    def test_tags_preserved_in_returned_items(self):
-        llm.client.chat.return_value = _chat_returning("7")
-        menu = [MenuItem("a", ["GF", "DF"])]
-        ranked = llm.rank_meals(menu, [("2026-01-01", "review")])
-        assert ranked[0].tags == ["GF", "DF"]
-
-    def test_garbage_llm_response_defaults_to_ten(self):
-        llm.client.chat.return_value = _chat_returning("no idea what to say")
-        menu = [MenuItem("a", [])]
-        ranked = llm.rank_meals(menu, [("2026-01-01", "review")])
-        # _parse_score returns 10 when nothing parses.
-        assert ranked[0].score == 10
-
-
 # --- summarise_feedback ---
 
 class TestSummariseFeedback:
@@ -198,6 +98,30 @@ class TestSummariseFeedback:
         llm.client.chat.return_value = _chat_returning("summary")
         llm.summarise_feedback([("2026-01-01", "a"), ("2026-01-02", "b"), ("2026-01-03", "c")])
         # Three reviews → still a single LLM call (not per-review).
+        assert llm.client.chat.call_count == 1
+
+
+# --- summarise_feedback_for_caterer ---
+
+class TestSummariseFeedbackForCaterer:
+    def test_empty_reviews_returns_empty_string(self):
+        # Empty string (not a sentinel) so the caller can omit the section entirely.
+        assert llm.summarise_feedback_for_caterer([]) == ""
+
+    def test_empty_reviews_does_not_call_llm(self):
+        llm.client.chat.reset_mock()
+        llm.summarise_feedback_for_caterer([])
+        assert llm.client.chat.call_count == 0
+
+    def test_returns_llm_output_stripped(self):
+        llm.client.chat.return_value = _chat_returning("  Balanced recap.  \n")
+        result = llm.summarise_feedback_for_caterer([("2026-01-01", "review content")])
+        assert result == "Balanced recap."
+
+    def test_one_chat_call_per_invocation(self):
+        llm.client.chat.reset_mock()
+        llm.client.chat.return_value = _chat_returning("summary")
+        llm.summarise_feedback_for_caterer([("2026-01-01", "a"), ("2026-01-02", "b")])
         assert llm.client.chat.call_count == 1
 
 

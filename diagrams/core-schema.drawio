@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="Core ER" id="core-er">
-        <mxGraphModel dx="1856" dy="916" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1500" math="0" shadow="0">
+        <mxGraphModel dx="1894" dy="734" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1500" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -201,13 +201,13 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="a-cat-contact" value="contact_email" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" parent="1" vertex="1">
-                    <mxGeometry x="5" y="755" width="110" height="38" as="geometry"/>
+                    <mxGeometry x="30.5" y="790" width="110" height="38" as="geometry"/>
                 </mxCell>
                 <mxCell id="a-cat-chef" value="chef_email" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" parent="1" vertex="1">
-                    <mxGeometry x="5" y="705" width="100" height="38" as="geometry"/>
+                    <mxGeometry x="30.5" y="740" width="100" height="38" as="geometry"/>
                 </mxCell>
                 <mxCell id="a-cat-cc" value="cc_chef" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" parent="1" vertex="1">
-                    <mxGeometry x="5" y="805" width="90" height="38" as="geometry"/>
+                    <mxGeometry x="30.5" y="840" width="90" height="38" as="geometry"/>
                 </mxCell>
                 <mxCell id="c-cat-contact" style="endArrow=none;html=1;rounded=0;" parent="1" source="a-cat-contact" target="ent-caterer" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -306,14 +306,8 @@
                 <mxCell id="21" value="dietary_tags" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" parent="1" vertex="1">
                     <mxGeometry x="1348.52" y="386" width="128" height="38" as="geometry"/>
                 </mxCell>
-                <mxCell id="a-item-rating" value="rating" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" parent="1" vertex="1">
-                    <mxGeometry x="720" y="828" width="80" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="c-item-rating" style="endArrow=none;html=1;rounded=0;" parent="1" source="a-item-rating" target="ent-item" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
                 <mxCell id="a-stu-wc" value="wants_catering" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" parent="1" vertex="1">
-                    <mxGeometry x="1082.52" y="610" width="140" height="40" as="geometry"/>
+                    <mxGeometry x="1292.52" y="300" width="140" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="c-stu-wc" style="endArrow=none;html=1;rounded=0;" parent="1" source="a-stu-wc" target="ent-student" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -325,16 +319,16 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="ent-newsession-outer" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#82b366;" parent="1" vertex="1">
-                    <mxGeometry x="1040" y="760" width="140" height="70" as="geometry"/>
+                    <mxGeometry x="990" y="668" width="140" height="70" as="geometry"/>
                 </mxCell>
                 <mxCell id="ent-newsession" value="Session" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=14;" parent="1" vertex="1">
-                    <mxGeometry x="1046" y="766" width="128" height="58" as="geometry"/>
+                    <mxGeometry x="996" y="674" width="128" height="58" as="geometry"/>
                 </mxCell>
                 <mxCell id="rel-schedules-outer" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#82b366;" parent="1" vertex="1">
-                    <mxGeometry x="845" y="670" width="120" height="70" as="geometry"/>
+                    <mxGeometry x="817.52" y="582" width="120" height="70" as="geometry"/>
                 </mxCell>
                 <mxCell id="rel-schedules" value="schedules" style="rhombus;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" parent="1" vertex="1">
-                    <mxGeometry x="851" y="676" width="108" height="58" as="geometry"/>
+                    <mxGeometry x="823.52" y="588" width="108" height="58" as="geometry"/>
                 </mxCell>
                 <mxCell id="c-program-schedules" value="1" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;" parent="1" source="ent-session" target="rel-schedules-outer" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -343,13 +337,13 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="a-newses-date" value="date" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;fontStyle=6;" parent="1" vertex="1">
-                    <mxGeometry x="980" y="850" width="80" height="40" as="geometry"/>
+                    <mxGeometry x="860" y="729" width="80" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="a-newses-subname" value="sub_manager_name" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" parent="1" vertex="1">
-                    <mxGeometry x="900" y="760" width="140" height="40" as="geometry"/>
+                    <mxGeometry x="820" y="683" width="140" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="a-newses-submob" value="sub_manager_mobile" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" parent="1" vertex="1">
-                    <mxGeometry x="1230" y="800" width="150" height="40" as="geometry"/>
+                    <mxGeometry x="810" y="778" width="150" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="c-newses-date" style="endArrow=none;html=1;rounded=0;" parent="1" source="a-newses-date" target="ent-newsession" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -361,7 +355,7 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="rel-absent" value="absent from" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" parent="1" vertex="1">
-                    <mxGeometry x="1192.52" y="664" width="130" height="70" as="geometry"/>
+                    <mxGeometry x="1072.52" y="575" width="130" height="70" as="geometry"/>
                 </mxCell>
                 <mxCell id="c-student-absent" value="N" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;" parent="1" source="ent-student" target="rel-absent" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -370,16 +364,16 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="ent-feedback-outer" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#36748f;" parent="1" vertex="1">
-                    <mxGeometry x="606.5" y="970" width="180" height="70" as="geometry"/>
+                    <mxGeometry x="566" y="936" width="180" height="70" as="geometry"/>
                 </mxCell>
                 <mxCell id="ent-feedback" value="Feedback" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#c8e4ed;strokeColor=#36748f;fontStyle=1;fontSize=14;" parent="1" vertex="1">
-                    <mxGeometry x="612.5" y="976" width="168" height="58" as="geometry"/>
+                    <mxGeometry x="572" y="942" width="168" height="58" as="geometry"/>
                 </mxCell>
                 <mxCell id="rel-about-outer" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#36748f;" parent="1" vertex="1">
-                    <mxGeometry x="420.5" y="970" width="140" height="70" as="geometry"/>
+                    <mxGeometry x="380" y="936" width="140" height="70" as="geometry"/>
                 </mxCell>
                 <mxCell id="rel-about" value="about" style="rhombus;whiteSpace=wrap;html=1;fillColor=#c8e4ed;strokeColor=#36748f;fontSize=12;fontStyle=1;" parent="1" vertex="1">
-                    <mxGeometry x="426" y="976" width="128" height="58" as="geometry"/>
+                    <mxGeometry x="385.5" y="942" width="128" height="58" as="geometry"/>
                 </mxCell>
                 <mxCell id="c-caterer-about" value="1" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="ent-caterer" target="rel-about" edge="1">
                     <mxGeometry relative="1" as="geometry">
@@ -390,21 +384,54 @@
                 </mxCell>
                 <mxCell id="c-about-feedback" value="N" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;shape=link;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="rel-about-outer" target="ent-feedback-outer" edge="1">
                     <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="566.5" y="1005" as="sourcePoint"/>
+                        <mxPoint x="526" y="971" as="sourcePoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="a-fdb-submitted" value="submitted_at" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;fontStyle=6;" parent="1" vertex="1">
-                    <mxGeometry x="566.5" y="1070" width="120" height="40" as="geometry"/>
+                    <mxGeometry x="526" y="1036" width="120" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="a-fdb-content" value="content" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" parent="1" vertex="1">
-                    <mxGeometry x="700.5" y="1070" width="100" height="40" as="geometry"/>
+                    <mxGeometry x="660" y="1036" width="100" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="c-fdb-submitted" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="a-fdb-submitted" target="ent-feedback" edge="1">
                     <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="837.4819282041117" y="971.5336639519737" as="sourcePoint"/>
+                        <mxPoint x="796.9819282041117" y="937.5336639519737" as="sourcePoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="c-fdb-content" style="endArrow=none;html=1;rounded=0;" parent="1" source="a-fdb-content" target="ent-feedback" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rel-rates" value="rates" style="rhombus;whiteSpace=wrap;html=1;fillColor=#b0e3e6;strokeColor=#0e8088;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+                    <mxGeometry x="1110" y="976" width="130" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="a-rate-date" value="date" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;fontStyle=4;" vertex="1" parent="1">
+                    <mxGeometry x="1060" y="1060" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="a-rate-rating" value="rating" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
+                    <mxGeometry x="1190" y="1060" width="90" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-rate-date" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="a-rate-date" target="rel-rates">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-rate-rating" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="a-rate-rating" target="rel-rates">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-item-rates" value="M" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;" edge="1" parent="1" source="ent-item-outer" target="rel-rates">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-rates-student" value="N" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="rel-rates" target="ent-student">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rel-preorder" value="pre-orders" style="rhombus;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="800" y="900" width="150" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-student-preorder" value="N" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;" parent="1" source="ent-student" target="rel-preorder" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-preorder-session" value="M" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;" parent="1" source="rel-preorder" target="ent-newsession" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-preorder-item" value="1" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;" parent="1" source="rel-preorder" target="ent-item-outer" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
             </root>

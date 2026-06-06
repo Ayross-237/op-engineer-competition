@@ -4,4 +4,4 @@ from datetime import date, timedelta
 
 
 if __name__ == "__main__":
-    main(next_week(today=(date.today() - timedelta(days=40)))) 
+    main(next_week(today=(date.today() - timedelta(days=43)))) 

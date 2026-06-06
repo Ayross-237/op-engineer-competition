@@ -18,3 +18,13 @@ Manual swap
 12. Where does feedback come from operationally?
 Anywhere I assume
 
+
+# Further questions
+1. Are the students emails safe to email to?
+NO don't email
+2. Confirming it's safe to draw the automation line at swapping caterers.
+Yes, leave it out
+3. Go over new philosophy of being selfish and changing the constraints to make the system as straightforward as possible.
+Very good idea
+4. Talking about the raising of exceptions, was that a hint to expand the automation to
+LLM Judge could be a good idea.

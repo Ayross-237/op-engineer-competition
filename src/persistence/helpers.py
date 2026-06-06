@@ -240,3 +240,126 @@ def get_meal_orders(program_id: int, date: str) -> dict[int, str]:
     )
     data: Any = response.data
     return {o["student_id"]: o["item_name"] for o in data}
+
+
+# --- student pre-order web app ---
+
+def get_student_by_email(email: str) -> tuple[int, str, list[str], str | None] | None:
+    """Looks a student up by their school email for the (password-less) web login.
+
+    Returns (id, name, dietary, dietary_extra) or None if no student has that email.
+    """
+    response = (
+        client.table("students")
+        .select("id", "name", "dietary", "dietary_extra")
+        .eq("student_email", email)
+        .limit(1)
+        .execute()
+    )
+    data: Any = response.data
+    if not data:
+        return None
+    s = data[0]
+    return s["id"], s["name"], s["dietary"], s["dietary_extra"]
+
+def get_upcoming_sessions_for_student(student_id: int) -> list[dict[str, Any]]:
+    """Returns the dated sessions a student can pre-order for: every session of every
+    program they're enrolled in, minus the ones they're marked absent from.
+
+    Each dict carries what the web UI needs to render the session and resolve its menu:
+    program_id, date, school_name, caterer_id, day, start, end, dinner, building.
+    """
+    enrolments = (
+        client.table("enrolments")
+        .select("program_id")
+        .eq("student_id", student_id)
+        .execute()
+    )
+    program_ids = [e["program_id"] for e in enrolments.data]
+    if not program_ids:
+        return []
+
+    programs = (
+        client.table("programs")
+        .select("id", "day_of_week", "start_time", "end_time", "dinner_time", "building", "schools(name, caterer_id)")
+        .in_("id", program_ids)
+        .execute()
+    )
+    program_by_id = {p["id"]: p for p in programs.data}
+
+    sessions = (
+        client.table("sessions")
+        .select("program_id", "date")
+        .in_("program_id", program_ids)
+        .execute()
+    )
+    absences = (
+        client.table("absences")
+        .select("program_id", "date")
+        .eq("student_id", student_id)
+        .execute()
+    )
+    absent = {(a["program_id"], a["date"]) for a in absences.data}
+
+    rows: list[dict[str, Any]] = []
+    for s in sessions.data:
+        pid, date = s["program_id"], s["date"]
+        program = program_by_id.get(pid)
+        if program is None or (pid, date) in absent:
+            continue
+        school = program.get("schools") or {}
+        rows.append({
+            "program_id": pid,
+            "date": date,
+            "school_name": school.get("name"),
+            "caterer_id": school.get("caterer_id"),
+            "day": program["day_of_week"],
+            "start": program["start_time"],
+            "end": program["end_time"],
+            "dinner": program["dinner_time"],
+            "building": program["building"],
+        })
+    rows.sort(key=lambda r: (r["date"], r["school_name"] or ""))
+    return rows
+
+def get_meal_order(student_id: int, program_id: int, date: str) -> str | None:
+    """Returns the student's currently locked-in dish for a session, or None."""
+    response = (
+        client.table("meal_orders")
+        .select("item_name")
+        .eq("student_id", student_id)
+        .eq("program_id", program_id)
+        .eq("date", date)
+        .limit(1)
+        .execute()
+    )
+    data: Any = response.data
+    return data[0]["item_name"] if data else None
+
+def upsert_meal_order(student_id: int, program_id: int, date: str, caterer_id: int, item_name: str) -> None:
+    """Locks in (or replaces) a student's pre-ordered dish for a session."""
+    (
+        client.table("meal_orders")
+        .upsert(
+            {
+                "student_id": student_id,
+                "program_id": program_id,
+                "date": date,
+                "caterer_id": caterer_id,
+                "item_name": item_name,
+            },
+            on_conflict="student_id,program_id,date",
+        )
+        .execute()
+    )
+
+def delete_meal_order(student_id: int, program_id: int, date: str) -> None:
+    """Clears a student's pre-order for a session (reverting to auto-assignment)."""
+    (
+        client.table("meal_orders")
+        .delete()
+        .eq("student_id", student_id)
+        .eq("program_id", program_id)
+        .eq("date", date)
+        .execute()
+    )

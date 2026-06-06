@@ -1,0 +1,17 @@
+# Padea Catering — runtime dependencies
+# Install: python -m pip install -r requirements.txt
+
+# Persistence
+supabase==2.30.0
+psycopg2==2.9.12
+python-dotenv==1.2.2
+
+# Business logic
+ollama==0.6.2            # local LLM (free-text dietary meal matching, feedback summaries)
+markdown-pdf==1.13.1     # order/overview PDF rendering
+
+# Student pre-order web app
+flask==3.1.3
+
+# Data generation (db/gen_populate2.py)
+openpyxl==3.1.5

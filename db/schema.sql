@@ -111,6 +111,26 @@ CREATE TABLE feedback (
     PRIMARY KEY (caterer_id, submitted_at)
 );
 
+-- Per-student rating of a dish they ate, scored 1-10.
+-- Keyed by (student_id, caterer_id, item_name, date) so a student can rate one
+-- dish once per dated session; the same dish eaten on another date is a new row.
+-- item_name references items via the caterer-scoped composite key.
+CREATE TABLE dish_ratings (
+    student_id  BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    caterer_id  BIGINT NOT NULL,
+    item_name   TEXT NOT NULL,
+    date        DATE NOT NULL,
+    rating      SMALLINT NOT NULL CHECK (rating BETWEEN 1 AND 10),
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (student_id, caterer_id, item_name, date),
+    FOREIGN KEY (caterer_id, item_name) REFERENCES items(caterer_id, name) ON DELETE CASCADE
+);
+
+-- Averaging/ranking queries hit ratings by dish, so index that access path
+-- (the PK leads with student_id, which doesn't serve per-dish aggregation).
+CREATE INDEX dish_ratings_by_item ON dish_ratings (caterer_id, item_name);
+
 CREATE TABLE pricing_structures (
     caterer_id      BIGINT PRIMARY KEY REFERENCES caterers(id) ON DELETE CASCADE,
     price_per_item  NUMERIC(10,2) NOT NULL,
@@ -119,3 +139,26 @@ CREATE TABLE pricing_structures (
     created_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at      TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- A student's pre-ordered ("locked-in") meal for a specific dated session. Optional:
+-- when a row exists it overrides auto-assignment; when absent the meal is assigned from
+-- the weighted dish ranking at order-generation time.
+-- Weak entity over sessions (cf. absences): composite PK (student_id, program_id, date).
+-- caterer_id is carried so item_name can be FK'd to the caterer-scoped items key; it must
+-- equal the caterer serving the program's school (enforced by the writer, not the DB).
+CREATE TABLE meal_orders (
+    student_id  BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    program_id  BIGINT NOT NULL,
+    date        DATE NOT NULL,
+    caterer_id  BIGINT NOT NULL,
+    item_name   TEXT NOT NULL,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (student_id, program_id, date),
+    FOREIGN KEY (program_id, date) REFERENCES sessions(program_id, date) ON DELETE CASCADE,
+    FOREIGN KEY (caterer_id, item_name) REFERENCES items(caterer_id, name) ON DELETE RESTRICT
+);
+
+-- The order generator reads locked meals by session; the PK leads with student_id and
+-- doesn't serve that path (mirrors dish_ratings_by_item).
+CREATE INDEX meal_orders_by_session ON meal_orders (program_id, date);

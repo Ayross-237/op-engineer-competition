@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="DB Schema" id="db-schema">
-        <mxGraphModel dx="930" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1000" math="0" shadow="0">
+        <mxGraphModel dx="1894" dy="734" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1000" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -350,7 +350,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="items" value="items" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fontSize=14;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
-                    <mxGeometry x="380" y="530" width="360" height="160" as="geometry"/>
+                    <mxGeometry x="370" y="580" width="360" height="160" as="geometry"/>
                 </mxCell>
                 <mxCell id="items-r1" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" parent="items" vertex="1">
                     <mxGeometry y="30" width="360" height="26" as="geometry"/>
@@ -581,13 +581,17 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="fk-items-caterers" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERone;startArrow=ERmany;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="items-r1" target="caterers-r1" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="350" y="590"/>
+                        </Array>
+                    </mxGeometry>
                 </mxCell>
                 <mxCell id="fk-pricing-caterers" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERone;startArrow=ERone;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="pricing-r1" target="caterers-r1" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="feedback" value="feedback" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fontSize=14;fontStyle=1;fillColor=#c8e4ed;strokeColor=#36748f;" parent="1" vertex="1">
-                    <mxGeometry x="380" y="720" width="360" height="160" as="geometry"/>
+                    <mxGeometry x="380" y="760" width="360" height="160" as="geometry"/>
                 </mxCell>
                 <mxCell id="feedback-r1" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" parent="feedback" vertex="1">
                     <mxGeometry y="30" width="360" height="26" as="geometry"/>
@@ -632,8 +636,141 @@
                 <mxCell id="fk-feedback-caterers" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERone;startArrow=ERmany;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="feedback-r1" target="caterers-r1" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="footer" value="• Primary keys: BIGINT GENERATED ALWAYS AS IDENTITY (composite PKs on enrolments, items, sessions, absences, feedback; pricing_structures uses caterer_id as PK for 1:1)    • day_of_week: ENUM (Mon–Fri)    • dietary_tag: ENUM (&#39;GF&#39;,&#39;DF&#39;,&#39;NF&#39;,&#39;V&#39;,&#39;H&#39;)  — V = vegetarian / vegetarian option, H = halal    • FK on delete: schools→caterers RESTRICT, programs→schools RESTRICT, enrolments→students/programs CASCADE, sessions→programs CASCADE, absences→students/sessions CASCADE, items/pricing/feedback→caterers CASCADE    • RLS disabled for now" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#555555;" parent="1" vertex="1">
-                    <mxGeometry x="40" y="920" width="1600" height="60" as="geometry"/>
+                <mxCell id="ratings" value="dish_ratings" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fontSize=14;fontStyle=1;fillColor=#b0e3e6;strokeColor=#0e8088;" vertex="1" parent="1">
+                    <mxGeometry x="780" y="690" width="380" height="212" as="geometry"/>
+                </mxCell>
+                <mxCell id="ratings-r1" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="ratings">
+                    <mxGeometry y="30" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="ratings-r1-c" value="student_id : BIGINT  (PK, FK → students.id)" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontStyle=5;align=left;spacingLeft=10;" vertex="1" parent="ratings-r1">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ratings-r2" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="ratings">
+                    <mxGeometry y="56" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="ratings-r2-c" value="caterer_id : BIGINT  (PK, FK → items.caterer_id)" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontStyle=5;align=left;spacingLeft=10;" vertex="1" parent="ratings-r2">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ratings-r3" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="ratings">
+                    <mxGeometry y="82" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="ratings-r3-c" value="item_name : TEXT  (PK, FK → items.name)" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontStyle=5;align=left;spacingLeft=10;" vertex="1" parent="ratings-r3">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ratings-r4" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="ratings">
+                    <mxGeometry y="108" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="ratings-r4-c" value="date : DATE  (PK)" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontStyle=5;align=left;spacingLeft=10;" vertex="1" parent="ratings-r4">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ratings-r5" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="ratings">
+                    <mxGeometry y="134" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="ratings-r5-c" value="rating : SMALLINT  (CHECK 1–10)" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;align=left;spacingLeft=10;" vertex="1" parent="ratings-r5">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ratings-r6" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="ratings">
+                    <mxGeometry y="160" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="ratings-r6-c" value="created_at : TIMESTAMPTZ" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;align=left;spacingLeft=10;fontColor=#666666;" vertex="1" parent="ratings-r6">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ratings-r7" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="ratings">
+                    <mxGeometry y="186" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="ratings-r7-c" value="updated_at : TIMESTAMPTZ" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;align=left;spacingLeft=10;fontColor=#666666;" vertex="1" parent="ratings-r7">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="fk-ratings-students" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERone;startArrow=ERmany;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="ratings-r1" target="students-r1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="fk-ratings-items" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERone;startArrow=ERmany;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="ratings-r2" target="items-r1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="meal" value="meal_orders" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fontSize=14;fontStyle=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+                    <mxGeometry x="1690" y="540" width="380" height="212" as="geometry"/>
+                </mxCell>
+                <mxCell id="meal-r1" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="meal">
+                    <mxGeometry y="30" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="meal-r1-c" value="student_id : BIGINT  (PK, FK → students.id)" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontStyle=5;align=left;spacingLeft=10;" vertex="1" parent="meal-r1">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meal-r2" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="meal">
+                    <mxGeometry y="56" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="meal-r2-c" value="program_id : BIGINT  (PK, FK → sessions.program_id)" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontStyle=5;align=left;spacingLeft=10;" vertex="1" parent="meal-r2">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meal-r3" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="meal">
+                    <mxGeometry y="82" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="meal-r3-c" value="date : DATE  (PK, FK → sessions.date)" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontStyle=5;align=left;spacingLeft=10;" vertex="1" parent="meal-r3">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meal-r4" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="meal">
+                    <mxGeometry y="108" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="meal-r4-c" value="caterer_id : BIGINT  (FK → items.caterer_id)" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;align=left;spacingLeft=10;" vertex="1" parent="meal-r4">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meal-r5" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="meal">
+                    <mxGeometry y="134" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="meal-r5-c" value="item_name : TEXT  (FK → items.name)" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;align=left;spacingLeft=10;" vertex="1" parent="meal-r5">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meal-r6" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="meal">
+                    <mxGeometry y="160" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="meal-r6-c" value="created_at : TIMESTAMPTZ" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;align=left;spacingLeft=10;fontColor=#666666;" vertex="1" parent="meal-r6">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meal-r7" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;" vertex="1" parent="meal">
+                    <mxGeometry y="186" width="380" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="meal-r7-c" value="updated_at : TIMESTAMPTZ" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;align=left;spacingLeft=10;fontColor=#666666;" vertex="1" parent="meal-r7">
+                    <mxGeometry width="380" height="26" as="geometry">
+                        <mxRectangle width="380" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="fk-meal-students" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERone;startArrow=ERmany;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="meal-r1" target="students-r1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="fk-meal-sessions" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERone;startArrow=ERmany;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="meal-r2" target="new-sessions-r1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="fk-meal-items" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERone;startArrow=ERmany;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="meal-r4" target="items-r1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="footer" value="• Primary keys: BIGINT GENERATED ALWAYS AS IDENTITY (composite PKs on enrolments, items, sessions, absences, feedback, dish_ratings, meal_orders; pricing_structures uses caterer_id as PK for 1:1)    • day_of_week: ENUM (Mon–Fri)    • dietary_tag: ENUM (&#39;GF&#39;,&#39;DF&#39;,&#39;NF&#39;,&#39;V&#39;,&#39;H&#39;)  — V = vegetarian / vegetarian option, H = halal    • FK on delete: schools→caterers RESTRICT, programs→schools RESTRICT, enrolments→students/programs CASCADE, sessions→programs CASCADE, absences→students/sessions CASCADE, items/pricing/feedback→caterers CASCADE, dish_ratings→students/items CASCADE, meal_orders→students/sessions CASCADE &amp; items RESTRICT    • RLS disabled for now" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#555555;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="940" width="1600" height="60" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

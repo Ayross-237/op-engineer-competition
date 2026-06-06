@@ -18,27 +18,26 @@ _Week of 2026-04-27 – 2026-05-03_
 
 | Dish | Quantity |
 |------|----------|
-| Fried Chicken Burger + Chips | 4 |
-| Gnocchi in Tomato Sauce | 2 |
-| Japanese Chicken Curry | 5 |
+| Chicken, Bacon, Avo Wrap (vegetarian) | 3 |
+| Fish Taco Bowl | 3 |
+| Fried Chicken Burger + Chips | 1 |
 | Japanese Chicken Curry (vegetarian) | 1 |
-| Korean Beef Bulgogi Rice Bowl | 1 |
+| Korean Beef Bulgogi Rice Bowl | 3 |
+| Spaghetti Bolognese + Garlic Bread | 2 |
 | Sweet and Sour Chicken | 1 |
 
 **Special dietary requirements:**
 
 | Dietary Requirements | Recommended Dish |
 |----------------------|------------------|
-| No Fish | Japanese Chicken Curry (vegetarian) |
+| No Fish | Korean Beef Bulgogi Rice Bowl |
 | No Shellfish | Korean Beef Bulgogi Rice Bowl |
 
 **Estimated cost:** $560.00 (16 × $35.00 + $0.00 trip + 1 × $0.00 school fee)
 
 **Caterer feedback summary:**
 
-Here’s a summary of the catering feedback:
-
-The caterer demonstrates consistent strengths with dishes like Korean Beef Bulgogi, Japanese Chicken Curry, and the Fried Chicken Burger, particularly favored by students. However, issues with heat retention, inconsistent cooking times (especially for beef and gnocchi), and occasional sauce problems (like the Cream Pasta) require attention to maintain food quality and student satisfaction. Addressing these weaknesses, particularly around temperature control and recipe consistency, will significantly improve overall performance.
+Catering performance has been highly variable, with Korean Beef Bulgogi and Japanese Chicken Curry consistently receiving positive feedback and proving popular with students. Key weaknesses include issues with heat retention, inconsistent cooking times (particularly for beef and gnocchi), and problems with certain dishes like Classic Cream Pasta and the Fish Taco Bowl. The caterer should prioritize improving heat retention, refining beef cooking processes, and reviewing recipes for items with frequent quality concerns.
 
 ## Terrific Noodles
 
@@ -58,23 +57,22 @@ The caterer demonstrates consistent strengths with dishes like Korean Beef Bulgo
 |------|----------|
 | Bacon Carbonara | 1 |
 | Beef Pad Thai | 2 |
-| Chinese Honey Soy Noodles | 2 |
 | Creamy Garlic Beef Noodles | 1 |
-| Creamy Garlic Beef Noodles (vegetarian) | 1 |
-| Grilled Pork Vermicelli Salad (vegetarian) | 2 |
-| Lemongrass Grilled Beef and Noodles | 2 |
-| Lemongrass Grilled Beef and Noodles (vegetarian) | 4 |
-| Mie Goreng | 1 |
-| Mie Goreng (vegetarian) | 5 |
-| Spaghetti meatballs | 1 |
-| Spicy Miso Udon | 1 |
+| Creamy Garlic Beef Noodles (vegetarian) | 4 |
+| Grilled Pork Vermicelli Salad | 1 |
+| Grilled Pork Vermicelli Salad (vegetarian) | 1 |
+| Lemongrass Grilled Beef and Noodles | 1 |
+| Lemongrass Grilled Beef and Noodles (vegetarian) | 6 |
+| Mie Goreng | 2 |
+| Mie Goreng (vegetarian) | 2 |
+| Spaghetti meatballs | 2 |
 | Stir-fry Noodles topped with Chicken | 2 |
 
 **Special dietary requirements:**
 
 | Dietary Requirements | Recommended Dish |
 |----------------------|------------------|
-| No Beef | Mie Goreng (vegetarian) |
+| No Beef | Grilled Pork Vermicelli Salad |
 
 **Estimated cost:** $563.00 (26 × $20.50 + $0.00 trip + 1 × $30.00 school fee)
 
@@ -90,33 +88,30 @@ The caterer demonstrates consistent strengths with dishes like Korean Beef Bulgo
 
 | Dish | Quantity |
 |------|----------|
-| Beef Pad Thai | 3 |
-| Chinese Honey Soy Noodles | 2 |
-| Creamy Garlic Beef Noodles | 2 |
-| Grilled Pork Vermicelli Salad | 1 |
-| Grilled Pork Vermicelli Salad (vegetarian) | 2 |
-| Lemongrass Grilled Beef and Noodles | 8 |
-| Lemongrass Grilled Beef and Noodles (vegetarian) | 5 |
-| Mie Goreng | 3 |
-| Mie Goreng (vegetarian) | 2 |
-| Spicy Miso Udon | 2 |
-| Stir-fry Noodles topped with Chicken | 2 |
+| Beef Pad Thai | 1 |
+| Chinese Honey Soy Noodles | 1 |
+| Creamy Garlic Beef Noodles | 1 |
+| Creamy Garlic Beef Noodles (vegetarian) | 8 |
+| Grilled Pork Vermicelli Salad (vegetarian) | 1 |
+| Lemongrass Grilled Beef and Noodles | 1 |
+| Lemongrass Grilled Beef and Noodles (vegetarian) | 9 |
+| Mie Goreng | 1 |
+| Mie Goreng (vegetarian) | 4 |
+| Stir-fry Noodles topped with Chicken | 7 |
 
 **Special dietary requirements:**
 
 | Dietary Requirements | Recommended Dish |
 |----------------------|------------------|
-| No Beef | Mie Goreng (vegetarian) |
-| No Beef | Mie Goreng (vegetarian) |
-| No Beef, No Pork | Mie Goreng (vegetarian) |
+| No Beef | Grilled Pork Vermicelli Salad |
 
 **Estimated cost:** $747.50 (35 × $20.50 + $0.00 trip + 1 × $30.00 school fee)
 
 **Caterer feedback summary:**
 
-Summary:
+Here’s a summary of the caterer’s performance based on the feedback:
 
-The caterer demonstrates significant strengths with consistently popular dishes like Spicy Miso Udon, Lemongrass Grilled Beef and Noodles, and Mie Goreng, particularly when executed well. However, reliability is inconsistent, with issues observed regarding sauce consistency (Carbonara), noodle texture (Pad Thai), and occasional over-seasoning (Honey Soy Noodles), requiring closer monitoring during preparation. Focusing on maintaining the quality of standout dishes and addressing sauce and noodle consistency problems will be key to continued student satisfaction.
+The caterer demonstrates significant strengths, particularly with dishes like Spicy Miso Udon, Lemongrass Grilled Beef and Noodles, and Mie Goreng, consistently receiving positive feedback and student preference. However, there are recurring issues with sauces – notably the Bacon Carbonara and Chinese Honey Soy Noodles – exhibiting inconsistencies in texture and seasoning, alongside occasional delivery delays. Focusing on refining sauce recipes and ensuring consistent execution will greatly improve overall student satisfaction.
 
 ## Kenko Sushi House
 
@@ -134,25 +129,24 @@ The caterer demonstrates significant strengths with consistently popular dishes 
 
 | Dish | Quantity |
 |------|----------|
-| Beef Fried Rice | 2 |
-| Beef Fried Rice (vegetarian) | 2 |
-| Chicken Karaage ricebowl | 2 |
-| Chicken Karaage ricebowl (vegetarian) | 4 |
-| Creamy Udon | 1 |
+| Beef Fried Rice | 1 |
+| Beef Fried Rice (vegetarian) | 1 |
+| Chicken Karaage ricebowl | 1 |
+| Chicken Parmi, chips and salad | 2 |
+| Chinese Honey Soy Noodles | 3 |
+| Creamy Udon | 2 |
 | Japanese Chicken Katsu | 3 |
-| Japanese Chicken Katsu (vegetarian) | 2 |
-| Lamb wrap | 7 |
-| Mongolian Beef and Rice | 1 |
-| Sweet and Sour Chicken | 1 |
-| Teriyaki Salmon rice bowl | 6 |
+| Japanese Chicken Katsu (vegetarian) | 13 |
+| Lamb wrap | 2 |
+| Mongolian Beef and Rice | 2 |
+| Teriyaki Salmon rice bowl | 2 |
 | Teriyaki Salmon rice bowl (vegetarian) | 3 |
 
 **Special dietary requirements:**
 
 | Dietary Requirements | Recommended Dish |
 |----------------------|------------------|
-| No Beef | Teriyaki Salmon rice bowl (vegetarian) |
-| No Beef | Teriyaki Salmon rice bowl (vegetarian) |
+| No Beef | Teriyaki Salmon rice bowl |
 
 **Estimated cost:** $208.00 (36 × $5.50 + $0.00 trip + 1 × $10.00 school fee)
 
@@ -168,33 +162,33 @@ The caterer demonstrates significant strengths with consistently popular dishes 
 
 | Dish | Quantity |
 |------|----------|
-| Beef Fried Rice (vegetarian) | 4 |
-| Chicken Karaage ricebowl | 4 |
-| Chicken Karaage ricebowl (vegetarian) | 5 |
-| Chicken Parmi, chips and salad | 3 |
+| Beef Fried Rice | 1 |
+| Beef Fried Rice (vegetarian) | 1 |
+| Chicken Karaage ricebowl | 1 |
+| Chicken Karaage ricebowl (vegetarian) | 3 |
+| Chicken Parmi, chips and salad | 2 |
 | Creamy Udon | 1 |
-| Japanese Chicken Katsu | 2 |
-| Japanese Chicken Katsu (vegetarian) | 1 |
-| Lamb wrap | 3 |
-| Mongolian Beef and Rice | 4 |
-| Teriyaki Salmon rice bowl | 3 |
-| Teriyaki Salmon rice bowl (vegetarian) | 8 |
+| Japanese Chicken Katsu | 1 |
+| Japanese Chicken Katsu (vegetarian) | 22 |
+| Mongolian Beef and Rice | 1 |
+| Sweet and Sour Chicken | 2 |
+| Teriyaki Salmon rice bowl (vegetarian) | 3 |
 
 **Special dietary requirements:**
 
 | Dietary Requirements | Recommended Dish |
 |----------------------|------------------|
-| No Beef | Teriyaki Salmon rice bowl (vegetarian) |
-| No Red Meat | Teriyaki Salmon rice bowl (vegetarian) |
-| No Seafood | Teriyaki Salmon rice bowl (vegetarian) |
+| No Beef | Teriyaki Salmon rice bowl |
+| No Red Meat | Teriyaki Salmon rice bowl |
+| No Seafood | Beef Fried Rice (vegetarian) |
 
 **Estimated cost:** $235.50 (41 × $5.50 + $0.00 trip + 1 × $10.00 school fee)
 
 **Caterer feedback summary:**
 
-Here’s a summary of the catering feedback:
+Here’s a summary of the caterer’s performance based on the feedback:
 
-Kenko consistently delivers strong performance, particularly with dishes like the Teriyaki Salmon rice bowl, Chicken Karaage, and Lamb wrap, which are frequently praised for quality and student appeal. A recurring weakness is the Mongolian Beef and Rice, requiring adjustments to braising time, alongside occasional issues with sauce consistency (Sweet and Sour Chicken, Creamy Udon). Focusing on maintaining consistent cooking times for the Mongolian Beef and addressing sauce thickness issues will significantly improve overall customer satisfaction.
+The caterer demonstrates significant strengths, particularly with consistently high-quality dishes like the Teriyaki Salmon rice bowl, Chicken Karaage, and Lamb wrap, alongside reliably good Beef Fried Rice. A recurring weakness is the inconsistent preparation of Mongolian Beef and Rice, requiring adjustments to braising times, and occasional issues with sauce consistency, particularly with the Sweet and Sour Chicken. Overall, Kenko remains a strong performer, especially when delivering consistently well-executed dishes, and is a popular choice with students.
 
 ## Guzman y Gomez
 
@@ -212,17 +206,19 @@ Kenko consistently delivers strong performance, particularly with dishes like th
 
 | Dish | Quantity |
 |------|----------|
-| Caesar Salad | 3 |
-| Caesar Salad (vegetarian) | 6 |
+| Breakfast Tacos (vegetarian) | 1 |
+| Caesar Salad | 1 |
 | Cali Burrito | 1 |
-| Chicken Enchilada | 2 |
-| Chicken Quesadilla | 2 |
-| Crispy Chicken Taco | 2 |
-| Grilled Chicken Burrito | 1 |
-| Nacho Fries | 4 |
-| Nacho Fries (vegetarian) | 3 |
-| Pulled pork burrito bowl | 5 |
-| Pulled pork burrito bowl (vegetarian) | 3 |
+| Chicken Enchilada | 3 |
+| Chicken Quesadilla | 4 |
+| Crispy Chicken Taco | 3 |
+| Grilled Chicken Burrito | 2 |
+| Nacho Fries | 2 |
+| Nacho Fries (vegetarian) | 1 |
+| Nachos | 4 |
+| Nachos (vegetarian) | 3 |
+| Pulled pork burrito bowl | 6 |
+| Pulled pork burrito bowl (vegetarian) | 1 |
 
 **Estimated cost:** $530.00 (32 × $15.00 + $50.00 trip + 1 × $0.00 school fee)
 
@@ -241,19 +237,13 @@ Kenko consistently delivers strong performance, particularly with dishes like th
 | Dish | Quantity |
 |------|----------|
 | Breakfast Tacos | 1 |
-| Breakfast Tacos (vegetarian) | 3 |
-| Caesar Salad | 1 |
-| Cali Burrito | 1 |
-| Chicken Quesadilla | 1 |
-| Crispy Chicken Taco | 1 |
-| Pulled pork burrito bowl | 2 |
-| Pulled pork burrito bowl (vegetarian) | 5 |
-
-**Special dietary requirements:**
-
-| Dietary Requirements | Recommended Dish |
-|----------------------|------------------|
-| No Beef, No Pork | Nacho Fries (vegetarian) |
+| Breakfast Tacos (vegetarian) | 1 |
+| Caesar Salad (vegetarian) | 1 |
+| Chicken Enchilada | 2 |
+| Crispy Chicken Taco | 2 |
+| Nachos | 3 |
+| Nachos (vegetarian) | 1 |
+| Pulled pork burrito bowl | 5 |
 
 **Estimated cost:** $290.00 (16 × $15.00 + $50.00 trip + 1 × $0.00 school fee)
 
@@ -269,19 +259,20 @@ Kenko consistently delivers strong performance, particularly with dishes like th
 
 | Dish | Quantity |
 |------|----------|
-| Breakfast Tacos | 1 |
-| Breakfast Tacos (vegetarian) | 1 |
-| Caesar Salad | 2 |
-| Crispy Chicken Taco | 4 |
-| Grilled Chicken Burrito | 1 |
-| Nacho Fries | 5 |
+| Caesar Salad | 1 |
+| Cali Burrito | 1 |
+| Chicken Enchilada | 4 |
+| Chicken Quesadilla | 2 |
+| Crispy Chicken Taco | 2 |
+| Nacho Fries (vegetarian) | 1 |
+| Nachos | 4 |
+| Nachos (vegetarian) | 2 |
 | Pulled pork burrito bowl | 4 |
-| Pulled pork burrito bowl (vegetarian) | 3 |
 
 **Estimated cost:** $365.00 (21 × $15.00 + $50.00 trip + 1 × $0.00 school fee)
 
 **Caterer feedback summary:**
 
-Here’s a summary of the catering feedback for the upcoming week:
+**Summary:**
 
-The caterer demonstrates consistent strengths with popular items like the Pulled Pork Burrito Bowl, Crispy Chicken Taco, and Caesar Salad, frequently receiving positive feedback regarding food quality and execution. A key weakness remains the inconsistent delivery of nachos, particularly regarding soggy assembly and packaging issues, requiring immediate attention to maintain customer satisfaction. Focusing on maintaining the quality of the consistently praised dishes will be crucial for continued success, especially given student demand.
+The caterer demonstrates significant strengths with consistently high ratings for the Pulled Pork Burrito Bowl, Crispy Chicken Taco, and Chicken Enchilada, particularly when delivered with proper packaging. A recurring weakness is the issue with soggy nachos, likely stemming from packaging inconsistencies, and occasional issues with overcooked eggs in the Breakfast Tacos. Focusing on maintaining correct assembly and packaging for the nachos, alongside careful monitoring of egg cooking times, will significantly improve student satisfaction.

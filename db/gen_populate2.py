@@ -7,8 +7,9 @@ matches the current schema (db/schema.sql).
 Re-run after editing the resources or the schema:
     python db/gen_populate2.py > db/populate2.sql
 """
+import random
 import sys
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from pathlib import Path
 
 import openpyxl
@@ -203,6 +204,20 @@ SHEET_TO_PROGRAM = {
 
 # --- helpers ---
 
+# The FEEDBACK prose was authored against Feb–Apr 2026 sessions. Shift the whole series
+# forward by this many whole weeks so the latest entries land in early June 2026 — recent
+# enough to populate the caterer-facing "last N weeks" feedback summary. Whole weeks keep
+# each entry's weekday, which dish-rating generation relies on to map a feedback date to
+# the programs running that day.
+FEEDBACK_SHIFT_WEEKS = 5
+
+def shift_submitted_at(submitted_at, weeks):
+    """Shift a feedback timestamp forward by whole weeks, preserving the weekday and the
+    original time/timezone suffix (e.g. '2026-02-24 19:30+10' -> '2026-03-31 19:30+10')."""
+    date_part, sep, rest = submitted_at.partition(" ")
+    shifted = datetime.strptime(date_part, "%Y-%m-%d").date() + timedelta(weeks=weeks)
+    return f"{shifted.isoformat()}{sep}{rest}"
+
 def sql_str(s):
     """Escape a value for inclusion in SQL. None → NULL."""
     if s is None:
@@ -324,16 +339,22 @@ def main():
     p("-- can prepare it vegetarian on request rather than it being vegetarian by default.")
     p("INSERT INTO items (caterer_id, name, dietary_tags) VALUES")
     rows = []
+    caterer_items = {}  # caterer name -> list of (item_name, tags) as actually inserted
     for cname, dishes in MENUS.items():
         cid = caterer_id[cname]
+        items_for_caterer = []
         for dish_name, pdf_tags in dishes:
             tags = menu_tags(pdf_tags, dish_name)
             if "V" in tags:
                 default_tags = [t for t in tags if t != "V"]
                 rows.append(f"    ({cid}, {sql_str(dish_name)}, {sql_array(default_tags)})")
                 rows.append(f"    ({cid}, {sql_str(dish_name + ' (vegetarian)')}, {sql_array(tags)})")
+                items_for_caterer.append((dish_name, default_tags))
+                items_for_caterer.append((dish_name + " (vegetarian)", tags))
             else:
                 rows.append(f"    ({cid}, {sql_str(dish_name)}, {sql_array(tags)})")
+                items_for_caterer.append((dish_name, tags))
+        caterer_items[cname] = items_for_caterer
     p(",\n".join(rows) + ";")
     p("")
 
@@ -489,15 +510,83 @@ def main():
     p(",\n".join(rows) + ";")
     p("")
 
+    # Reverse index used by dish-rating generation: which students attend each program.
+    program_students = {}  # (school, day) -> set of student emails
+    for email, sheets in student_sheets.items():
+        for sheet_name in sheets:
+            program_students.setdefault(SHEET_TO_PROGRAM[sheet_name], set()).add(email)
+
     # --- feedback ---
     # Dollar-quoted strings ($$...$$) avoid the need to escape apostrophes in the prose.
+    # Shift the whole series forward (FEEDBACK_SHIFT_WEEKS) so it ends in early June 2026;
+    # the same shifted dates drive dish_ratings below so feedback and ratings stay aligned.
+    feedback_dated = [
+        (cname, shift_submitted_at(submitted_at, FEEDBACK_SHIFT_WEEKS), content)
+        for cname, submitted_at, content in FEEDBACK
+    ]
     p("-- Manager-submitted feedback per caterer. Dish names match the menu so an LLM")
     p("-- can derive per-dish quality signals.")
     p("INSERT INTO feedback (caterer_id, submitted_at, content) VALUES")
     rows = []
-    for cname, submitted_at, content in FEEDBACK:
+    for cname, submitted_at, content in feedback_dated:
         rows.append(f"    ({caterer_id[cname]}, '{submitted_at}', $${content}$$)")
     p(",\n".join(rows) + ";")
+    p("")
+
+    # --- dish ratings ---
+    # Simulates the per-student 1-10 score a tutor collects during each session and
+    # sends back. Each caterer's feedback dates are its past delivery nights; the
+    # date's weekday selects which programs ran, so every catering-eligible student
+    # in those programs rates one dietary-appropriate dish that night.
+    #
+    # To keep dishes distinguishable (rather than every average collapsing toward
+    # the middle), each dish is given a latent quality drawn from a U-shaped
+    # distribution — so dishes lean clearly good or clearly bad — and individual
+    # ratings jitter around that quality. A fixed seed keeps the output reproducible.
+    random.seed(20260606)
+
+    # Latent per-dish quality on a 1-10 scale. betavariate(0.5, 0.5) is U-shaped,
+    # piling mass near the extremes, so dish averages spread across the full range.
+    dish_quality = {}
+    for cname, items_for_caterer in caterer_items.items():
+        cid = caterer_id[cname]
+        for name, _tags in items_for_caterer:
+            dish_quality[(cid, name)] = 1.0 + 9.0 * random.betavariate(0.5, 0.5)
+
+    rating_rows = []
+    seen_ratings = set()  # (student_id, caterer_id, date) — one dish rated per student per night
+    for cname, submitted_at, _content in feedback_dated:
+        cid = caterer_id[cname]
+        date_iso = str(submitted_at).split(" ")[0]
+        weekday = datetime.strptime(date_iso, "%Y-%m-%d").strftime("%A")
+        items_for_caterer = caterer_items[cname]
+        schools_served = [s for s, c in SCHOOL_CATERER.items() if c == cname]
+        for school in schools_served:
+            for email in sorted(program_students.get((school, weekday), ())):
+                s = student_by_email[email]
+                if not s["wants_catering"]:
+                    continue
+                required = set(s["dietary"])
+                eligible = [name for name, tags in items_for_caterer if required.issubset(set(tags))]
+                if not eligible:
+                    continue
+                sid_ = student_id[email]
+                if (sid_, cid, date_iso) in seen_ratings:
+                    continue
+                seen_ratings.add((sid_, cid, date_iso))
+                dish = random.choice(eligible)
+                # Jitter each rating around the dish's quality (tight spread keeps
+                # per-dish averages polarised) and clamp into the 1-10 range.
+                rating = max(1, min(10, round(random.gauss(dish_quality[(cid, dish)], 1.0))))
+                rating_rows.append(f"    ({sid_}, {cid}, {sql_str(dish)}, '{date_iso}', {rating})")
+
+    if rating_rows:
+        p("-- Dish ratings: per-student 1-10 scores collected by tutors during each past")
+        p("-- session. One dietary-appropriate dish rated per student per delivery night.")
+        p("INSERT INTO dish_ratings (student_id, caterer_id, item_name, date, rating) VALUES")
+        p(",\n".join(rating_rows) + ";")
+    else:
+        p("-- (no dish ratings to insert)")
     p("")
 
     # --- absences ---
@@ -557,6 +646,49 @@ def main():
         p(",\n".join(absence_rows) + ";")
     else:
         p("-- (no absences to insert)")
+    p("")
+
+    # --- meal orders (student pre-orders) ---
+    # A deterministic ~1-in-3 subset of catering-eligible students lock in a specific
+    # dish ahead of each upcoming session; everyone else is auto-assigned from the dish
+    # ranking at order time. Eligibility mirrors dish_ratings: enrolled in the program,
+    # wants_catering, not absent for that session, and a dietary-appropriate dish exists
+    # on the school's caterer menu. The chosen dish is FK-safe (it's on that caterer).
+    order_rows = []
+    seen_orders = set()  # (student_id, program_id, date) — one pre-order per student per session
+    for school, day, date_iso, _mgr, _mgr_mob in session_rows:
+        if (school, date_iso) in full_cancellations:
+            continue
+        pid = program_id[(school, day)]
+        cname = SCHOOL_CATERER[school]
+        cid = caterer_id[cname]
+        items_for_caterer = caterer_items[cname]
+        for email in sorted(program_students.get((school, day), ())):
+            s = student_by_email[email]
+            if not s["wants_catering"]:
+                continue
+            sid_ = student_id[email]
+            if (sid_, pid, date_iso) in seen_abs:          # absent that session
+                continue
+            if (sid_, pid, date_iso) in seen_orders:
+                continue
+            required = set(s["dietary"])
+            eligible = [name for name, tags in items_for_caterer if required.issubset(set(tags))]
+            if not eligible:
+                continue
+            if random.random() >= 0.34:                    # ~1 in 3 pre-orders
+                continue
+            seen_orders.add((sid_, pid, date_iso))
+            dish = random.choice(eligible)
+            order_rows.append(f"    ({sid_}, {pid}, '{date_iso}', {cid}, {sql_str(dish)})")
+
+    if order_rows:
+        p("-- Student pre-ordered meals: a locked-in dish for an upcoming session, for a")
+        p("-- subset of eligible students; the rest are auto-assigned from the dish ranking.")
+        p("INSERT INTO meal_orders (student_id, program_id, date, caterer_id, item_name) VALUES")
+        p(",\n".join(order_rows) + ";")
+    else:
+        p("-- (no meal orders to insert)")
     p("")
 
     return "\n".join(out)

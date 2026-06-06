@@ -5,6 +5,7 @@ requested delivery window per session, and emailed to the caterer's contact (CC'
 chef when the caterer opts in).
 """
 import logging
+from datetime import date, timedelta
 from pathlib import Path
 
 from src.business import llm
@@ -184,9 +185,34 @@ def render_session_block(
     return lines
 
 
-def build_caterer_order(caterer_name: str, sessions: list[RenderedSession], week: list[str]) -> list[str]:
+def recent_feedback(
+    feedback: list[tuple[str, str]], reference_date: date, weeks: int
+) -> list[tuple[str, str]]:
+    """Filter (submitted_at, content) feedback to entries from the last `weeks` weeks
+    up to and including `reference_date`. submitted_at is an ISO-ish timestamp string
+    (e.g. '2026-02-24 19:30+10'); unparseable entries are skipped."""
+    cutoff = reference_date - timedelta(weeks=weeks)
+    out: list[tuple[str, str]] = []
+    for submitted_at, content in feedback:
+        try:
+            submitted = date.fromisoformat(str(submitted_at)[:10])
+        except ValueError:
+            continue
+        if cutoff <= submitted <= reference_date:
+            out.append((submitted_at, content))
+    return out
+
+
+def build_caterer_order(
+    caterer_name: str,
+    sessions: list[RenderedSession],
+    week: list[str],
+    feedback_summary: str = "",
+    feedback_weeks: int = 4,
+) -> list[str]:
     """Caterer-facing order document: dishes, dietary notes, delivery window and the
-    day-of manager — no internal cost figures or feedback critique."""
+    day-of manager — no internal cost figures. When `feedback_summary` is non-empty it
+    is appended as a 'Manager feedback (last N weeks)' section at the bottom."""
     body: list[str] = []
     current_school: str | None = None
     for rs in sessions:
@@ -197,6 +223,16 @@ def build_caterer_order(caterer_name: str, sessions: list[RenderedSession], week
             rs, include_cost=False, include_optout=False, include_dinner=False, special_note=True
         )
         body.append("")
+
+    if feedback_summary:
+        body += [
+            "---",
+            "",
+            f"## Manager feedback (last {feedback_weeks} weeks)",
+            "",
+            feedback_summary,
+            "",
+        ]
 
     return [
         f"# Catering Order — {caterer_name}",
@@ -230,12 +266,18 @@ def write_document(lines: list[str], md_path: Path) -> Path:
 
 
 def dispatch_caterer_order(
-    caterer_id: int, caterer_name: str, sessions: list[RenderedSession], week: list[str], output_dir: Path
+    caterer_id: int,
+    caterer_name: str,
+    sessions: list[RenderedSession],
+    week: list[str],
+    output_dir: Path,
+    feedback_summary: str = "",
+    feedback_weeks: int = 4,
 ) -> None:
     """Build the caterer-facing order PDF and email it to the caterer (CC'ing the chef
     when the caterer opts in)."""
     pdf_path = write_document(
-        build_caterer_order(caterer_name, sessions, week),
+        build_caterer_order(caterer_name, sessions, week, feedback_summary, feedback_weeks),
         output_dir / f"orders-{slug(caterer_name)}.md",
     )
     logger.info("%s: wrote order PDF %s", caterer_name, pdf_path)
@@ -282,7 +324,12 @@ def send_overview(overview: list[str], week: list[str], admin_email: str, output
     logger.info("Emailed overview to %s", admin_email)
 
 
-def main(week: list[str], admin_email: str = "aaron.r.dmello@gmail.com") -> None:
+def main(
+    week: list[str],
+    admin_email: str = "aaron.r.dmello@gmail.com",
+    feedback_weeks: int = 5,
+    feedback_reference: date | None = None,
+) -> None:
     # Configure logging if the caller hasn't already (no-op when handlers exist),
     # so running the pipeline directly still surfaces the stage-by-stage progress.
     logging.basicConfig(
@@ -297,6 +344,7 @@ def main(week: list[str], admin_email: str = "aaron.r.dmello@gmail.com") -> None
 
     output_dir = Path() / "output"
     output_dir.mkdir(exist_ok=True)
+    reference = feedback_reference or date.today()
     logger.info("Generating catering orders for week %s - %s", week[0], week[-1])
 
     overview: list[str] = [
@@ -315,6 +363,11 @@ def main(week: list[str], admin_email: str = "aaron.r.dmello@gmail.com") -> None
         feedback = helpers.get_feedback(caterer_id)
         logger.info("%s: loaded %d feedback entr%s", caterer_name, len(feedback), "y" if len(feedback) == 1 else "ies")
 
+        recent = recent_feedback(feedback, reference, feedback_weeks)
+        caterer_summary = llm.summarise_feedback_for_caterer(recent) if recent else ""
+        logger.info("%s: %d feedback entr%s in the last %d weeks", caterer_name,
+                    len(recent), "y" if len(recent) == 1 else "ies", feedback_weeks)
+
         ranked_menu = rank_menu_for_caterer(caterer_id)
 
         pricing = helpers.get_pricing(caterer_id)
@@ -327,7 +380,9 @@ def main(week: list[str], admin_email: str = "aaron.r.dmello@gmail.com") -> None
             continue
         logger.info("%s: computed %d session(s)", caterer_name, len(sessions))
 
-        dispatch_caterer_order(caterer_id, caterer_name, sessions, week, output_dir)
+        dispatch_caterer_order(
+            caterer_id, caterer_name, sessions, week, output_dir, caterer_summary, feedback_weeks
+        )
         overview += build_overview_section(caterer_name, sessions, feedback)
 
     logger.info("Assembling and sending the Padea overview...")

@@ -97,3 +97,28 @@ def summarise_feedback(reviews: list[tuple[str, str]]) -> str:
         "Only include the actual review and no headers or extraneous text."
     )
     return run_model(prompt).strip()
+
+
+def summarise_feedback_for_caterer(reviews: list[tuple[str, str]], target_words: int = 300) -> str:
+    """Summarise manager feedback into a caterer-facing recap of about `target_words`
+    words, for appending to the caterer's order.
+
+    Tone is factual and neutral: a balanced account of what went well and what fell
+    short, naming specific dishes, with no praise or scolding. Returns "" for no reviews
+    (the caller omits the section rather than printing an empty heading)."""
+    if not reviews:
+        return ""
+
+    reviews_text = "\n\n".join(f"[{date}]\n{content}" for date, content in reviews)
+    prompt = (
+        "You are summarising catering manager feedback to share directly with the caterer.\n\n"
+        "Feedback entries (one per session, newest last):\n"
+        f"{reviews_text}\n\n"
+        f"Write a balanced, factual summary of about {target_words} words covering both what "
+        "worked well and what fell short, referring to specific dishes where the feedback does. "
+        "Keep a neutral, professional tone — neither praising nor scolding — an accurate recap "
+        "the caterer can act on. Do not invent details not present in the feedback. "
+        "Respond with prose only: no headings, no bullet points, no preamble."
+        "DO NOT include any header or extraneous text — just the summary itself, suitable for appending to the caterer's order."
+    )
+    return run_model(prompt).strip()

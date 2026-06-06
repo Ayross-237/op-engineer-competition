@@ -18,14 +18,20 @@ sys.modules["psycopg2"] = MagicMock()
 os.environ.setdefault("SUPABASE_URL", "http://test.local")
 os.environ.setdefault("SUPABASE_KEY", "test-key")
 
+from datetime import date  # noqa: E402
+
 from src.business.create_orders import (  # noqa: E402
     RenderedSession,
     SessionReport,
     slug,
     build_caterer_order,
+    build_session_report,
+    recent_feedback,
     render_session,
     render_session_block,
 )
+from src.business import llm  # noqa: E402
+from src.business.menu import MenuItem  # noqa: E402
 
 
 def _report(**kw) -> SessionReport:
@@ -74,6 +80,72 @@ class TestSlug:
 
     def test_digits_preserved(self):
         assert slug("Caterer 4") == "caterer-4"
+
+
+# --- build_session_report: locked pre-orders vs auto-assignment ---
+
+class TestBuildSessionReport:
+    PRICING = (10.0, 5.0, 2.0)  # (per_item, per_trip, per_school)
+
+    def test_empty_roster_returns_zero(self):
+        r = build_session_report([], [MenuItem("A", [])], self.PRICING)
+        assert r.student_count == 0
+        assert r.standard_counts == {}
+        assert r.special_assignments == []
+        assert r.cost == 0.0
+
+    def test_locked_orders_counted_verbatim(self):
+        # The locked dish is used even when it isn't what the picker would choose.
+        students = [(1, [], None), (2, [], None)]
+        menu = [MenuItem("Pad Thai", []), MenuItem("Nachos", [])]
+        r = build_session_report(students, menu, self.PRICING, {1: "Nachos", 2: "Nachos"})
+        assert r.standard_counts == {"Nachos": 2}
+        assert r.special_assignments == []
+        assert r.student_count == 2
+
+    def test_locked_order_overrides_special_dietary(self):
+        # A special-dietary student who pre-ordered must skip the LLM recommendation.
+        llm.client.chat.side_effect = AssertionError("LLM must not run for a locked order")
+        try:
+            students = [(7, ["GF"], "no peanuts please")]
+            menu = [MenuItem("Safe Bowl", ["GF"])]
+            r = build_session_report(students, menu, self.PRICING, {7: "Safe Bowl"})
+        finally:
+            llm.client.chat.side_effect = None
+        assert r.standard_counts == {"Safe Bowl": 1}
+        assert r.special_assignments == []
+
+    def test_unlocked_special_uses_llm(self):
+        # Without a lock, a free-text dietary student routes through find_meal.
+        llm.client.chat.return_value = {"message": {"content": "Safe Bowl"}}
+        try:
+            students = [(7, ["GF"], "no peanuts please")]
+            menu = [MenuItem("Safe Bowl", ["GF"])]
+            r = build_session_report(students, menu, self.PRICING, locked_orders=None)
+        finally:
+            llm.client.chat.reset_mock(return_value=True)
+        assert r.special_assignments == [("GF, no peanuts please", "Safe Bowl")]
+        assert r.standard_counts == {}
+
+    def test_unlocked_standard_uses_picker(self):
+        # Single matching dish → the weighted picker is deterministic.
+        students = [(3, ["GF"], None)]
+        menu = [MenuItem("Only GF", ["GF"]), MenuItem("Plain", [])]
+        r = build_session_report(students, menu, self.PRICING)
+        assert r.standard_counts == {"Only GF": 1}
+
+    def test_mixed_locked_and_unlocked(self):
+        students = [(1, [], None), (2, ["GF"], None)]
+        menu = [MenuItem("GF Dish", ["GF"]), MenuItem("Plain", [])]
+        # Student 1 locked to "GF Dish"; student 2 (unlocked, GF) can only match "GF Dish".
+        r = build_session_report(students, menu, self.PRICING, {1: "GF Dish"})
+        assert r.standard_counts == {"GF Dish": 2}
+
+    def test_cost_counts_every_student(self):
+        students = [(1, [], None), (2, [], None), (3, [], None)]
+        menu = [MenuItem("A", [])]
+        r = build_session_report(students, menu, self.PRICING, {1: "A", 2: "A", 3: "A"})
+        assert r.cost == 3 * 10.0 + 5.0 + 2.0  # 37.0
 
 
 # --- render_session cost toggle ---
@@ -158,3 +230,67 @@ class TestBuildCatererOrder:
         rs = _session(report=_report(special_assignments=[("No Beef", "Mie Goreng (vegetarian)")]))
         out = "\n".join(render_session_block(rs, include_cost=True, include_optout=True, include_dinner=True))
         assert "please substitute another dish" not in out
+
+
+# --- recent_feedback window filter ---
+
+class TestRecentFeedback:
+    FB = [
+        ("2026-01-01 19:00+10", "old"),
+        ("2026-02-15 19:00+10", "mid"),
+        ("2026-03-01 19:00+10", "recent"),
+    ]
+
+    def test_filters_to_window(self):
+        # 4 weeks before 2026-03-05 is 2026-02-05 → keeps mid + recent, drops old.
+        out = recent_feedback(self.FB, date(2026, 3, 5), 4)
+        assert [c for _, c in out] == ["mid", "recent"]
+
+    def test_cutoff_is_inclusive(self):
+        # 1 week before 2026-03-05 is exactly 2026-02-26.
+        out = recent_feedback([("2026-02-26 00:00+10", "edge")], date(2026, 3, 5), 1)
+        assert len(out) == 1
+
+    def test_reference_date_is_inclusive(self):
+        out = recent_feedback([("2026-03-05 12:00+10", "today")], date(2026, 3, 5), 1)
+        assert len(out) == 1
+
+    def test_future_entries_excluded(self):
+        assert recent_feedback([("2026-04-01 19:00+10", "future")], date(2026, 3, 5), 4) == []
+
+    def test_unparseable_dates_skipped(self):
+        fb = [("not-a-date", "bad"), ("2026-03-01 19:00+10", "ok")]
+        assert recent_feedback(fb, date(2026, 3, 5), 4) == [("2026-03-01 19:00+10", "ok")]
+
+    def test_empty_input(self):
+        assert recent_feedback([], date(2026, 3, 5), 4) == []
+
+
+# --- caterer order: manager feedback section ---
+
+class TestCatererOrderFeedback:
+    WEEK = ["2026-05-01", "2026-05-07"]
+
+    def test_section_appended_when_summary_present(self):
+        out = "\n".join(build_caterer_order(
+            "Terrific Noodles", [_session()], self.WEEK,
+            feedback_summary="Noodles were consistently well received.", feedback_weeks=4,
+        ))
+        assert "## Manager feedback (last 4 weeks)" in out
+        assert "Noodles were consistently well received." in out
+
+    def test_no_section_when_summary_empty(self):
+        out = "\n".join(build_caterer_order("Terrific Noodles", [_session()], self.WEEK))
+        assert "Manager feedback" not in out
+
+    def test_header_reflects_weeks_parameter(self):
+        out = "\n".join(build_caterer_order(
+            "Terrific Noodles", [_session()], self.WEEK, feedback_summary="s", feedback_weeks=8,
+        ))
+        assert "(last 8 weeks)" in out
+
+    def test_still_no_internal_cost_with_feedback(self):
+        out = "\n".join(build_caterer_order(
+            "Terrific Noodles", [_session()], self.WEEK, feedback_summary="s", feedback_weeks=4,
+        ))
+        assert "Estimated cost" not in out
