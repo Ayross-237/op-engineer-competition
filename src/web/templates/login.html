@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+    <p>Enter your school email to see your upcoming sessions and lock in a meal.</p>
+    <form method="post" action="{{ url_for('login') }}">
+        <p><input type="email" name="email" placeholder="you@school.edu.au" value="{{ email }}" required autofocus></p>
+        <p><input type="submit" value="Continue"></p>
+    </form>
+{% endblock %}

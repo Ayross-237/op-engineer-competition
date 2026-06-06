@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Padea Meal Pre-orders{% endblock %}</title>
+    <style>
+        body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+               max-width: 760px; margin: 0 auto; padding: 24px; color: #222; }
+        header { display: flex; justify-content: space-between; align-items: baseline;
+                 border-bottom: 2px solid #82b366; padding-bottom: 8px; margin-bottom: 20px; }
+        h1 { font-size: 1.3rem; margin: 0; color: #2c5f2d; }
+        a { color: #0e8088; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px 10px; text-align: left; }
+        th { background: #f3f7f3; }
+        .flash { padding: 10px 12px; border-radius: 6px; margin: 10px 0; }
+        .flash.success { background: #e6f4ea; border: 1px solid #82b366; }
+        .flash.error { background: #fdecea; border: 1px solid #d79b00; }
+        .tag { font-size: .75rem; background: #eef; border-radius: 4px; padding: 1px 5px; margin-left: 4px; }
+        .locked { color: #2c5f2d; font-weight: 600; }
+        .unset { color: #888; }
+        button, input[type=submit] { background: #82b366; color: #fff; border: 0;
+                 padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: .95rem; }
+        button.secondary { background: #bbb; }
+        input[type=email] { padding: 8px; width: 100%; box-sizing: border-box; }
+        label.choice { display: block; padding: 6px 0; }
+        .muted { color: #666; font-size: .9rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Padea Meal Pre-orders</h1>
+        {% if session.get("student_id") %}
+            <span class="muted">{{ session.get("student_name") }} &middot; <a href="{{ url_for('logout') }}">log out</a></span>
+        {% endif %}
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</body>
+</html>

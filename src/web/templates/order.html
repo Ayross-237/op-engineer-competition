@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+    <p><a href="{{ url_for('sessions') }}">&larr; back to my sessions</a></p>
+
+    <h2 style="font-size:1.1rem">{{ session.school_name }} — {{ session.date }} ({{ session.day }})</h2>
+    <p class="muted">
+        {{ session.start[:5] }}&ndash;{{ session.end[:5] }} &middot; {{ session.building }}
+        {% if dietary %} &middot; matching your dietary tags: {% for t in dietary %}<span class="tag">{{ t }}</span>{% endfor %}{% endif %}
+    </p>
+    {% if dietary_extra %}<p class="muted">Your dietary note: &ldquo;{{ dietary_extra }}&rdquo; — pick the closest dish.</p>{% endif %}
+
+    {% if choices %}
+    <form method="post">
+        {% for item in choices %}
+            <label class="choice">
+                <input type="radio" name="item_name" value="{{ item.name }}" {{ "checked" if item.name == current }}>
+                {{ item.name }}
+                {% for t in item.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+            </label>
+        {% endfor %}
+        <p>
+            <button type="submit" name="action" value="set">Lock in this meal</button>
+            {% if current %}
+                <button type="submit" name="action" value="clear" class="secondary">Clear pre-order</button>
+            {% endif %}
+        </p>
+    </form>
+    {% else %}
+        <p class="muted">No dishes on this caterer's menu match your dietary requirements — your meal will be handled manually.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+    <p>Your upcoming sessions. Lock in a meal, or leave it and we'll auto-assign one.</p>
+
+    {% if sessions %}
+    <table>
+        <thead>
+            <tr><th>Date</th><th>School</th><th>Session</th><th>Your meal</th><th></th></tr>
+        </thead>
+        <tbody>
+        {% for s in sessions %}
+            <tr>
+                <td>{{ s.date }} ({{ s.day }})</td>
+                <td>{{ s.school_name }}</td>
+                <td>{{ s.start[:5] }}&ndash;{{ s.end[:5] }}</td>
+                <td>
+                    {% if s.order %}
+                        <span class="locked">{{ s.order }}</span>
+                    {% else %}
+                        <span class="unset">auto-assigned</span>
+                    {% endif %}
+                </td>
+                <td><a href="{{ url_for('order', program_id=s.program_id, date=s.date) }}">
+                    {{ "Change" if s.order else "Choose" }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="muted">You have no upcoming sessions.</p>
+    {% endif %}
+{% endblock %}
