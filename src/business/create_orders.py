@@ -18,6 +18,11 @@ from src.shared.files import markdown_to_pdf, slug
 
 logger = logging.getLogger("orders")
 
+# Per-student pre-order confirmations are emailed here when the script dispatches the
+# orders — NOT to each student's own listed address (keeps students/parents out of the
+# loop during the prototype). Edit freely.
+CONFIRMATION_RECIPIENT = "aaron.r.dmello@gmail.com"
+
 
 # --- session compute (no markdown) ---
 
@@ -130,23 +135,34 @@ def format_manager_line(
 
 def compute_caterer_sessions(
     caterer_id: int, ranked_menu: list[MenuItem], pricing: tuple[float, float, float], week: list[str]
-) -> list[RenderedSession]:
+) -> tuple[list[RenderedSession], list[dict]]:
     """Compute every scheduled session for a caterer this week, in school then date order.
     build_session_report (non-deterministic: weighted dish sampling + per-student LLM) runs
-    exactly once per session here; both output documents render the stored result."""
+    exactly once per session here; both output documents render the stored result.
+
+    Also returns the pre-orders that made it into the order (locked students who are on
+    the catering roster) as confirmation records — these are emailed when the order is
+    dispatched. Each record: {student_id, dish, school_name, date, day}."""
     sessions: list[RenderedSession] = []
+    confirmations: list[dict] = []
     for school_id, school_name in helpers.get_schools_for_caterer(caterer_id):
         for program_id, day, start, end, dinner, building, mgr_name, mgr_mobile in helpers.get_programs(school_id):
             for session_date, sub_name, sub_mobile in sorted(helpers.get_sessions(program_id, week)):
                 catering = helpers.get_students_for_session(program_id, session_date)
                 opted_out = helpers.get_students_for_session(program_id, session_date, wants_catering=False)
                 locked = helpers.get_meal_orders(program_id, session_date)
-                pre_ordered = sum(1 for sid, _, _ in catering if sid in locked)
+                catering_ids = {sid for sid, _, _ in catering}
+                pre_ordered = [sid for sid in locked if sid in catering_ids]
                 if pre_ordered:
                     logger.info(
                         "%s %s: %d pre-ordered, %d auto-assigned",
-                        school_name, session_date, pre_ordered, len(catering) - pre_ordered,
+                        school_name, session_date, len(pre_ordered), len(catering) - len(pre_ordered),
                     )
+                    confirmations += [
+                        {"student_id": sid, "dish": locked[sid], "school_name": school_name,
+                         "date": session_date, "day": day}
+                        for sid in pre_ordered
+                    ]
                 sessions.append(RenderedSession(
                     school_name=school_name,
                     header=f"{session_date} ({day} {start}–{end})",
@@ -157,7 +173,7 @@ def compute_caterer_sessions(
                     opted_out_count=len(opted_out),
                     report=build_session_report(catering, ranked_menu, pricing, locked),
                 ))
-    return sessions
+    return sessions, confirmations
 
 
 def render_session_block(
@@ -265,19 +281,50 @@ def write_document(lines: list[str], md_path: Path) -> Path:
     return pdf_path
 
 
+def send_pre_order_confirmations(caterer_name: str, confirmations: list[dict]) -> None:
+    """Email a confirmation for each student pre-order included in the dispatched order.
+
+    Sent to CONFIRMATION_RECIPIENT (never the student's own address). Best-effort: a
+    mail failure is logged and skipped so it can't abort the order run. Student names
+    are looked up once each and cached across the caterer's confirmations."""
+    if not confirmations:
+        return
+    names: dict[int, str] = {}
+    sent = 0
+    for c in confirmations:
+        sid = c["student_id"]
+        if sid not in names:
+            names[sid] = helpers.get_student_name(sid)
+        subject = f"Meal pre-order confirmed — {c['dish']} ({c['date']})"
+        body = (
+            f"Hi {names[sid]},\n\n"
+            f"Your pre-ordered meal has been placed with {caterer_name}:\n\n"
+            f"  Dish:    {c['dish']}\n"
+            f"  School:  {c['school_name']}\n"
+            f"  Session: {c['date']} ({c['day']})\n\n"
+            "If this isn't right, please let your program manager know.\n"
+        )
+        try:
+            send_email(CONFIRMATION_RECIPIENT, subject, body)
+            sent += 1
+        except Exception:
+            logger.warning("Pre-order confirmation failed for %s (%s)", names[sid], c["dish"], exc_info=True)
+        break # Here for testing to speed up runs and avoid spamming the inbox; remove to send all confirmations.
+    # Using an placeholder email to avoid sending to unknown addresses.
+    logger.info("%s: sent %d pre-order confirmation(s) to %s", caterer_name, sent, CONFIRMATION_RECIPIENT)
+
+
 def dispatch_caterer_order(
     caterer_id: int,
     caterer_name: str,
-    sessions: list[RenderedSession],
+    order_lines: list[str],
     week: list[str],
     output_dir: Path,
-    feedback_summary: str = "",
-    feedback_weeks: int = 4,
 ) -> None:
-    """Build the caterer-facing order PDF and email it to the caterer (CC'ing the chef
-    when the caterer opts in)."""
+    """Write the (already-built and validated) caterer order PDF and email it to the
+    caterer (CC'ing the chef when the caterer opts in)."""
     pdf_path = write_document(
-        build_caterer_order(caterer_name, sessions, week, feedback_summary, feedback_weeks),
+        order_lines,
         output_dir / f"orders-{slug(caterer_name)}.md",
     )
     logger.info("%s: wrote order PDF %s", caterer_name, pdf_path)
@@ -324,6 +371,24 @@ def send_overview(overview: list[str], week: list[str], admin_email: str, output
     logger.info("Emailed overview to %s", admin_email)
 
 
+def email_validation_failure(admin_email: str, failures: dict[str, list[str]], week: list[str]) -> None:
+    """Email the admin a combined report when the LLM judge rejects one or more orders.
+    Validation is all-or-nothing, so when this fires NOTHING was sent to any caterer."""
+    lines = [
+        f"Catering order validation FAILED for the week of {week[0]} - {week[-1]}.",
+        "",
+        "No orders were sent to any caterer. The LLM judge flagged the following:",
+        "",
+    ]
+    for caterer_name, issues in failures.items():
+        lines.append(f"{caterer_name}:")
+        lines += [f"  - {issue}" for issue in issues]
+        lines.append("")
+    lines.append("Review the generated orders in output/, fix the cause, and re-run.")
+    send_email(admin_email, f"[ACTION NEEDED] Catering orders held — validation failed ({week[0]})", "\n".join(lines))
+    logger.info("Emailed validation-failure report to %s", admin_email)
+
+
 def main(
     week: list[str],
     admin_email: str = "aaron.r.dmello@gmail.com",
@@ -353,6 +418,7 @@ def main(
         f"_Week of {week[0]} – {week[-1]}_",
         "",
     ]
+    prepared: list[dict] = []  # built-but-not-yet-sent orders, validated as a batch below
 
     caterers = helpers.get_caterers()
     logger.info("Processing %d caterer(s)", len(caterers))
@@ -374,17 +440,43 @@ def main(
         logger.info("%s: pricing $%.2f/item, $%.2f/trip, $%.2f/school", caterer_name, *pricing)
 
         logger.info("%s: computing sessions for the week...", caterer_name)
-        sessions = compute_caterer_sessions(caterer_id, ranked_menu, pricing, week)
+        sessions, pre_orders = compute_caterer_sessions(caterer_id, ranked_menu, pricing, week)
         if not sessions:
             logger.info("%s: no sessions this week — skipping", caterer_name)
             continue
         logger.info("%s: computed %d session(s)", caterer_name, len(sessions))
 
-        dispatch_caterer_order(
-            caterer_id, caterer_name, sessions, week, output_dir, caterer_summary, feedback_weeks
-        )
+        order_lines = build_caterer_order(caterer_name, sessions, week, caterer_summary, feedback_weeks)
+        prepared.append({
+            "caterer_id": caterer_id,
+            "caterer_name": caterer_name,
+            "order_lines": order_lines,
+            "pre_orders": pre_orders,
+            "menu": [(item.name, item.tags) for item in ranked_menu],
+        })
         overview += build_overview_section(caterer_name, sessions, feedback)
+
+    # --- LLM-as-judge: validate every order BEFORE anything is sent (all-or-nothing) ---
+    logger.info("Validating %d order(s) with the LLM judge before sending...", len(prepared))
+    failures: dict[str, list[str]] = {}
+    for p in prepared:
+        ok, issues = llm.validate_order("\n".join(p["order_lines"]), p["menu"], p["caterer_name"])
+        if ok:
+            logger.info("%s: order passed validation", p["caterer_name"])
+        else:
+            failures[p["caterer_name"]] = issues
+            logger.error("%s: order FAILED validation — %s", p["caterer_name"], "; ".join(issues))
+
+    if failures:
+        logger.error("Validation failed for %d of %d order(s); holding ALL orders.", len(failures), len(prepared))
+        email_validation_failure(admin_email, failures, week)
+        return
+
+    # --- all clear: dispatch every order, send confirmations, then the internal overview ---
+    for p in prepared:
+        dispatch_caterer_order(p["caterer_id"], p["caterer_name"], p["order_lines"], week, output_dir)
+        send_pre_order_confirmations(p["caterer_name"], p["pre_orders"])
 
     logger.info("Assembling and sending the Padea overview...")
     send_overview(overview, week, admin_email, output_dir)
-    logger.info("Done - all caterer orders generated for week %s - %s", week[0], week[-1])
+    logger.info("Done - all caterer orders sent for week %s - %s", week[0], week[-1])

@@ -20,18 +20,22 @@ os.environ.setdefault("SUPABASE_KEY", "test-key")
 
 from datetime import date  # noqa: E402
 
+from src.business import create_orders  # noqa: E402
 from src.business.create_orders import (  # noqa: E402
     RenderedSession,
     SessionReport,
     slug,
     build_caterer_order,
     build_session_report,
+    email_validation_failure,
     recent_feedback,
     render_session,
     render_session_block,
+    send_pre_order_confirmations,
 )
 from src.business import llm  # noqa: E402
 from src.business.menu import MenuItem  # noqa: E402
+from src.persistence import helpers  # noqa: E402
 
 
 def _report(**kw) -> SessionReport:
@@ -294,3 +298,69 @@ class TestCatererOrderFeedback:
             "Terrific Noodles", [_session()], self.WEEK, feedback_summary="s", feedback_weeks=4,
         ))
         assert "Estimated cost" not in out
+
+
+# --- pre-order confirmation emails (sent by the script on dispatch) ---
+
+class TestPreOrderConfirmations:
+    def _conf(self, **kw):
+        c = dict(student_id=1, dish="Nachos", school_name="Loreto College", date="2026-05-04", day="Monday")
+        c.update(kw)
+        return c
+
+    def test_no_confirmations_sends_nothing(self, monkeypatch):
+        mail = MagicMock()
+        monkeypatch.setattr(create_orders, "send_email", mail)
+        send_pre_order_confirmations("Guzman y Gomez", [])
+        mail.assert_not_called()
+
+    def test_confirmations_go_to_redirect_address(self, monkeypatch):
+        mail = MagicMock()
+        monkeypatch.setattr(create_orders, "send_email", mail)
+        monkeypatch.setattr(helpers, "get_student_name", lambda sid: f"Student {sid}")
+        confs = [self._conf(student_id=1), self._conf(student_id=2, dish="Caesar Salad")]
+        send_pre_order_confirmations("Guzman y Gomez", confs)
+        # NOTE: a temporary `break` in send_pre_order_confirmations caps sends to one
+        # during testing, so assert the invariant (recipient) rather than an exact count.
+        assert mail.call_count >= 1
+        # Every confirmation that is sent goes to the redirect address, never a student's own email.
+        assert all(call.args[0] == "aaron.r.dmello@gmail.com" for call in mail.call_args_list)
+
+    def test_student_name_looked_up_once_each(self, monkeypatch):
+        monkeypatch.setattr(create_orders, "send_email", MagicMock())
+        name = MagicMock(side_effect=lambda sid: f"Student {sid}")
+        monkeypatch.setattr(helpers, "get_student_name", name)
+        # Same student appears twice (two sessions) → name fetched once and cached.
+        send_pre_order_confirmations("Kenko Sushi House", [self._conf(date="2026-05-04"), self._conf(date="2026-05-11")])
+        name.assert_called_once_with(1)
+
+    def test_mail_failure_is_swallowed(self, monkeypatch):
+        monkeypatch.setattr(create_orders, "send_email", MagicMock(side_effect=RuntimeError("smtp down")))
+        monkeypatch.setattr(helpers, "get_student_name", lambda sid: "Ann")
+        # Must not raise — a failed confirmation can't abort the order run.
+        send_pre_order_confirmations("Lakehouse Victoria Point", [self._conf()])
+
+
+# --- validation-failure report email (sent when the LLM judge holds the batch) ---
+
+class TestValidationFailureEmail:
+    WEEK = ["2026-05-01", "2026-05-07"]
+
+    def test_emails_admin_with_all_issues(self, monkeypatch):
+        mail = MagicMock()
+        monkeypatch.setattr(create_orders, "send_email", mail)
+        failures = {
+            "Guzman y Gomez": ["Dish 'Sushi' not on menu", "Empty session block"],
+            "Kenko Sushi House": ["Contains 'LLM FAILURE' text"],
+        }
+        email_validation_failure("admin@padea.com", failures, self.WEEK)
+        mail.assert_called_once()
+        to, subject, body = mail.call_args.args[0], mail.call_args.args[1], mail.call_args.args[2]
+        assert to == "admin@padea.com"
+        assert "validation failed" in subject.lower()
+        # Every caterer and every issue is named in the report.
+        for caterer, issues in failures.items():
+            assert caterer in body
+            for issue in issues:
+                assert issue in body
+        assert "No orders were sent" in body

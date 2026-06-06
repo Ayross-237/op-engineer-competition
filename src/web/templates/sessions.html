@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-    <p>Your upcoming sessions. Lock in a meal, or leave it and we'll auto-assign one.</p>
 
-    {% if sessions %}
+    <h2 style="font-size:1.1rem">Upcoming sessions</h2>
+    <p class="muted">Lock in a meal, or leave it and we'll auto-assign one.</p>
+    {% if upcoming %}
     <table>
         <thead>
             <tr><th>Date</th><th>School</th><th>Session</th><th>Your meal</th><th></th></tr>
         </thead>
         <tbody>
-        {% for s in sessions %}
+        {% for s in upcoming %}
             <tr>
                 <td>{{ s.date }} ({{ s.day }})</td>
                 <td>{{ s.school_name }}</td>
@@ -29,4 +30,35 @@
     {% else %}
         <p class="muted">You have no upcoming sessions.</p>
     {% endif %}
+
+    <h2 style="font-size:1.1rem; margin-top:28px">Past sessions</h2>
+    <p class="muted">Rate the meal you had so we can improve future menus.</p>
+    {% if past %}
+    <table>
+        <thead>
+            <tr><th>Date</th><th>School</th><th>Session</th><th>Your rating</th><th></th></tr>
+        </thead>
+        <tbody>
+        {% for s in past %}
+            <tr>
+                <td>{{ s.date }} ({{ s.day }})</td>
+                <td>{{ s.school_name }}</td>
+                <td>{{ s.start[:5] }}&ndash;{{ s.end[:5] }}</td>
+                <td>
+                    {% if s.rating %}
+                        <span class="locked">{{ s.rating[0] }} &middot; {{ s.rating[1] }}/10</span>
+                    {% else %}
+                        <span class="unset">not rated</span>
+                    {% endif %}
+                </td>
+                <td><a href="{{ url_for('rate', program_id=s.program_id, date=s.date) }}">
+                    {{ "Re-rate" if s.rating else "Rate" }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="muted">You have no past sessions.</p>
+    {% endif %}
+
 {% endblock %}

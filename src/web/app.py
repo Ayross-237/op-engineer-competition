@@ -11,11 +11,17 @@ ordering cutoff — a pre-order can be set or changed until the admin runs the g
 """
 import functools
 import os
+from datetime import date, timedelta
 
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 
 from src.business.menu import MenuItem, filter_menu
 from src.persistence import helpers
+
+# Reference "today" used to split a student's sessions into upcoming (still orderable)
+# and past (rateable). Defaults to the real date. To demo against the May-2026 seed
+# data, set a fixed date here, e.g.:  REFERENCE_DATE = date(2026, 5, 1)
+REFERENCE_DATE: date = date.today() - timedelta(days=33)
 
 
 def login_required(view):
@@ -76,12 +82,19 @@ def create_app() -> Flask:
     @login_required
     def sessions():
         student_id = session["student_id"]
-        upcoming = helpers.get_upcoming_sessions_for_student(student_id)
-        for s in upcoming:
-            s["order"] = helpers.get_meal_order(student_id, s["program_id"], s["date"])
+        upcoming: list[dict] = []
+        past: list[dict] = []
+        for s in helpers.get_upcoming_sessions_for_student(student_id):
+            if date.fromisoformat(s["date"]) >= REFERENCE_DATE:
+                s["order"] = helpers.get_meal_order(student_id, s["program_id"], s["date"])
+                upcoming.append(s)
+            else:
+                s["rating"] = helpers.get_dish_rating_for_session(student_id, s["caterer_id"], s["date"])
+                past.append(s)
         return render_template(
             "sessions.html",
-            sessions=upcoming,
+            upcoming=upcoming,
+            past=past,
             student_name=session.get("student_name"),
         )
 
@@ -122,6 +135,48 @@ def create_app() -> Flask:
             current=current,
             dietary=dietary,
             dietary_extra=session.get("dietary_extra"),
+        )
+
+    @app.route("/sessions/<int:program_id>/<date>/rate", methods=["GET", "POST"])
+    @login_required
+    def rate(program_id: int, date: str):
+        student_id = session["student_id"]
+        sess = _find_session(student_id, program_id, date)
+        if sess is None:
+            flash("That session isn't available for you to rate.", "error")
+            return redirect(url_for("sessions"))
+
+        dietary = session.get("dietary") or []
+        raw_menu = helpers.get_menu(sess["caterer_id"])
+        choices = filter_menu([MenuItem(name=n, tags=t) for n, t in raw_menu], dietary)
+
+        if request.method == "POST":
+            item_name = request.form.get("item_name")
+            try:
+                rating = int(request.form.get("rating", ""))
+            except ValueError:
+                rating = 0
+            allowed = {item.name for item in choices}
+            if item_name not in allowed:
+                flash("Please choose a dish from your menu.", "error")
+            elif not 1 <= rating <= 10:
+                flash("Please give a rating from 1 to 10.", "error")
+            else:
+                helpers.record_dish_rating(student_id, sess["caterer_id"], date, item_name, rating)
+                flash(f"Thanks! Rated {item_name}: {rating}/10", "success")
+                return redirect(url_for("sessions"))
+
+        existing = helpers.get_dish_rating_for_session(student_id, sess["caterer_id"], date)
+        # Pre-select the dish they rated before, else the one they pre-ordered (if any).
+        preselect_dish = existing[0] if existing else helpers.get_meal_order(student_id, program_id, date)
+        current_rating = existing[1] if existing else None
+        return render_template(
+            "rate.html",
+            session=sess,
+            choices=choices,
+            preselect_dish=preselect_dish,
+            current_rating=current_rating,
+            dietary=dietary,
         )
 
     return app

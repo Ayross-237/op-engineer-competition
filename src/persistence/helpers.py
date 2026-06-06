@@ -262,6 +262,18 @@ def get_student_by_email(email: str) -> tuple[int, str, list[str], str | None] |
     s = data[0]
     return s["id"], s["name"], s["dietary"], s["dietary_extra"]
 
+def get_student_name(student_id: int) -> str:
+    """Returns a student's name by id (used to address pre-order confirmation emails)."""
+    response = (
+        client.table("students")
+        .select("name")
+        .eq("id", student_id)
+        .single()
+        .execute()
+    )
+    data: Any = response.data
+    return data["name"]
+
 def get_upcoming_sessions_for_student(student_id: int) -> list[dict[str, Any]]:
     """Returns the dated sessions a student can pre-order for: every session of every
     program they're enrolled in, minus the ones they're marked absent from.
@@ -361,5 +373,52 @@ def delete_meal_order(student_id: int, program_id: int, date: str) -> None:
         .eq("student_id", student_id)
         .eq("program_id", program_id)
         .eq("date", date)
+        .execute()
+    )
+
+def get_dish_rating_for_session(student_id: int, caterer_id: int, date: str) -> tuple[str, int] | None:
+    """Returns the student's existing rating for a session as (item_name, rating), or None.
+    Used to pre-fill the rating form and show the current score in the session list."""
+    response = (
+        client.table("dish_ratings")
+        .select("item_name", "rating")
+        .eq("student_id", student_id)
+        .eq("caterer_id", caterer_id)
+        .eq("date", date)
+        .limit(1)
+        .execute()
+    )
+    data: Any = response.data
+    if not data:
+        return None
+    return data[0]["item_name"], data[0]["rating"]
+
+def record_dish_rating(student_id: int, caterer_id: int, date: str, item_name: str, rating: int) -> None:
+    """Ingests a student's 1-10 rating of the dish they had at a session.
+
+    One rating per student per session: any existing rating for that
+    (student, caterer, date) is cleared first, so switching the rated dish replaces
+    the old row cleanly rather than leaving two. The caller is responsible for
+    validating that the dish is on the caterer's menu and rating is in 1..10.
+    """
+    (
+        client.table("dish_ratings")
+        .delete()
+        .eq("student_id", student_id)
+        .eq("caterer_id", caterer_id)
+        .eq("date", date)
+        .execute()
+    )
+    (
+        client.table("dish_ratings")
+        .insert(
+            {
+                "student_id": student_id,
+                "caterer_id": caterer_id,
+                "item_name": item_name,
+                "date": date,
+                "rating": rating,
+            }
+        )
         .execute()
     )

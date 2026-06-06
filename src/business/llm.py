@@ -122,3 +122,42 @@ def summarise_feedback_for_caterer(reviews: list[tuple[str, str]], target_words:
         "DO NOT include any header or extraneous text — just the summary itself, suitable for appending to the caterer's order."
     )
     return run_model(prompt).strip()
+
+
+def validate_order(order_text: str, menu: list[tuple[str, list[str]]], caterer_name: str) -> tuple[bool, list[str]]:
+    """LLM-as-judge check of a generated caterer order before it is sent.
+
+    Returns (ok, issues): ok=True with no issues when the order looks correct, else
+    ok=False with one short sentence per problem. Fail-closed — if the model errors or
+    its verdict can't be parsed, returns (False, [...]) so the caller holds the order.
+    """
+    menu_lines = "\n".join(
+        f"- {name} (tags: {', '.join(tags) if tags else 'none'})" for name, tags in menu
+    )
+    prompt = (
+        "You are a quality checker reviewing a school catering order before it is "
+        f"emailed to the caterer '{caterer_name}'. Be precise; only flag real problems.\n\n"
+        "The generated order:\n"
+        "-----\n"
+        f"{order_text}\n"
+        "-----\n\n"
+        "Flag ONLY the following issues, if present:\n"
+        " - The order is obviously malformed of incomplete."
+        "Respond in EXACTLY this format and nothing else:\n"
+        "First line: PASS or FAIL\n"
+        "If FAIL, each following line is one short sentence describing one problem."
+    )
+    try:
+        raw = run_model(prompt).strip()
+    except Exception as e:
+        return False, [f"validation could not run: {e}"]
+
+    lines = [ln.strip("-* \t") for ln in raw.splitlines() if ln.strip()]
+    if not lines:
+        return False, ["validator returned no output"]
+    verdict = lines[0].upper()
+    if verdict.startswith("PASS"):
+        return True, []
+    if verdict.startswith("FAIL"):
+        return False, lines[1:] or ["unspecified problem reported"]
+    return False, [f"could not parse validator verdict: {raw[:200]}"]

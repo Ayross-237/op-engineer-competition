@@ -16,13 +16,12 @@ _Week of 2026-04-27 – 2026-05-03_
 
 | Dish | Quantity |
 |------|----------|
-| Chicken, Bacon, Avo Wrap (vegetarian) | 3 |
-| Fish Taco Bowl | 3 |
-| Fried Chicken Burger + Chips | 1 |
-| Japanese Chicken Curry (vegetarian) | 1 |
-| Korean Beef Bulgogi Rice Bowl | 3 |
-| Spaghetti Bolognese + Garlic Bread | 2 |
-| Sweet and Sour Chicken | 1 |
+| Classic Cream Pasta | 2 |
+| Fish Taco Bowl | 2 |
+| Fried Chicken Burger + Chips | 5 |
+| Japanese Chicken Curry (vegetarian) | 2 |
+| Korean Beef Bulgogi Rice Bowl | 2 |
+| Spaghetti Bolognese + Garlic Bread | 1 |
 
 **Special dietary requirements:**
 

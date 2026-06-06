@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+    <p><a href="{{ url_for('sessions') }}">&larr; back to my sessions</a></p>
+
+    <h2 style="font-size:1.1rem">Rate your meal — {{ session.school_name }}, {{ session.date }} ({{ session.day }})</h2>
+    <p class="muted">Pick the dish you had and score it from 1 (terrible) to 10 (excellent).</p>
+
+    {% if choices %}
+    <form method="post">
+        <p><strong>Which dish did you have?</strong></p>
+        {% for item in choices %}
+            <label class="choice">
+                <input type="radio" name="item_name" value="{{ item.name }}" {{ "checked" if item.name == preselect_dish }}>
+                {{ item.name }}
+                {% for t in item.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+            </label>
+        {% endfor %}
+
+        <p style="margin-top:14px">
+            <label><strong>Your rating:</strong>
+                <select name="rating">
+                    {% for n in range(1, 11) %}
+                        <option value="{{ n }}" {{ "selected" if n == current_rating }}>{{ n }}</option>
+                    {% endfor %}
+                </select>
+                / 10
+            </label>
+        </p>
+
+        <p><button type="submit">Submit rating</button></p>
+    </form>
+    {% else %}
+        <p class="muted">No dishes on this caterer's menu match your dietary requirements, so there's nothing to rate here.</p>
+    {% endif %}
+{% endblock %}
