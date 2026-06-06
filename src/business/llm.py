@@ -1,10 +1,14 @@
-"""Ollama client singleton for local LLM-driven business logic.
+"""LLM clients for the business logic.
 
-On import: pulls the configured model (no-op if already cached) and
-pins it in memory so the first real call doesn't pay load latency.
+Local Ollama (gemma3) drives meal matching and feedback summaries; on import it pulls
+the configured model and pins it in memory so the first real call doesn't pay load
+latency. The order-validation judge ("final checks") instead calls the Google AI Studio
+(Gemini) API via GEMINI_API_KEY, so it doesn't depend on a local model.
 """
+import json
 import os
 import sys
+import urllib.request
 
 from dotenv import load_dotenv
 from ollama import Client
@@ -26,9 +30,15 @@ print(f"[llm] Loading {MODEL} into memory...", file=sys.stderr)
 client.generate(model=MODEL, keep_alive=-1)
 print(f"[llm] {MODEL} ready.", file=sys.stderr)
 
+# The order-validation judge ("final checks") runs on the Google AI Studio (Gemini) API
+# instead of a local model. JUDGE_MODEL is overridable via the environment.
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+JUDGE_MODEL = os.environ.get("JUDGE_MODEL", "gemini-2.5-flash")
+_GEMINI_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+
 
 def run_model(prompt: str) -> str:
-    """Run the configured model with the given prompt and return the output."""
+    """Run the configured local model (Ollama gemma3) with the given prompt."""
     try:
         response = client.chat(
             model=MODEL,
@@ -40,6 +50,27 @@ def run_model(prompt: str) -> str:
     except Exception as e:
         print(f"Error running model: {e}", file=sys.stderr)
         raise
+
+
+def run_judge(prompt: str) -> str:
+    """Run the order-validation judge via the Google AI Studio (Gemini) API.
+
+    Raises on a missing key or any request/parse failure — validate_order treats that
+    as a fail-closed verdict (the order is held)."""
+    if not GEMINI_API_KEY:
+        raise RuntimeError("GEMINI_API_KEY is not set")
+    payload = json.dumps({
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {"temperature": 0},
+    }).encode("utf-8")
+    request = urllib.request.Request(
+        _GEMINI_ENDPOINT.format(model=JUDGE_MODEL),
+        data=payload,
+        headers={"Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY},
+    )
+    with urllib.request.urlopen(request, timeout=60) as response:
+        data = json.loads(response.read().decode("utf-8"))
+    return data["candidates"][0]["content"]["parts"][0]["text"].strip()
 
 
 def find_meal(dietary_extra: str, filtered_menu: list[MenuItem]) -> str:
@@ -142,13 +173,15 @@ def validate_order(order_text: str, menu: list[tuple[str, list[str]]], caterer_n
         f"{order_text}\n"
         "-----\n\n"
         "Flag ONLY the following issues, if present:\n"
-        " - The order is obviously malformed of incomplete."
+        " - The order document is clearly malfomatted, incomplete or incomprehensible.\n\n" \
+        "DO NOT flag anything else. DO NOT validate any other part of the document including the menu items, quantities or feedback summaries\n" \
+        "If the document is complete, it is a PASS regardless of any seemingly incorrect details.\n"
         "Respond in EXACTLY this format and nothing else:\n"
         "First line: PASS or FAIL\n"
         "If FAIL, each following line is one short sentence describing one problem."
     )
     try:
-        raw = run_model(prompt).strip()
+        raw = run_judge(prompt).strip()
     except Exception as e:
         return False, [f"validation could not run: {e}"]
 

@@ -125,53 +125,55 @@ class TestSummariseFeedbackForCaterer:
         assert llm.client.chat.call_count == 1
 
 
-# --- validate_order (LLM judge) ---
+# --- validate_order (LLM judge via the Gemini API) ---
 
 class TestValidateOrder:
     MENU = [("Nachos", ["GF"]), ("Pad Thai", [])]
 
-    def test_pass_verdict_returns_ok(self):
-        llm.client.chat.return_value = _chat_returning("PASS")
+    def test_pass_verdict_returns_ok(self, monkeypatch):
+        monkeypatch.setattr(llm, "run_judge", lambda prompt: "PASS")
         ok, issues = llm.validate_order("some order", self.MENU, "GYG")
         assert ok is True
         assert issues == []
 
-    def test_fail_verdict_returns_issues(self):
-        llm.client.chat.return_value = _chat_returning(
-            "FAIL\nDish 'Sushi' is not on the menu.\nNachos quantity is missing."
+    def test_fail_verdict_returns_issues(self, monkeypatch):
+        monkeypatch.setattr(
+            llm, "run_judge",
+            lambda prompt: "FAIL\nDish 'Sushi' is not on the menu.\nNachos quantity is missing.",
         )
         ok, issues = llm.validate_order("some order", self.MENU, "GYG")
         assert ok is False
         assert issues == ["Dish 'Sushi' is not on the menu.", "Nachos quantity is missing."]
 
-    def test_fail_with_no_detail_still_flags(self):
-        llm.client.chat.return_value = _chat_returning("FAIL")
+    def test_fail_with_no_detail_still_flags(self, monkeypatch):
+        monkeypatch.setattr(llm, "run_judge", lambda prompt: "FAIL")
         ok, issues = llm.validate_order("o", self.MENU, "GYG")
         assert ok is False
         assert issues  # a non-empty placeholder issue
 
-    def test_bullet_prefixes_stripped(self):
-        llm.client.chat.return_value = _chat_returning("FAIL\n- Dish off-menu\n* Empty session")
+    def test_bullet_prefixes_stripped(self, monkeypatch):
+        monkeypatch.setattr(llm, "run_judge", lambda prompt: "FAIL\n- Dish off-menu\n* Empty session")
         ok, issues = llm.validate_order("o", self.MENU, "GYG")
         assert ok is False
         assert issues == ["Dish off-menu", "Empty session"]
 
-    def test_empty_output_is_fail_closed(self):
-        llm.client.chat.return_value = _chat_returning("   ")
+    def test_empty_output_is_fail_closed(self, monkeypatch):
+        monkeypatch.setattr(llm, "run_judge", lambda prompt: "   ")
         ok, issues = llm.validate_order("o", self.MENU, "GYG")
         assert ok is False
         assert issues
 
-    def test_unparseable_verdict_is_fail_closed(self):
-        llm.client.chat.return_value = _chat_returning("I think it looks fine overall")
+    def test_unparseable_verdict_is_fail_closed(self, monkeypatch):
+        monkeypatch.setattr(llm, "run_judge", lambda prompt: "I think it looks fine overall")
         ok, issues = llm.validate_order("o", self.MENU, "GYG")
         assert ok is False
         assert issues
 
-    def test_model_error_is_fail_closed(self):
-        llm.client.chat.side_effect = RuntimeError("ollama down")
+    def test_judge_error_is_fail_closed(self, monkeypatch):
+        def _boom(prompt):
+            raise RuntimeError("gemini unreachable")
+        monkeypatch.setattr(llm, "run_judge", _boom)
         ok, issues = llm.validate_order("o", self.MENU, "GYG")
-        llm.client.chat.side_effect = None
         assert ok is False
         assert any("could not run" in i for i in issues)
 

@@ -18,11 +18,10 @@ _Week of 2026-04-27 – 2026-05-03_
 
 | Dish | Quantity |
 |------|----------|
+| Chicken, Bacon, Avo Wrap (vegetarian) | 4 |
 | Classic Cream Pasta | 2 |
-| Fish Taco Bowl | 2 |
-| Fried Chicken Burger + Chips | 5 |
-| Japanese Chicken Curry (vegetarian) | 2 |
-| Korean Beef Bulgogi Rice Bowl | 2 |
+| Fish Taco Bowl | 3 |
+| Korean Beef Bulgogi Rice Bowl | 4 |
 | Spaghetti Bolognese + Garlic Bread | 1 |
 
 **Special dietary requirements:**
@@ -56,15 +55,16 @@ Catering performance has been highly variable, with Korean Beef Bulgogi and Japa
 |------|----------|
 | Bacon Carbonara | 1 |
 | Beef Pad Thai | 2 |
-| Creamy Garlic Beef Noodles (vegetarian) | 2 |
-| Grilled Pork Vermicelli Salad | 2 |
-| Grilled Pork Vermicelli Salad (vegetarian) | 1 |
+| Creamy Garlic Beef Noodles | 1 |
+| Creamy Garlic Beef Noodles (vegetarian) | 1 |
+| Grilled Pork Vermicelli Salad | 3 |
+| Grilled Pork Vermicelli Salad (vegetarian) | 2 |
 | Lemongrass Grilled Beef and Noodles | 1 |
-| Lemongrass Grilled Beef and Noodles (vegetarian) | 6 |
+| Lemongrass Grilled Beef and Noodles (vegetarian) | 4 |
 | Mie Goreng | 2 |
-| Mie Goreng (vegetarian) | 3 |
+| Mie Goreng (vegetarian) | 2 |
 | Spaghetti meatballs | 2 |
-| Stir-fry Noodles topped with Chicken | 3 |
+| Stir-fry Noodles topped with Chicken | 4 |
 
 **Special dietary requirements:**
 
@@ -88,14 +88,14 @@ Catering performance has been highly variable, with Korean Beef Bulgogi and Japa
 |------|----------|
 | Beef Pad Thai | 1 |
 | Chinese Honey Soy Noodles | 1 |
-| Creamy Garlic Beef Noodles | 1 |
-| Creamy Garlic Beef Noodles (vegetarian) | 9 |
-| Grilled Pork Vermicelli Salad (vegetarian) | 2 |
+| Creamy Garlic Beef Noodles (vegetarian) | 8 |
+| Grilled Pork Vermicelli Salad | 2 |
+| Grilled Pork Vermicelli Salad (vegetarian) | 1 |
 | Lemongrass Grilled Beef and Noodles | 1 |
-| Lemongrass Grilled Beef and Noodles (vegetarian) | 5 |
+| Lemongrass Grilled Beef and Noodles (vegetarian) | 10 |
 | Mie Goreng | 1 |
 | Mie Goreng (vegetarian) | 4 |
-| Stir-fry Noodles topped with Chicken | 9 |
+| Stir-fry Noodles topped with Chicken | 5 |
 
 **Special dietary requirements:**
 
@@ -127,17 +127,18 @@ The caterer demonstrates significant strengths, particularly with dishes like Sp
 
 | Dish | Quantity |
 |------|----------|
-| Beef Fried Rice | 2 |
+| Beef Fried Rice | 1 |
 | Beef Fried Rice (vegetarian) | 1 |
 | Chicken Karaage ricebowl | 1 |
+| Chicken Parmi, chips and salad | 2 |
 | Chinese Honey Soy Noodles | 3 |
 | Creamy Udon | 2 |
-| Japanese Chicken Katsu | 3 |
-| Japanese Chicken Katsu (vegetarian) | 16 |
+| Japanese Chicken Katsu | 1 |
+| Japanese Chicken Katsu (vegetarian) | 17 |
 | Lamb wrap | 2 |
-| Mongolian Beef and Rice | 2 |
+| Mongolian Beef and Rice | 1 |
 | Teriyaki Salmon rice bowl | 1 |
-| Teriyaki Salmon rice bowl (vegetarian) | 2 |
+| Teriyaki Salmon rice bowl (vegetarian) | 3 |
 
 **Special dietary requirements:**
 
@@ -160,14 +161,16 @@ The caterer demonstrates significant strengths, particularly with dishes like Sp
 | Dish | Quantity |
 |------|----------|
 | Beef Fried Rice | 1 |
-| Beef Fried Rice (vegetarian) | 2 |
+| Beef Fried Rice (vegetarian) | 1 |
 | Chicken Karaage ricebowl | 1 |
 | Chicken Karaage ricebowl (vegetarian) | 3 |
-| Chicken Parmi, chips and salad | 1 |
+| Chicken Parmi, chips and salad | 3 |
 | Creamy Udon | 1 |
-| Japanese Chicken Katsu (vegetarian) | 24 |
+| Japanese Chicken Katsu | 1 |
+| Japanese Chicken Katsu (vegetarian) | 21 |
 | Mongolian Beef and Rice | 2 |
 | Sweet and Sour Chicken | 2 |
+| Teriyaki Salmon rice bowl | 1 |
 | Teriyaki Salmon rice bowl (vegetarian) | 1 |
 
 **Special dietary requirements:**
@@ -206,15 +209,15 @@ The caterer demonstrates significant strengths, particularly with consistently h
 | Caesar Salad | 1 |
 | Cali Burrito | 1 |
 | Chicken Enchilada | 5 |
-| Chicken Quesadilla | 2 |
-| Crispy Chicken Taco | 6 |
+| Chicken Quesadilla | 3 |
+| Crispy Chicken Taco | 3 |
 | Grilled Chicken Burrito | 2 |
 | Nacho Fries | 1 |
-| Nacho Fries (vegetarian) | 2 |
-| Nachos | 3 |
+| Nacho Fries (vegetarian) | 1 |
+| Nachos | 4 |
 | Nachos (vegetarian) | 2 |
-| Pulled pork burrito bowl | 4 |
-| Pulled pork burrito bowl (vegetarian) | 2 |
+| Pulled pork burrito bowl | 7 |
+| Pulled pork burrito bowl (vegetarian) | 1 |
 
 **Estimated cost:** $530.00 (32 × $15.00 + $50.00 trip + 1 × $0.00 school fee)
 
@@ -235,11 +238,13 @@ The caterer demonstrates significant strengths, particularly with consistently h
 | Breakfast Tacos | 1 |
 | Breakfast Tacos (vegetarian) | 1 |
 | Caesar Salad (vegetarian) | 1 |
+| Chicken Enchilada | 2 |
 | Chicken Quesadilla | 2 |
 | Crispy Chicken Taco | 2 |
-| Nachos | 2 |
+| Grilled Chicken Burrito | 1 |
+| Nachos | 1 |
 | Nachos (vegetarian) | 4 |
-| Pulled pork burrito bowl | 3 |
+| Pulled pork burrito bowl | 1 |
 
 **Estimated cost:** $290.00 (16 × $15.00 + $50.00 trip + 1 × $0.00 school fee)
 
@@ -257,13 +262,13 @@ The caterer demonstrates significant strengths, particularly with consistently h
 |------|----------|
 | Caesar Salad | 1 |
 | Cali Burrito | 1 |
-| Chicken Enchilada | 4 |
-| Chicken Quesadilla | 2 |
-| Crispy Chicken Taco | 4 |
+| Chicken Enchilada | 1 |
+| Crispy Chicken Taco | 3 |
+| Grilled Chicken Burrito | 1 |
 | Nacho Fries (vegetarian) | 1 |
-| Nachos | 2 |
-| Nachos (vegetarian) | 4 |
-| Pulled pork burrito bowl | 2 |
+| Nachos | 4 |
+| Nachos (vegetarian) | 2 |
+| Pulled pork burrito bowl | 7 |
 
 **Estimated cost:** $365.00 (21 × $15.00 + $50.00 trip + 1 × $0.00 school fee)
 

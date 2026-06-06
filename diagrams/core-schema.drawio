@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="Core ER" id="core-er">
-        <mxGraphModel dx="1894" dy="734" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1500" math="0" shadow="0">
+        <mxGraphModel dx="2947" dy="1142" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1500" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -355,7 +355,7 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="rel-absent" value="absent from" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" parent="1" vertex="1">
-                    <mxGeometry x="1072.52" y="575" width="130" height="70" as="geometry"/>
+                    <mxGeometry x="1060" y="571" width="130" height="70" as="geometry"/>
                 </mxCell>
                 <mxCell id="c-student-absent" value="N" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;" parent="1" source="ent-student" target="rel-absent" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -401,29 +401,29 @@
                 <mxCell id="c-fdb-content" style="endArrow=none;html=1;rounded=0;" parent="1" source="a-fdb-content" target="ent-feedback" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="rel-rates" value="rates" style="rhombus;whiteSpace=wrap;html=1;fillColor=#b0e3e6;strokeColor=#0e8088;fontSize=12;fontStyle=1;" vertex="1" parent="1">
-                    <mxGeometry x="1110" y="976" width="130" height="70" as="geometry"/>
+                <mxCell id="rel-rates" value="rates" style="rhombus;whiteSpace=wrap;html=1;fillColor=#b0e3e6;strokeColor=#0e8088;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1070" y="906" width="130" height="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="a-rate-date" value="date" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;fontStyle=4;" vertex="1" parent="1">
-                    <mxGeometry x="1060" y="1060" width="80" height="40" as="geometry"/>
+                <mxCell id="a-rate-date" value="date" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;fontStyle=4;" parent="1" vertex="1">
+                    <mxGeometry x="1030" y="986" width="80" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="a-rate-rating" value="rating" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
-                    <mxGeometry x="1190" y="1060" width="90" height="40" as="geometry"/>
+                <mxCell id="a-rate-rating" value="rating" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="1160" y="986" width="90" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="c-rate-date" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="a-rate-date" target="rel-rates">
+                <mxCell id="c-rate-date" style="endArrow=none;html=1;rounded=0;" parent="1" source="a-rate-date" target="rel-rates" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="c-rate-rating" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="a-rate-rating" target="rel-rates">
+                <mxCell id="c-rate-rating" style="endArrow=none;html=1;rounded=0;" parent="1" source="a-rate-rating" target="rel-rates" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="c-item-rates" value="M" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;" edge="1" parent="1" source="ent-item-outer" target="rel-rates">
+                <mxCell id="c-item-rates" value="M" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;" parent="1" source="ent-item-outer" target="rel-rates" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="c-rates-student" value="N" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="rel-rates" target="ent-student">
+                <mxCell id="c-rates-student" value="N" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="rel-rates" target="ent-student" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="rel-preorder" value="pre-orders" style="rhombus;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" parent="1" vertex="1">
-                    <mxGeometry x="800" y="900" width="150" height="70" as="geometry"/>
+                    <mxGeometry x="985" y="814" width="150" height="70" as="geometry"/>
                 </mxCell>
                 <mxCell id="c-student-preorder" value="N" style="endArrow=none;html=1;rounded=0;fontSize=13;fontStyle=1;" parent="1" source="ent-student" target="rel-preorder" edge="1">
                     <mxGeometry relative="1" as="geometry"/>

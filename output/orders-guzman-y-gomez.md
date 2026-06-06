@@ -20,15 +20,15 @@ _Week of 2026-04-27 – 2026-05-03_
 | Caesar Salad | 1 |
 | Cali Burrito | 1 |
 | Chicken Enchilada | 5 |
-| Chicken Quesadilla | 2 |
-| Crispy Chicken Taco | 6 |
+| Chicken Quesadilla | 3 |
+| Crispy Chicken Taco | 3 |
 | Grilled Chicken Burrito | 2 |
 | Nacho Fries | 1 |
-| Nacho Fries (vegetarian) | 2 |
-| Nachos | 3 |
+| Nacho Fries (vegetarian) | 1 |
+| Nachos | 4 |
 | Nachos (vegetarian) | 2 |
-| Pulled pork burrito bowl | 4 |
-| Pulled pork burrito bowl (vegetarian) | 2 |
+| Pulled pork burrito bowl | 7 |
+| Pulled pork burrito bowl (vegetarian) | 1 |
 
 ## Cannon Hill Anglican College
 
@@ -47,11 +47,13 @@ _Week of 2026-04-27 – 2026-05-03_
 | Breakfast Tacos | 1 |
 | Breakfast Tacos (vegetarian) | 1 |
 | Caesar Salad (vegetarian) | 1 |
+| Chicken Enchilada | 2 |
 | Chicken Quesadilla | 2 |
 | Crispy Chicken Taco | 2 |
-| Nachos | 2 |
+| Grilled Chicken Burrito | 1 |
+| Nachos | 1 |
 | Nachos (vegetarian) | 4 |
-| Pulled pork burrito bowl | 3 |
+| Pulled pork burrito bowl | 1 |
 
 ### 2026-05-03 (Wednesday 15:30:00–18:30:00)
 
@@ -67,13 +69,13 @@ _Week of 2026-04-27 – 2026-05-03_
 |------|----------|
 | Caesar Salad | 1 |
 | Cali Burrito | 1 |
-| Chicken Enchilada | 4 |
-| Chicken Quesadilla | 2 |
-| Crispy Chicken Taco | 4 |
+| Chicken Enchilada | 1 |
+| Crispy Chicken Taco | 3 |
+| Grilled Chicken Burrito | 1 |
 | Nacho Fries (vegetarian) | 1 |
-| Nachos | 2 |
-| Nachos (vegetarian) | 4 |
-| Pulled pork burrito bowl | 2 |
+| Nachos | 4 |
+| Nachos (vegetarian) | 2 |
+| Pulled pork burrito bowl | 7 |
 
 ---
 
