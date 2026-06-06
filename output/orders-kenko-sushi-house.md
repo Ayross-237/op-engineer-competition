@@ -19,15 +19,15 @@ _Week of 2026-04-27 – 2026-05-03_
 | Beef Fried Rice | 1 |
 | Beef Fried Rice (vegetarian) | 1 |
 | Chicken Karaage ricebowl | 1 |
-| Chicken Parmi, chips and salad | 2 |
-| Chinese Honey Soy Noodles | 3 |
+| Chicken Parmi, chips and salad | 3 |
+| Chinese Honey Soy Noodles | 4 |
 | Creamy Udon | 2 |
-| Japanese Chicken Katsu | 1 |
-| Japanese Chicken Katsu (vegetarian) | 17 |
+| Japanese Chicken Katsu | 2 |
+| Japanese Chicken Katsu (vegetarian) | 15 |
 | Lamb wrap | 2 |
 | Mongolian Beef and Rice | 1 |
-| Teriyaki Salmon rice bowl | 1 |
-| Teriyaki Salmon rice bowl (vegetarian) | 3 |
+| Teriyaki Salmon rice bowl | 2 |
+| Teriyaki Salmon rice bowl (vegetarian) | 1 |
 
 **Special dietary requirements:**
 
@@ -53,14 +53,14 @@ _If a recommended dish does not meet the student's dietary needs, please substit
 | Beef Fried Rice (vegetarian) | 1 |
 | Chicken Karaage ricebowl | 1 |
 | Chicken Karaage ricebowl (vegetarian) | 3 |
-| Chicken Parmi, chips and salad | 3 |
+| Chicken Parmi, chips and salad | 2 |
+| Chinese Honey Soy Noodles | 1 |
 | Creamy Udon | 1 |
-| Japanese Chicken Katsu | 1 |
+| Japanese Chicken Katsu | 2 |
 | Japanese Chicken Katsu (vegetarian) | 21 |
-| Mongolian Beef and Rice | 2 |
+| Mongolian Beef and Rice | 1 |
 | Sweet and Sour Chicken | 2 |
-| Teriyaki Salmon rice bowl | 1 |
-| Teriyaki Salmon rice bowl (vegetarian) | 1 |
+| Teriyaki Salmon rice bowl (vegetarian) | 2 |
 
 **Special dietary requirements:**
 

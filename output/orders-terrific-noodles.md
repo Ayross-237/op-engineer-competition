@@ -18,16 +18,16 @@ _Week of 2026-04-27 – 2026-05-03_
 |------|----------|
 | Bacon Carbonara | 1 |
 | Beef Pad Thai | 2 |
-| Creamy Garlic Beef Noodles | 1 |
-| Creamy Garlic Beef Noodles (vegetarian) | 1 |
-| Grilled Pork Vermicelli Salad | 3 |
+| Creamy Garlic Beef Noodles | 3 |
+| Creamy Garlic Beef Noodles (vegetarian) | 3 |
+| Grilled Pork Vermicelli Salad | 1 |
 | Grilled Pork Vermicelli Salad (vegetarian) | 2 |
 | Lemongrass Grilled Beef and Noodles | 1 |
-| Lemongrass Grilled Beef and Noodles (vegetarian) | 4 |
+| Lemongrass Grilled Beef and Noodles (vegetarian) | 5 |
 | Mie Goreng | 2 |
 | Mie Goreng (vegetarian) | 2 |
 | Spaghetti meatballs | 2 |
-| Stir-fry Noodles topped with Chicken | 4 |
+| Stir-fry Noodles topped with Chicken | 1 |
 
 **Special dietary requirements:**
 
@@ -51,11 +51,12 @@ _If a recommended dish does not meet the student's dietary needs, please substit
 |------|----------|
 | Beef Pad Thai | 1 |
 | Chinese Honey Soy Noodles | 1 |
+| Creamy Garlic Beef Noodles | 1 |
 | Creamy Garlic Beef Noodles (vegetarian) | 8 |
-| Grilled Pork Vermicelli Salad | 2 |
+| Grilled Pork Vermicelli Salad | 3 |
 | Grilled Pork Vermicelli Salad (vegetarian) | 1 |
 | Lemongrass Grilled Beef and Noodles | 1 |
-| Lemongrass Grilled Beef and Noodles (vegetarian) | 10 |
+| Lemongrass Grilled Beef and Noodles (vegetarian) | 8 |
 | Mie Goreng | 1 |
 | Mie Goreng (vegetarian) | 4 |
 | Stir-fry Noodles topped with Chicken | 5 |
